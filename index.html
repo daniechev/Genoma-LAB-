@@ -29,7 +29,7 @@
         <div class="codon-strip" id="codons" role="group" aria-label="Secuencia de ADN, selecciona una letra"></div>
         <div class="gene-nav"><button id="previous" class="round-button" aria-label="Ver letras anteriores">←</button><label class="range-label" for="gene-range"><span id="region-label">Grupos 1–4 de 148</span><input id="gene-range" type="range" min="0" max="144" value="0" aria-label="Recorrer el gen"></label><button id="next" class="round-button" aria-label="Ver letras siguientes">→</button></div>
         <div class="step-actions"><p class="picked" id="selection"></p><button class="primary" id="to-step2">Cambiar esta letra <span aria-hidden="true">→</span></button></div>
-        <div class="shortcuts"><button class="shortcut" id="random"><span class="shortcut-icon dice" aria-hidden="true">⚄</span><span><b>Sorpréndeme</b>Probar una mutación al azar</span></button><button class="shortcut" id="mission"><span class="shortcut-icon target" aria-hidden="true">◎</span><span><b>Un caso real</b>La pista de la anemia falciforme</span></button></div>
+        <div class="shortcuts"><button class="shortcut" id="random"><span class="shortcut-icon dice" aria-hidden="true">⚄</span><span><b>Sorpréndeme</b>Probar una mutación al azar</span></button><button class="shortcut" id="mission"><span class="shortcut-icon target" aria-hidden="true">◎</span><span><b>Casos reales</b>Tres mutaciones famosas de la hemoglobina</span></button></div>
       </section>
       <section class="panel" data-panel="2" hidden>
         <h2 tabindex="-1">Haz un pequeño cambio</h2>
@@ -82,7 +82,7 @@
 </main>
 <footer><span>ADN, genes y proteínas · Feria de ciencias</span><button class="footer-link" data-tab="stats">Resultados del stand</button></footer>
 <div class="toast" id="toast" role="status" hidden></div>
-<dialog id="mission-dialog"><button class="dialog-close" aria-label="Cerrar" id="close-mission">×</button><p class="eyebrow">MISIÓN / UNA LETRA PUEDE CAMBIARLO TODO</p><h2>Encuentra el cambio de la anemia falciforme.</h2><p>Ve al <b>codón 7: GAG</b>. Cambia su letra del medio para que la pieza 6 deje de ser glutamato (Glu) y pase a ser valina (Val).</p><div class="mission-codon">G <span>?</span> G</div><p class="muted">Pista: la nueva letra también aparece en el codón GTG. Es un caso histórico, sin relación con las personas que visitan el stand.</p><button class="primary" id="start-mission">Ir al codón 7</button></dialog>
+<dialog id="mission-dialog" aria-labelledby="mission-heading"><button class="dialog-close" aria-label="Cerrar" id="close-mission">×</button><p class="eyebrow">MISIÓN / UNA LETRA PUEDE CAMBIARLO TODO</p><h2 id="mission-heading">Elige un caso real.</h2><div class="case-picker" role="group" aria-label="Casos reales"><button data-case="sickle" class="active" aria-pressed="true"><b>Anemia falciforme</b>Glu6Val</button><button data-case="hbc" aria-pressed="false"><b>Hemoglobina C</b>Glu6Lys</button><button data-case="thal" aria-pressed="false"><b>Beta-talasemia</b>Gln39Stop</button></div><div id="case-detail" aria-live="polite"></div><p class="muted">Son casos históricos, sin relación con las personas que visitan el stand.</p><button class="primary" id="start-mission">Ir al codón 7</button></dialog>
 <script src="js/datos-modelos.js"></script>
 <script src="js/genetica.js"></script>
 <script src="js/visor-3d.js"></script>

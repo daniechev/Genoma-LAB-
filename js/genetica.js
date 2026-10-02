@@ -24,6 +24,15 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     }
     return {protein,stop};
   }
+  // Casos reales del gen HBB. position es el índice (desde 0) de la letra que cambia.
+  const CASES = [
+    {id:'sickle', name:'Anemia falciforme', notation:'Glu6Val', position:19, base:'T'},
+    {id:'hbc', name:'Hemoglobina C', notation:'Glu6Lys', position:18, base:'A'},
+    {id:'thal', name:'Beta-talasemia', notation:'Gln39Stop', position:117, base:'T'}
+  ];
+  function findCase(position,type,base) {
+    return type==='sub' ? CASES.find(c=>c.position===position&&c.base===base)||null : null;
+  }
   function simulate({position,type,base}) {
     if (!Number.isInteger(position)||position<0||position>=DNA.length) throw new Error('Elige una letra entre 1 y 444.');
     if (!['sub','del','ins'].includes(type)) throw new Error('Tipo de mutación no válido.');
@@ -45,7 +54,7 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     else {category='pieza';effect='missense';}
     const differences=[];
     for(let i=0;i<Math.min(mature.length,original.length);i++) if(mature[i]!==original[i]) differences.push(i+1);
-    return {position,type,base,changeIndex,mutated,category,effect,startLost,protein,mature,stop:tr.stop,codon,piece:codon,originalCodon:DNA.slice(codon*3,codon*3+3),mutatedCodon:mutated.slice(codon*3,codon*3+3),differences,sickle:type==='sub'&&position===19&&base==='T',lengthUnknown:!startLost&&tr.stop===-1};
+    return {position,type,base,changeIndex,mutated,category,effect,startLost,protein,mature,stop:tr.stop,codon,piece:codon,originalCodon:DNA.slice(codon*3,codon*3+3),mutatedCodon:mutated.slice(codon*3,codon*3+3),differences,realCase:findCase(position,type,base),lengthUnknown:!startLost&&tr.stop===-1};
   }
   function parsePDB(text, alphaFold=false) {
     const chains={},hemes=[], seen=new Set();
@@ -75,7 +84,7 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     }
     return {chains,hemes:alphaFold?[]:hemes,beta};
   }
-  const api={DNA,EXPECTED,table,names,translate,simulate,parsePDB};
+  const api={DNA,EXPECTED,table,names,CASES,translate,simulate,parsePDB};
   if(typeof module!=='undefined')module.exports=api;
   root.Genetics=api;
 })(globalThis);
