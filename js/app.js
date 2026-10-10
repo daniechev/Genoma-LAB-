@@ -6,6 +6,12 @@
     hbc:{goal:'Andá al <b>codón 7: GAG</b>, el mismo de la anemia falciforme. Cambiá su <b>primera</b> letra para que la pieza 6 pase de glutamato (Glu) a lisina (Lys).',display:'<span>?</span> A G',hint:'Pista: la lisina se escribe con los codones AAA o AAG.',toast:'Codón 7 seleccionado: cambiá la G del principio por A y hacé tu predicción.',tour:['Volvemos al mismo codón 7: GAG. Esta vez vamos a cambiar otra de sus letras.','Cambiamos la primera letra: la G por una A. GAG pasa a ser AAG. ¿Será el mismo resultado?','La pieza 6 ahora es lisina (Lys). Mismo lugar, otra letra, otra enfermedad: la hemoglobina C forma cristales y suele dar una anemia más leve.'],note:'<b>Encontraste la hemoglobina C: Glu6Lys.</b> Cambiaste la letra 19, G por A. Es el mismo lugar que la anemia falciforme, pero con otra letra, y el resultado es distinto: esta hemoglobina tiende a formar cristales dentro del glóbulo rojo y suele causar una anemia más leve. El visor marca la pieza 6 en la estructura normal.'},
     thal:{goal:'Andá al <b>codón 40: CAG</b>, que fabrica la pieza 39, glutamina (Gln). Cambiá su <b>primera</b> letra para convertirlo en una señal de STOP.',display:'<span>?</span> A G',hint:'Pista: las señales de STOP son TAA, TAG y TGA.',toast:'Codón 40 seleccionado: cambiá la C del principio por T y hacé tu predicción.',tour:['Ahora vamos al codón 40: CAG. Le indica a la célula que ponga la pieza 39, glutamina (Gln).','Cambiamos la primera letra: la C por una T. CAG pasa a ser TAG, que es una señal de STOP.','La lectura se corta antes de tiempo: la cadena beta queda con 38 de sus 146 piezas. Sin suficiente cadena beta, el cuerpo fabrica menos hemoglobina. Es una beta-talasemia.'],note:'<b>Encontraste un caso de beta-talasemia: Gln39Stop.</b> Cambiaste la letra 118, C por T, y el codón CAG se volvió TAG, una señal de STOP. La lectura se corta y la cadena beta queda con solo 38 de sus 146 piezas. Sin suficiente cadena beta, el cuerpo fabrica menos hemoglobina.'}
   };
+  const speciesNotes={
+    llama:'<b>¡Así es en la llama!</b> Con esta letra, la pieza 2 pasa de histidina a asparagina, como en la hemoglobina de las llamas, alpacas y guanacos. Ese cambio ayuda a que su hemoglobina agarre más fuerte el oxígeno en la altura de los Andes.',
+    mammoth12:'<b>¡Uno de los cambios del mamut lanudo!</b> La pieza 12 pasa de treonina a alanina. Junto con otros dos cambios (Ala86Ser y Glu101Gln), ayudaba a que su hemoglobina soltara bien el oxígeno aunque hiciera mucho frío.',
+    mammoth86:'<b>¡Uno de los cambios del mamut lanudo!</b> La pieza 86 pasa de alanina a serina. Junto con otros dos cambios (Thr12Ala y Glu101Gln), ayudaba a que su hemoglobina soltara bien el oxígeno aunque hiciera mucho frío.',
+    mammoth101:'<b>¡Uno de los cambios del mamut lanudo!</b> La pieza 101 pasa de glutamato a glutamina. Junto con otros dos cambios (Thr12Ala y Ala86Ser), ayudaba a que su hemoglobina soltara bien el oxígeno aunque hiciera mucho frío.'
+  };
   const titles={nada:'No cambió ninguna pieza',pieza:'Cambió una pieza',corte:'La proteína se cortó',desorden:'Se alteró la lectura o el final'};
   const effects={'synonymous':'Mutación silenciosa',missense:'Cambio de aminoácido',nonsense:'STOP prematuro','start-loss':'Pérdida del inicio','stop-loss':'Pérdida del STOP',frameshift:'Cambio del marco de lectura'};
   const baseNames={A:'adenina',T:'timina',C:'citosina',G:'guanina'};
@@ -110,7 +116,8 @@
     }
     const guess=lastGuess,heading=r.effect==='start-loss'?'Falta la señal para empezar':r.effect==='stop-loss'?'Falta la señal para terminar':r.effect==='frameshift'?'Se corrió toda la lectura':titles[r.category];
     const length=r.lengthUnknown?`${r.mature.length}+`:`${r.mature.length}`;
-    box.innerHTML=`<div class="result-top"><h3>${heading}</h3>${guess?`<span class="guess-feedback${guess===r.category?' hit':''}">${guess===r.category?'✓ ¡Acertaste!':'Esta vez no acertaste'}</span>`:''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase?`<p class="sickle-note">${caseInfo[r.realCase.id].note}</p>`:''}<details><summary>Ver detalles</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown?' · final desconocido':''}</div><div><b>${r.differences.length}</b>Piezas distintas entre las comparables</div><div><b>${r.originalCodon||'—'} / ${r.mutatedCodon||'—'}</b>Codón original / mutado</div></div><p>Comparación de las cadenas de aminoácidos: una letra por aminoácido. Se omite la metionina inicial. Las piezas cambiadas se resaltan.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${r.mature?r.mature.split('').map((aa,i)=>G.EXPECTED[i+1]!==aa?`<mark>${aa}</mark>`:aa).join(''):'No se fabrica en este modelo.'}</div></details>`;
+    box.innerHTML=`<div class="result-top"><h3>${heading}</h3>${guess?`<span class="guess-feedback${guess===r.category?' hit':''}">${guess===r.category?'✓ ¡Acertaste!':'Esta vez no acertaste'}</span>`:''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase?`<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id==='sickle'?' <button class="text-button" data-goto="naturaleza">¿Por qué es tan común? La historia de la malaria →</button>':''}</p>`:''}${r.species?`<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza">Conocé más animales →</button></p>`:''}${r.effect==='start-loss'?`<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza">Conocé más animales →</button></p>`:''}<details><summary>Ver detalles</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown?' · final desconocido':''}</div><div><b>${r.differences.length}</b>Piezas distintas entre las comparables</div><div><b>${r.originalCodon||'—'} / ${r.mutatedCodon||'—'}</b>Codón original / mutado</div></div><p>Comparación de las cadenas de aminoácidos: una letra por aminoácido. Se omite la metionina inicial. Las piezas cambiadas se resaltan.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${r.mature?r.mature.split('').map((aa,i)=>G.EXPECTED[i+1]!==aa?`<mark>${aa}</mark>`:aa).join(''):'No se fabrica en este modelo.'}</div></details>`;
+    box.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>{stopTour();showTab(b.dataset.goto);});
     $('see-3d').onclick=()=>{if(!$('focus-mutation').hidden)viewer.focusMutation();document.querySelector('.protein-panel').scrollIntoView({block:'center',behavior:viewer.reduced.matches?'instant':'smooth'});};
   }
   function reveal(guess=null,count=true){if(!current||revealed)return;revealed=true;lastGuess=guess;const r=current;if(count){stats[r.category]++;if(guess){stats.n++;if(guess===r.category)stats.ok++;}save();}
@@ -119,7 +126,7 @@
     render();
   }
   function restart(){stopTour();clearResult();viewer.reset();viewer.rotating=!viewer.reduced.matches;viewer.onRotation();render();window.scrollTo({top:0,behavior:'instant'});}
-  function showTab(tab){all('.tab-page').forEach(p=>p.hidden=p.id!==`tab-${tab}`);all('.nav').forEach(b=>{b.classList.toggle('active',b.dataset.tab===tab);if(b.dataset.tab===tab)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});if(tab==='stats'||tab==='proyecto')renderStats();if(tab==='lab'){viewer.resize();render();}window.scrollTo({top:0,behavior:'instant'});}
+  function showTab(tab){all('.tab-page').forEach(p=>p.hidden=p.id!==`tab-${tab}`);all('.nav').forEach(b=>{b.classList.toggle('active',b.dataset.tab===tab);if(b.dataset.tab===tab)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});if(tab==='stats'||tab==='proyecto')renderStats();if(tab==='lab'){viewer.resize();render();}if(tab!=='naturaleza')evoStop();window.scrollTo({top:0,behavior:'instant'});}
   function renderStats(){const total=stats.nada+stats.pieza+stats.corte+stats.desorden;$('stats-overview').innerHTML=`<div class="stat"><b>${total}</b>Mutaciones descubiertas</div><div class="stat"><b>${stats.n}</b>Predicciones del público</div><div class="stat"><b>${stats.n?Math.round(stats.ok/stats.n*100)+' %':'—'}</b>${stats.n?`${stats.ok} respuestas correctas`:'Todavía sin predicciones'}</div>`;$('stats-bars').innerHTML=Object.entries(titles).map(([key,label])=>`<div class="bar-row"><div><span>${label}</span><b>${stats[key]}</b></div><div class="bar-track"><i style="width:${total?stats[key]/total*100:0}%"></i></div></div>`).join('');$('stand-stats').innerHTML=`<div class="stat"><b>${total}</b>mutaciones probadas</div><div class="stat"><b>${stats.n?Math.round(stats.ok/stats.n*100)+' %':'—'}</b>${stats.n?`de ${stats.n===1?'1 predicción acertada':stats.n+' predicciones acertadas'}`:'todavía sin predicciones'}</div>`;$('storage-status').textContent=persistent?'Los datos persisten en este navegador. Descargalos antes de cambiar de equipo o borrar los datos del navegador.':'Guardado permanente no disponible. Descargá los resultados antes de cerrar.';}
   function setModel(model){viewer.model=model;viewer.reset();all('[data-model]').forEach(b=>{b.classList.toggle('active',b.dataset.model===model);b.setAttribute('aria-pressed',String(b.dataset.model===model));});$('all-chains').disabled=model==='af';$('confidence-label').hidden=model!=='af';$('viewer-badge').textContent=model==='pdb'?'CADENA BETA · PDB 2HHB':'CADENA BETA · ALPHAFOLD P68871';$('model-caption').textContent=model==='pdb'?'Estructura medida por rayos X. Cada tramo conecta las posiciones reales de los aminoácidos.':'Predicción de la cadena beta normal. La confianza de IA describe el modelo, no el efecto de una mutación.';updateLegend();}
   function updateLegend(){const confidence=viewer.model==='af'&&viewer.confidence;$('protein-legend').innerHTML=confidence?'<span class="gradient-line" style="background:linear-gradient(90deg,#388de7 25%,#65cbf3 25%,#65cbf3 50%,#ffdb13 50%,#ffdb13 75%,#ff7d45 75%)"></span><span>pLDDT &gt;90</span><span>70–90</span><span>50–70</span><span>&lt;50</span>':'<span class="gradient-line"></span><span>Inicio de la cadena</span><span>Final</span>';}
@@ -199,6 +206,57 @@
     else if(e.key==='Escape'){stopTour();restart();}
   });
 
-  centerOn(position);renderSurvey();renderStats();render();
+  // Naturaleza: mapa de la malaria y las mutaciones que protegen (esquema por país, códigos ISO 3166 numéricos).
+  const AFRICA_HBS='686 270 624 324 694 430 384 466 854 288 768 204 562 566 120 148 140 729 728 226 266 178 180 024 800 404 834 646 108 894 454 508',
+    MAP_LAYERS={
+      hbs:{name:'Anemia falciforme (HbS) frecuente',ids:AFRICA_HBS+' 682 512 887 356',text:'La mutación de la anemia falciforme es frecuente en África al sur del Sahara, en partes de Arabia y en la India: justo donde la malaria era más común.'},
+      hbc:{name:'Hemoglobina C (HbC) frecuente',ids:'854 288 466 768 204 384 566',text:'La hemoglobina C, el otro cambio del codón 7, se concentra en África occidental, una zona de malaria intensa. También protege, sobre todo con dos copias.'},
+      thal:{name:'Talasemias y HbE frecuentes',ids:'380 300 196 792 364 368 760 422 682 586 356 050 104 764 418 116 704 458 360 608 144 818 788',text:'Donde no llegó la mutación falciforme, otras mutaciones de la hemoglobina se volvieron comunes: talasemias en el Mediterráneo y Asia, y HbE en el sudeste asiático. También coinciden con la malaria.'}
+    },
+    MALARIA_IDS=new Set((AFRICA_HBS+' 231 706 232 450 716 516 072 478 262 682 512 887 356 586 050 104 764 418 116 704 458 360 608 144 598 626 380 300 196 792 364 368 760 422 400 818 788 012 504 724 620 340 222 558 188 591 076 170 862 328 740 604 068 218 600 332 214 192 388 484 320 084 004').split(' '));
+  let mapLayer='hbs';
+  function renderMap(){
+    const svg=$('world-map');
+    if(!svg.childElementCount){
+      svg.setAttribute('viewBox',`0 0 ${WORLD_MAP.width} ${WORLD_MAP.height}`);
+      svg.innerHTML=`<defs><pattern id="malaria-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2.6" height="7" fill="#ff5d6c"/></pattern></defs><g class="countries">${WORLD_MAP.countries.map(c=>`<path data-id="${c.id}" d="${c.d}"/>`).join('')}</g><g class="malaria">${WORLD_MAP.countries.filter(c=>MALARIA_IDS.has(c.id)).map(c=>`<path d="${c.d}"/>`).join('')}</g>`;
+    }
+    const layer=MAP_LAYERS[mapLayer],ids=new Set(layer.ids.split(' '));
+    svg.querySelectorAll('.countries path').forEach(p=>p.classList.toggle('on',ids.has(p.dataset.id)));
+    svg.querySelector('.malaria').style.display=$('map-malaria').checked?'':'none';
+    all('[data-layer]').forEach(b=>{const on=b.dataset.layer===mapLayer;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});
+    $('map-layer-name').textContent=layer.name;$('map-text').textContent=layer.text;
+  }
+  all('[data-layer]').forEach(b=>b.onclick=()=>{mapLayer=b.dataset.layer;renderMap();});$('map-malaria').onchange=renderMap;
+
+  // Jugá a la evolución: frecuencia de la mutación (q) en un pueblo, generación a generación.
+  // Hardy-Weinberg con selección: q' = (p·q·wAS + q²·wSS) / (p²·wAA + 2·p·q·wAS + q²·wSS). Valores ilustrativos.
+  const evo={q0:.02,q:.02,gen:0,history:[],timer:null};
+  const fitness=malaria=>({AA:malaria?.85:1,AS:1,SS:.2});
+  const genotypes=q=>{const p=1-q;return {AA:p*p,AS:2*p*q,SS:q*q};};
+  // Orden fijo y mezclado de los 100 lugares, para que cada persona no salte de lugar entre generaciones.
+  const seats=[...Array(100).keys()].map(i=>[i,Math.sin(i*12.9898)*43758.5453%1]).sort((a,b)=>a[1]-b[1]).map(x=>x[0]);
+  function evoStep(){const w=fitness($('evo-malaria').checked),p=1-evo.q,mean=p*p*w.AA+2*p*evo.q*w.AS+evo.q*evo.q*w.SS;evo.q=(p*evo.q*w.AS+evo.q*evo.q*w.SS)/mean;evo.gen++;evo.history.push([evo.gen,genotypes(evo.q).AS,$('evo-malaria').checked]);}
+  function renderEvolution(){
+    const g=genotypes(evo.q),ss=Math.round(g.SS*100),as=Math.round(g.AS*100),kind=Array(100).fill('aa');
+    seats.slice(0,as).forEach(i=>kind[i]='as');seats.slice(as,as+ss).forEach(i=>kind[i]='ss');
+    $('village').innerHTML=kind.map(k=>`<i class="${k}"></i>`).join('');
+    const pct=v=>`${(v*100).toLocaleString('es-AR',{maximumFractionDigits:1})} %`;
+    $('evo-stats').innerHTML=`<div><b>${evo.gen}</b>generaciones</div><div><b>${pct(g.AS)}</b>portadores</div><div><b>${pct(g.SS)}</b>con anemia falciforme</div>`;
+    const maxGen=Math.max(40,evo.gen),x=n=>40+n/maxGen*350,y=v=>150-v/.4*135,points=[[0,genotypes(evo.q0).AS],...evo.history.map(([n,v])=>[n,v])];
+    const eq=fitness(true),qEq=(1-eq.AA)/((1-eq.AA)+(1-eq.SS)),asEq=2*qEq*(1-qEq);
+    $('evo-chart').innerHTML=`<g class="grid">${[0,.1,.2,.3,.4].map(v=>`<line x1="40" x2="390" y1="${y(v)}" y2="${y(v)}"/><text x="34" y="${y(v)+4}">${v*100}%</text>`).join('')}</g><line class="eq" x1="40" x2="390" y1="${y(asEq)}" y2="${y(asEq)}"/><text class="eq-label" x="388" y="${y(asEq)-6}">equilibrio con malaria</text><polyline points="${points.map(([n,v])=>`${x(n).toFixed(1)},${y(v).toFixed(1)}`).join(' ')}"/><text x="205" y="168" class="axis">generaciones</text>`;
+  }
+  function evoStop(){clearInterval(evo.timer);evo.timer=null;$('evo-play').innerHTML='<span aria-hidden="true">▶</span> Avanzar 10';}
+  $('evo-step').onclick=()=>{evoStop();evoStep();renderEvolution();};
+  $('evo-play').onclick=()=>{if(evo.timer)return evoStop();let n=0;$('evo-play').textContent='❚❚ Pausar';const tick=()=>{evoStep();renderEvolution();if(++n>=10)evoStop();};if(viewer.reduced.matches){while(evo.timer===null&&n<10)tick();evoStop();}else evo.timer=setInterval(tick,260);};
+  $('evo-reset').onclick=()=>{evoStop();evo.q=evo.q0;evo.gen=0;evo.history=[];renderEvolution();};
+
+  // Tarjetas de especies: se abren al tocarlas y algunas llevan su cambio al simulador.
+  all('.species-open').forEach(b=>b.onclick=()=>{const answer=b.nextElementSibling,open=answer.hidden;answer.hidden=!open;b.setAttribute('aria-expanded',String(open));b.textContent=open?'Ocultar':'Descubrí cómo';b.closest('.species').classList.toggle('open',open);});
+  const tries={...Object.fromEntries(G.SPECIES.map(c=>[c.id,{position:c.position,type:'sub',base:c.base}])),icefish:{position:0,type:'sub',base:'C'}};
+  all('.species-try').forEach(b=>b.onclick=()=>{const m=tries[b.dataset.try];showTab('lab');clearResult();position=m.position;centerOn(position);apply(m,{guess:false});});
+
+  centerOn(position);renderSurvey();renderStats();render();renderMap();renderEvolution();
   if(location.hash==='#jurado')startTour();
 })();

@@ -30,6 +30,16 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     {id:'hbc', name:'Hemoglobina C', notation:'Glu6Lys', position:18, base:'A'},
     {id:'thal', name:'Beta-talasemia', notation:'Gln39Stop', position:117, base:'T'}
   ];
+  // Cambios de otras especies que en el gen humano son de una sola letra (la pieza se cuenta sin la metionina inicial).
+  const SPECIES = [
+    {id:'llama', name:'Llama', notation:'His2Asn', position:6, base:'A'},
+    {id:'mammoth12', name:'Mamut lanudo', notation:'Thr12Ala', position:36, base:'G'},
+    {id:'mammoth86', name:'Mamut lanudo', notation:'Ala86Ser', position:258, base:'T'},
+    {id:'mammoth101', name:'Mamut lanudo', notation:'Glu101Gln', position:303, base:'C'}
+  ];
+  function findSpecies(position,type,base) {
+    return type==='sub' ? SPECIES.find(c=>c.position===position&&c.base===base)||null : null;
+  }
   function findCase(position,type,base) {
     return type==='sub' ? CASES.find(c=>c.position===position&&c.base===base)||null : null;
   }
@@ -54,7 +64,7 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     else {category='pieza';effect='missense';}
     const differences=[];
     for(let i=0;i<Math.min(mature.length,original.length);i++) if(mature[i]!==original[i]) differences.push(i+1);
-    return {position,type,base,changeIndex,mutated,category,effect,startLost,protein,mature,stop:tr.stop,codon,piece:codon,originalCodon:DNA.slice(codon*3,codon*3+3),mutatedCodon:mutated.slice(codon*3,codon*3+3),differences,realCase:findCase(position,type,base),lengthUnknown:!startLost&&tr.stop===-1};
+    return {position,type,base,changeIndex,mutated,category,effect,startLost,protein,mature,stop:tr.stop,codon,piece:codon,originalCodon:DNA.slice(codon*3,codon*3+3),mutatedCodon:mutated.slice(codon*3,codon*3+3),differences,realCase:findCase(position,type,base),species:findSpecies(position,type,base),lengthUnknown:!startLost&&tr.stop===-1};
   }
   // Prueba todas las sustituciones posibles (444 letras × 3 letras nuevas) y cuenta cada efecto.
   function substitutionSurvey() {
@@ -90,7 +100,7 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     }
     return {chains,hemes:alphaFold?[]:hemes,beta};
   }
-  const api={DNA,EXPECTED,table,names,CASES,translate,simulate,substitutionSurvey,parsePDB};
+  const api={DNA,EXPECTED,table,names,CASES,SPECIES,translate,simulate,substitutionSurvey,parsePDB};
   if(typeof module!=='undefined')module.exports=api;
   root.Genetics=api;
 })(globalThis);

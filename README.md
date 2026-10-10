@@ -34,15 +34,25 @@ La sección **Casos reales** propone tres mutaciones conocidas para encontrar:
 
 Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la metionina inicial, como en la literatura científica.
 
+### Naturaleza
+
+La pestaña **Naturaleza** muestra cómo cambió la hemoglobina fuera del laboratorio:
+
+- **Una mutación que protege:** por qué la anemia falciforme es común donde había malaria. Tiene un mapa con capas (HbS, HbC, talasemias y HbE, con la malaria superpuesta) y el juego **Jugá a la evolución**: un pueblo de 100 personas donde se ve, generación a generación, cómo la malaria hace crecer a los portadores hasta un equilibrio (selección balanceada). Los valores del juego son ilustrativos.
+- **Animales con hemoglobinas especiales:** la llama, el ánsar indio, el mamut lanudo y el pez de hielo. Los cambios de la llama y del mamut son de una sola letra en el gen humano y se pueden probar en el simulador, que los reconoce.
+
+Fuentes: Piel y col. 2010 (*Nature Communications*), Taylor y col. 2012 (*Lancet Infectious Diseases*), Weatherall y Clegg 2001 (*Bull. OMS*), OMS región africana 2010, Piccinini y col. 1990, Jessen y col. 1991 (*PNAS*), Campbell y col. 2010 (*Nature Genetics*) y Cocca y col. 1995 (*PNAS*). El mapa usa Natural Earth (dominio público) y es un esquema simplificado por país.
+
 ## Estructura
 
 ```
 index.html              estructura de la página
 css/estilos.css         estilos
 js/datos-modelos.js     coordenadas 3D de la hemoglobina (PDB y AlphaFold)
+js/datos-mapa.js        mapa del mundo simplificado (Natural Earth)
 js/genetica.js          ADN, código genético, casos reales y clasificación de mutaciones
 js/visor-3d.js          visor 3D dibujado en canvas
-js/app.js               interfaz, póster, recorrido guiado, pasos, misiones y contador del stand
+js/app.js               interfaz, póster, recorrido guiado, naturaleza, pasos, misiones y contador del stand
 tests/                  pruebas automáticas
 ```
 

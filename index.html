@@ -11,7 +11,7 @@
 <a class="skip" href="#main">Saltar al contenido</a>
 <header class="topbar">
   <a class="brand" href="#" aria-label="ADN, genes y proteínas, inicio"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="brand-gradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9a4d"/><stop offset="1" stop-color="#ff5c9d"/></linearGradient></defs><path d="M9 4c0 12 14 12 14 24M23 4C23 16 9 16 9 28M10 8h12M11 24h10M13 13h6M13 19h6" stroke="url(#brand-gradient)" fill="none" stroke-width="2.4" stroke-linecap="round"/></svg><span>ADN, genes<br><b>y proteínas</b></span></a>
-  <nav aria-label="Secciones"><button class="nav active" data-tab="proyecto" aria-current="page">Proyecto</button><button class="nav" data-tab="lab">Simulador</button><button class="nav" data-tab="learn">Cómo funciona</button></nav>
+  <nav aria-label="Secciones"><button class="nav active" data-tab="proyecto" aria-current="page">Proyecto</button><button class="nav" data-tab="lab">Simulador</button><button class="nav" data-tab="naturaleza">Naturaleza</button><button class="nav" data-tab="learn">Cómo funciona</button></nav>
   <button id="fullscreen" class="icon-button" title="Pantalla completa" aria-label="Activar pantalla completa">⛶</button>
 </header>
 <main id="main">
@@ -100,6 +100,61 @@
   </div>
   <p class="disclaimer">Una simulación educativa con una secuencia pública. No es un diagnóstico.</p>
 </section>
+<section id="tab-naturaleza" class="tab-page nature" hidden>
+  <div class="poster-hero"><p class="eyebrow">MÁS ALLÁ DEL LABORATORIO</p><h1>La hemoglobina <em>en la naturaleza</em></h1><p>Las mismas letras que cambiás en el simulador también cambiaron en personas y animales reales. A veces enferman… y a veces salvan vidas.</p></div>
+
+  <article class="poster-card nature-block">
+    <span class="lesson-number">01</span><h2>Una mutación que protege</h2>
+    <p class="poster-big">La anemia falciforme es una enfermedad grave. Entonces, ¿por qué la mutación es tan común en algunas regiones? Porque tener <b>una sola copia</b> protege contra la <b>malaria</b>.</p>
+    <div class="genotypes">
+      <div class="genotype aa"><span class="cells" aria-hidden="true"><i></i><i></i></span><b>Ninguna copia</b><span>Sin anemia, pero sin protección contra la malaria.</span></div>
+      <div class="genotype as"><span class="cells" aria-hidden="true"><i></i><i class="s"></i></span><b>Una copia · portador</b><span>Casi sin síntomas y muy protegido: el riesgo de malaria grave baja cerca de un 90 %.</span></div>
+      <div class="genotype ss"><span class="cells" aria-hidden="true"><i class="s"></i><i class="s"></i></span><b>Dos copias</b><span>Anemia falciforme: los glóbulos rojos se deforman y se traban.</span></div>
+    </div>
+    <p class="muted nature-note">Cada persona tiene dos copias del gen HBB: una de su mamá y otra de su papá.</p>
+
+    <h3 class="nature-sub">¿Dónde pasa?</h3>
+    <div class="map-controls" role="group" aria-label="Capa del mapa">
+      <button class="chip active" data-layer="hbs" aria-pressed="true">Anemia falciforme</button><button class="chip" data-layer="hbc" aria-pressed="false">Hemoglobina C</button><button class="chip" data-layer="thal" aria-pressed="false">Talasemias y HbE</button>
+      <label class="challenge map-malaria"><input type="checkbox" id="map-malaria" checked> <span><b>Superponer</b> dónde había malaria</span></label>
+    </div>
+    <figure class="map-figure"><svg id="world-map" role="img" aria-labelledby="map-caption"></svg>
+      <figcaption id="map-caption"><span class="map-key"><i class="fill"></i><span id="map-layer-name">Mutación frecuente</span></span><span class="map-key"><i class="hatch"></i>Malaria antes de las campañas de control</span><p id="map-text"></p></figcaption>
+    </figure>
+    <p class="muted map-source">Esquema simplificado por país, para mostrar el patrón general. Basado en Piel y col. (2010), Weatherall y Clegg (2001) y la OMS.</p>
+
+    <h3 class="nature-sub">Jugá a la evolución</h3>
+    <p>Un pueblo imaginario de 100 personas. Al principio, casi nadie tiene la mutación. Elegí si hay malaria y avanzá las generaciones: ¿qué pasa con los portadores?</p>
+    <div class="evolution">
+      <div class="village" id="village" aria-hidden="true"></div>
+      <div class="evo-side">
+        <div class="evo-controls">
+          <label class="challenge"><input type="checkbox" id="evo-malaria" checked> <span><b>Hay malaria</b> en el pueblo</span></label>
+          <div class="evo-buttons"><button class="primary" id="evo-step">Avanzar 1 generación</button><button class="ghost" id="evo-play"><span aria-hidden="true">▶</span> Avanzar 10</button><button class="ghost" id="evo-reset"><span aria-hidden="true">↺</span> Reiniciar</button></div>
+        </div>
+        <div class="evo-stats" id="evo-stats" aria-live="polite"></div>
+        <svg class="evo-chart" id="evo-chart" viewBox="0 0 400 170" role="img" aria-label="Porcentaje de portadores por generación"></svg>
+        <div class="village-key"><span><i class="aa"></i>Ninguna copia</span><span><i class="as"></i>Portador</span><span><i class="ss"></i>Anemia falciforme</span></div>
+      </div>
+    </div>
+    <details><summary>Las reglas del juego</summary><p>Con malaria, de cada 100 personas llegan a tener hijos: 85 sin la mutación, 100 portadores y 20 con anemia falciforme. Sin malaria, los que no tienen la mutación también llegan 100. Son valores ilustrativos, no medidos.</p><p>En cada generación, las copias del gen de los sobrevivientes se mezclan al azar para formar la generación siguiente (equilibrio de Hardy-Weinberg). Con malaria, la mutación crece hasta un equilibrio: los portadores ganan, pero las personas con dos copias se enferman. Por eso no desaparece ni llega a todos. Este fenómeno se llama <b>selección balanceada</b>.</p><p>En la vida real, en muchos países de África entre el 10 % y el 40 % de las personas son portadoras (OMS, región africana).</p></details>
+  </article>
+
+  <article class="poster-card nature-block">
+    <span class="lesson-number">02</span><h2>Animales con hemoglobinas especiales</h2>
+    <p class="poster-big">Cada especie ajustó su hemoglobina a su ambiente. Tocá cada tarjeta para descubrir cómo.</p>
+    <div class="species-grid">
+      <article class="species" data-species="llama"><div class="species-icon mountain"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 40 18 16l8 12 6-8 12 20Z" fill="currentColor"/><path d="m18 16 4 7-4-2-3 3Z" fill="#fff" opacity=".85"/></svg></div><h3>Llama</h3><p class="species-place">Los Andes, a unos 4.000 m de altura</p><p class="species-question">¿Cómo respira donde el aire tiene poco oxígeno?</p><button class="ghost species-open" aria-expanded="false">Descubrí cómo</button>
+        <div class="species-answer" hidden><p>Su hemoglobina <b>agarra el oxígeno con más fuerza</b>, como una mano que aprieta para no soltar lo poco que consigue. Uno de los cambios clave está en la cadena beta, la misma de este proyecto: en la pieza 2 tiene asparagina en lugar de histidina.</p><p class="species-change">Pieza 2: His → Asn · en el gen humano, <b>C</b>AT → <b>A</b>AT: ¡una sola letra!</p><button class="primary species-try" data-try="llama">Probalo en el simulador <span aria-hidden="true">→</span></button><p class="species-source">Piccinini y col. (1990), hemoglobina de guanaco, llama y alpaca.</p></div></article>
+      <article class="species" data-species="goose"><div class="species-icon sky"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 40 18 16l8 12 6-8 12 20Z" fill="currentColor"/><path d="m18 16 4 7-4-2-3 3Z" fill="#fff" opacity=".85"/></svg></div><h3>Ánsar indio</h3><p class="species-place">Cruza el Himalaya volando</p><p class="species-question">¿Cómo vuela tan alto sin quedarse sin aire?</p><button class="ghost species-open" aria-expanded="false">Descubrí cómo</button>
+        <div class="species-answer" hidden><p>Un solo cambio en la <b>otra cadena</b> de la hemoglobina, la alfa, afloja una unión entre las cadenas y hace que capture más oxígeno. Cuando los científicos pusieron ese cambio en hemoglobina humana, también capturó más oxígeno.</p><p class="species-change">Cadena alfa, pieza 119: Pro → Ala</p><p class="species-limit">Está en otro gen (alfa), así que no se puede probar en este simulador.</p><p class="species-source">Jessen y col. (1991), PNAS.</p></div></article>
+      <article class="species" data-species="mammoth"><div class="species-icon ice"><svg viewBox="0 0 48 48" aria-hidden="true"><g stroke="currentColor" stroke-width="3.4" stroke-linecap="round" fill="none"><path d="M24 5v38M7.5 14.5l33 19M7.5 33.5l33-19"/><path d="m18 8 6 5 6-5M18 40l6-5 6 5M6 22l8-1-3-7M42 26l-8 1 3 7M6 26l8 1-3 7M42 22l-8-1 3-7"/></g></svg></div><h3>Mamut lanudo</h3><p class="species-place">Siberia, durante la Edad de Hielo</p><p class="species-question">¿Cómo llevaba oxígeno con un frío extremo?</p><button class="ghost species-open" aria-expanded="false">Descubrí cómo</button>
+        <div class="species-answer" hidden><p>Con frío, la hemoglobina común <b>suelta mal el oxígeno</b>. Científicos reconstruyeron la del mamut a partir de ADN antiguo: tres cambios hacían que la soltara igual de bien aunque hiciera frío, y así perdía menos calor.</p><p class="species-change">Los tres son de una sola letra en el gen humano. Probá cada uno:</p><div class="species-tries"><button class="ghost species-try" data-try="mammoth12">Thr12Ala</button><button class="ghost species-try" data-try="mammoth86">Ala86Ser</button><button class="ghost species-try" data-try="mammoth101">Glu101Gln</button></div><p class="species-source">Campbell y col. (2010), Nature Genetics. En el mamut, esta cadena es una mezcla de beta y delta.</p></div></article>
+      <article class="species" data-species="icefish"><div class="species-icon water"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5C17 16 11 23 11 30a13 13 0 0 0 26 0c0-7-6-14-13-25Z" fill="none" stroke="currentColor" stroke-width="3.4"/><path d="M18 31a6 6 0 0 0 6 6" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg></div><h3>Pez de hielo</h3><p class="species-place">Antártida, en agua a casi −2 °C</p><p class="species-question">¿Cómo vive sin nada de hemoglobina?</p><button class="ghost species-open" aria-expanded="false">Descubrí cómo</button>
+        <div class="species-answer" hidden><p>No tiene hemoglobina: su sangre es <b>casi transparente</b>. En la mayoría de estas especies, el gen de la cadena beta directamente desapareció. Sobrevive porque el agua helada tiene mucho oxígeno disuelto, y tiene un corazón grande y mucha sangre.</p><p class="species-change">Podés imitarlo: si se pierde la señal de inicio ATG, no se fabrica la cadena beta.</p><button class="primary species-try" data-try="icefish">Apagá el gen en el simulador <span aria-hidden="true">→</span></button><p class="species-source">Cocca y col. (1995), PNAS.</p></div></article>
+    </div>
+  </article>
+</section>
 <section id="tab-learn" class="tab-page reading-page" hidden><p class="eyebrow">CUATRO IDEAS PARA EMPEZAR</p><h1>De cuatro letras a una proteína.</h1><div class="learning-grid">
   <article><span class="lesson-number">01</span><h2>¿Qué es el ADN?</h2><p>Es una molécula que guarda instrucciones de los seres vivos. Usa cuatro letras: A, T, C y G. En su doble hélice, A se une con T y C con G.</p><div class="pair-demo"><span class="base a">A</span><i>···</i><span class="base t">T</span><span class="base c">C</span><i>···</i><span class="base g">G</span></div><p>Un gen es un tramo de ADN. Algunos genes contienen la receta para fabricar una proteína.</p></article>
   <article><span class="lesson-number">02</span><h2>¿Cómo se lee?</h2><p>La célula hace una copia de trabajo, el ARN. El ribosoma lee esa copia de tres en tres. Cada grupo, llamado <b>codón</b>, indica un aminoácido o una señal de parada.</p><div class="recipe"><span>ADN <b>ATG GAA TTT TGA</b></span><span>ARN <b>AUG GAA UUU UGA</b></span><span>Piezas <b>Met · Glu · Phe · STOP</b></span></div></article>
@@ -114,6 +169,7 @@
 <div class="toast" id="toast" role="status" hidden></div>
 <dialog id="mission-dialog" aria-labelledby="mission-heading"><button class="dialog-close" aria-label="Cerrar" id="close-mission">×</button><p class="eyebrow">MISIÓN / UNA LETRA PUEDE CAMBIARLO TODO</p><h2 id="mission-heading">Elegí un caso real.</h2><div class="case-picker" role="group" aria-label="Casos reales"><button data-case="sickle" class="active" aria-pressed="true"><b>Anemia falciforme</b>Glu6Val</button><button data-case="hbc" aria-pressed="false"><b>Hemoglobina C</b>Glu6Lys</button><button data-case="thal" aria-pressed="false"><b>Beta-talasemia</b>Gln39Stop</button></div><div id="case-detail" aria-live="polite"></div><p class="muted">Son casos históricos, sin relación con las personas que visitan el stand.</p><button class="primary" id="start-mission">Ir al codón 7</button></dialog>
 <script src="js/datos-modelos.js"></script>
+<script src="js/datos-mapa.js"></script>
 <script src="js/genetica.js"></script>
 <script src="js/visor-3d.js"></script>
 <script src="js/app.js"></script>

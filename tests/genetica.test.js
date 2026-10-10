@@ -155,3 +155,14 @@ test('las 1.332 sustituciones posibles se reparten como muestra el póster', () 
   assert.deepEqual(counts, { missense: 957, synonymous: 325, nonsense: 34, 'start-loss': 9, 'stop-loss': 7 });
   assert.equal(Object.values(counts).reduce((a, b) => a + b, 0), 444 * 3);
 });
+
+test('los cambios de otras especies son de una letra y coinciden con su notación', () => {
+  const names = G.names;
+  for (const c of G.SPECIES) {
+    const r = sub(c.position, c.base);
+    assert.equal(r.effect, 'missense', c.id);
+    assert.equal(`${names[G.EXPECTED[r.piece]]}${r.piece}${names[G.table[r.mutatedCodon]]}`, c.notation, c.id);
+    assert.equal(r.species.id, c.id);
+  }
+  assert.equal(sub(6, 'G').species, null);
+});

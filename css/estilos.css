@@ -170,6 +170,90 @@ details p{margin-top:14px;color:var(--muted);font-size:16px}
 .prediction-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
 #skip-guess{margin-top:8px}
 
+/* Naturaleza */
+.nature{padding:10px 0 40px}
+.nature-block{margin-bottom:22px}
+.nature-block>p{margin-top:12px}
+.poster-card .nature-sub{font-size:22px;margin:34px 0 12px}
+.nature-note{font-size:16px}
+.genotypes{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.genotype{display:grid;gap:4px;align-content:start;background:var(--well);border:2px solid var(--line);border-radius:16px;padding:16px;color:var(--muted);font-size:16px}
+.genotype b{color:var(--text);font-size:18px}
+.genotype.as{border-color:var(--accent)}
+.genotype.as b{color:var(--accent)}
+.cells{display:flex;gap:6px;margin-bottom:6px}
+.cells i{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#b3263a 0 32%,#ff5d6c 34%)}
+.cells i.s{border-radius:50% 50% 50% 50%/22% 22% 78% 78%;transform:rotate(-30deg);background:#c9505e;height:20px;margin-top:7px}
+.map-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{background:var(--card-2);border:2px solid var(--line);border-radius:999px;padding:8px 16px;font-size:16px;font-weight:600;min-height:44px}
+.chip.active{background:var(--accent);border-color:var(--accent);color:var(--ink)}
+.map-malaria{margin-left:auto}
+.map-figure{margin:14px 0 0;background:var(--well);border-radius:18px;padding:12px}
+#world-map{display:block;width:100%;height:auto}
+#world-map .countries path{fill:#2c2868;stroke:#100d2c;stroke-width:.6}
+#world-map .countries path.on{fill:var(--accent)}
+#world-map .malaria path{fill:url(#malaria-hatch);opacity:.75;stroke:none;pointer-events:none}
+.map-figure figcaption{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;padding:10px 6px 4px;font-size:15px;color:var(--muted)}
+.map-figure figcaption p{flex-basis:100%;margin-top:4px;color:var(--text);font-size:17px}
+.map-key{display:inline-flex;align-items:center;gap:8px}
+.map-key i{width:18px;height:14px;border-radius:4px}
+.map-key i.fill{background:var(--accent)}
+.map-key i.hatch{background:repeating-linear-gradient(45deg,#ff5d6c 0 2px,transparent 2px 5px);border:1px solid #ff5d6c80}
+.map-source{font-size:14px;margin-top:10px}
+.evolution{display:grid;grid-template-columns:minmax(220px,1fr) 1.4fr;gap:22px;margin-top:16px;align-items:start}
+.village{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;background:var(--well);border-radius:18px;padding:16px}
+.village i{aspect-ratio:1;border-radius:50%;background:#4fd8ff;transition:background-color .4s}
+.village i.as{background:var(--accent)}
+.village i.ss{background:var(--red)}
+.evo-side{display:grid;gap:14px}
+.evo-controls{display:grid;gap:12px}
+.evo-controls .challenge{justify-self:start}
+.evo-buttons{display:flex;flex-wrap:wrap;gap:10px}
+.evo-buttons .primary{min-height:52px;font-size:17px;padding:10px 20px}
+.evo-buttons .ghost{min-height:52px}
+.evo-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.evo-stats div{background:var(--card-2);border-radius:14px;padding:10px 12px;font-size:14px;color:var(--muted)}
+.evo-stats b{display:block;font:800 24px var(--mono);color:var(--text)}
+.evo-stats div:nth-child(2) b{color:var(--accent)}
+.evo-stats div:nth-child(3) b{color:var(--red)}
+.evo-chart{width:100%;background:var(--well);border-radius:14px}
+.evo-chart .grid line{stroke:#ffffff14}
+.evo-chart text{fill:#8e89c4;font:11px var(--mono);text-anchor:end}
+.evo-chart .axis{text-anchor:middle}
+.evo-chart .eq{stroke:var(--accent);stroke-dasharray:5 5;opacity:.6}
+.evo-chart .eq-label{fill:var(--accent)}
+.evo-chart polyline{fill:none;stroke:var(--accent);stroke-width:3;stroke-linejoin:round}
+.village-key{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted)}
+.village-key span{display:inline-flex;align-items:center;gap:6px}
+.village-key i{width:14px;height:14px;border-radius:50%;background:#4fd8ff}
+.village-key i.as{background:var(--accent)}
+.village-key i.ss{background:var(--red)}
+.species-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:20px;align-items:start}
+.species{display:grid;align-content:start;gap:6px;background:var(--well);border:2px solid var(--line);border-radius:20px;padding:20px;transition:border-color .2s}
+.species.open{border-color:var(--cyan)}
+.species-icon{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;margin-bottom:6px}
+.species-icon svg{width:40px;height:40px}
+.species-icon.mountain{background:#ff9a4d33;color:var(--orange)}
+.species-icon.sky{background:#b693ff33;color:var(--G)}
+.species-icon.ice{background:#4fd8ff26;color:var(--cyan)}
+.species-icon.water{background:#ffffff1a;color:#e6e4ff}
+.species h3{font-size:24px}
+.species-place{color:var(--cyan);font-size:15px;font-weight:600}
+.species-question{font-size:19px;margin:6px 0 10px}
+.species-open{justify-self:start;min-height:46px;padding:8px 18px}
+.species-answer{display:grid;gap:10px;margin-top:10px;color:var(--muted);font-size:16px}
+.species-answer b{color:var(--text)}
+.species-change{color:var(--text)!important;font:600 15px/1.5 var(--mono);background:var(--card-2);border-radius:10px;padding:10px 12px}
+.species-change b{color:var(--accent)!important}
+.species-limit{font-style:italic}
+.species-tries{display:flex;flex-wrap:wrap;gap:8px}
+.species-tries .ghost{min-height:46px;padding:8px 14px;font-family:var(--mono)}
+.species-answer .primary{justify-self:start;min-height:50px;font-size:17px;padding:10px 20px}
+.species-source{font-size:13px;color:#8e89c4}
+.species-note{border-color:var(--cyan);background:#4fd8ff14}
+.species-note b{color:var(--cyan)}
+.sickle-note .text-button{padding:4px 0;font-size:16px;font-weight:600}
+
 /* Visor 3D */
 .protein-panel{position:sticky;top:84px;overflow:hidden}
 .protein-header{padding:22px 22px 0}
@@ -325,7 +409,8 @@ body.touring .protein-panel{position:static}
   .see-3d{display:block}
   .protein-panel{scroll-margin-top:70px}
   .codon-labels{width:54px}
-  .learning-grid,.stats-layout,.poster-grid,.results-layout{grid-template-columns:1fr}
+  .learning-grid,.stats-layout,.poster-grid,.results-layout,.genotypes,.evolution,.species-grid{grid-template-columns:1fr}
+  .map-malaria{margin-left:0}
   .tour-bar{grid-template-columns:1fr;padding:14px 16px;top:4px}
   .tour-controls{justify-content:space-between}
   .stats-overview{gap:10px}
@@ -339,7 +424,12 @@ body.touring .protein-panel{position:static}
   .brand{font-size:15px}
   .brand-mark{width:34px;height:34px}
   .topbar nav{order:3;width:100%;margin:0}
-  .nav{flex:1;padding:9px 4px;font-size:14px;white-space:nowrap}
+  .topbar nav{display:grid;grid-template-columns:1fr 1fr;border-radius:18px}
+  .nav{padding:9px 4px;font-size:15px;white-space:nowrap}
+  .evo-stats{gap:6px}
+  .evo-stats div{padding:8px;font-size:13px}
+  .evo-stats b{font-size:18px}
+  .evo-side,.evolution>*{min-width:0}
   .poster-actions .primary{flex-wrap:wrap;gap:4px 10px}
   .poster-actions .primary small{width:100%}
   .survey-label small{display:block;margin:2px 0 0}
