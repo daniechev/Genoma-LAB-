@@ -14,12 +14,15 @@ La página abre en **Proyecto**, una portada tipo póster con la pregunta, la hi
 
 El botón **Ver el recorrido guiado** muestra los tres casos reales solo, paso a paso, en unos dos minutos. Se puede pausar, avanzar o volver con los botones, con las flechas del teclado o con un control remoto de presentaciones (AvPág/RePág); Esc lo cierra. Para que arranque directamente, abrí `index.html#jurado`. El recorrido no suma al contador del stand, salvo que el jurado haga su propia predicción.
 
-### Recorrido del simulador
+### El simulador
 
-1. **Elegí una letra** de los 444 nucleótidos del gen.
-2. **Hacé un cambio:** reemplazarla, quitarla o agregar una letra nueva.
-3. **Predecí** qué va a pasar con la proteína.
-4. **Mirá el resultado** y la pieza afectada en el modelo 3D.
+Todo está en una sola pantalla:
+
+1. **Tocá una letra** de los 444 nucleótidos del gen.
+2. **Cambiala, quitala o agregá una letra** con un solo toque. La tira del ADN muestra el *antes* y el *después* de cada codón, con la pieza (aminoácido) que fabrica.
+3. **Mirá al instante** qué le pasa a la proteína y dónde cae el cambio en el modelo 3D. **Deshacer** vuelve al gen normal.
+
+Con el **modo desafío** activado, primero hay que predecir qué va a pasar y después se ve el resultado. Las predicciones se suman a los resultados del stand.
 
 La sección **Casos reales** propone tres mutaciones conocidas para encontrar:
 

@@ -54,7 +54,7 @@
   <p class="poster-sources">Fuentes: estructura <a href="https://www.rcsb.org/structure/2HHB" target="_blank" rel="noreferrer">PDB 2HHB</a> · modelo <a href="https://alphafold.ebi.ac.uk/entry/P68871" target="_blank" rel="noreferrer">AlphaFold P68871</a> · proteína <a href="https://www.uniprot.org/uniprotkb/P68871/entry" target="_blank" rel="noreferrer">UniProt P68871</a></p>
 </section>
 <section id="tab-lab" class="tab-page" hidden>
-  <div class="hero"><h1>¿Qué cambia con <em>una letra?</em></h1><p>Modificá el ADN. Hacé una predicción. Descubrí qué pasa con la proteína.</p></div>
+  <div class="hero lab-hero"><h1>¿Qué cambia con <em>una letra?</em></h1><p>Tocá una letra del ADN, cambiala y mirá al instante qué le pasa a la proteína.</p></div>
   <section class="tour-bar" id="tour-bar" aria-label="Recorrido guiado" hidden>
     <div class="tour-progress" aria-hidden="true"><i id="tour-timer"></i></div>
     <div class="tour-body">
@@ -70,41 +70,18 @@
     </div>
     <div class="tour-end" id="tour-end" hidden><button class="primary" id="tour-try">Probarlo vos <span aria-hidden="true">→</span></button><button class="ghost" id="tour-project">Volver al proyecto</button><button class="ghost" id="tour-replay"><span aria-hidden="true">↺</span> Repetir</button></div>
   </section>
-  <div class="stepbar" id="experiment">
-    <ol class="steps" aria-label="Pasos del experimento"><li class="current" data-step="1"><b>1</b><span>Elegí</span></li><li data-step="2"><b>2</b><span>Mutá</span></li><li data-step="3"><b>3</b><span>Adiviná</span></li><li data-step="4"><b>4</b><span>Descubrí</span></li></ol>
-    <button id="restart" class="ghost restart" hidden><span aria-hidden="true">↺</span><span class="restart-label">Empezar de nuevo</span></button>
-  </div>
-  <div class="workspace">
+  <div class="workspace" id="experiment">
     <div class="stage">
-      <section class="panel" data-panel="1">
-        <h2 tabindex="-1">Elegí una letra del ADN</h2>
-        <p class="lead">Esta es la receta de la hemoglobina: 444 letras. Cada grupo de tres indica una pieza de la proteína.</p>
+      <section class="panel dna-panel" aria-labelledby="dna-heading">
+        <div class="panel-head"><h2 id="dna-heading" tabindex="-1">1 · El ADN</h2><div class="quick"><button id="random"><span class="shortcut-icon dice" aria-hidden="true">⚄</span>Al azar</button><button id="mission"><span class="shortcut-icon target" aria-hidden="true">◎</span>Casos reales</button></div><p class="lead">La receta de la hemoglobina tiene 444 letras. Cada grupo de tres, el <b>codón</b>, indica una pieza (aminoácido) de la proteína.</p></div>
         <div class="codon-strip" id="codons" role="group" aria-label="Secuencia de ADN, seleccioná una letra"></div>
-        <div class="gene-nav"><button id="previous" class="round-button" aria-label="Ver letras anteriores">←</button><label class="range-label" for="gene-range"><span id="region-label">Grupos 1–4 de 148</span><input id="gene-range" type="range" min="0" max="144" value="0" aria-label="Recorrer el gen"></label><button id="next" class="round-button" aria-label="Ver letras siguientes">→</button></div>
-        <div class="step-actions"><p class="picked" id="selection"></p><button class="primary" id="to-step2">Cambiar esta letra <span aria-hidden="true">→</span></button></div>
-        <div class="shortcuts"><button class="shortcut" id="random"><span class="shortcut-icon dice" aria-hidden="true">⚄</span><span><b>Sorprendeme</b>Probar una mutación al azar</span></button><button class="shortcut" id="mission"><span class="shortcut-icon target" aria-hidden="true">◎</span><span><b>Casos reales</b>Tres mutaciones famosas de la hemoglobina</span></button></div>
+        <div class="gene-nav"><button id="previous" class="round-button" aria-label="Ver letras anteriores">←</button><label class="range-label" for="gene-range"><span id="region-label">Codones 1–4 de 148</span><input id="gene-range" type="range" min="0" max="144" value="0" aria-label="Recorrer el gen"></label><button id="next" class="round-button" aria-label="Ver letras siguientes">→</button></div>
+        <div class="tool" id="tool"></div>
       </section>
-      <section class="panel" data-panel="2" hidden>
-        <h2 tabindex="-1">Hacé un pequeño cambio</h2>
-        <div class="picked-letter"><span class="base big" id="picked-base">A</span><p id="picked-text">Letra 20 de 444, en el grupo 7.</p></div>
-        <div class="type-cards" role="group" aria-label="Tipo de mutación"><button data-type="sub" class="active" aria-pressed="true"><b>Cambiar</b><span>Reemplazarla por otra letra</span></button><button data-type="del" aria-pressed="false"><b>Quitar</b><span>Borrar esta letra</span></button><button data-type="ins" aria-pressed="false"><b>Agregar</b><span>Poner una letra nueva después</span></button></div>
-        <p class="help" id="mutation-help">Elegí la letra nueva:</p>
-        <div class="base-choices" id="base-choices"></div>
-        <div class="step-actions"><button class="ghost" id="back-1"><span aria-hidden="true">←</span> Volver</button><button class="primary" id="mutate">Crear mutación <span aria-hidden="true">→</span></button></div>
+      <section class="panel result-panel" aria-labelledby="result-heading">
+        <div class="result-head"><h2 id="result-heading">2 · La proteína</h2><label class="challenge"><input type="checkbox" id="challenge"> <span><b>Modo desafío</b> adiviná antes de ver</span></label></div>
+        <div id="result" aria-live="polite"></div>
       </section>
-      <section class="panel" data-panel="3" id="prediction" hidden>
-        <h2 tabindex="-1">¿Qué creés que va a pasar?</h2>
-        <p class="lead" id="mutation-summary"></p>
-        <div id="dna-comparison" class="dna-comparison"></div>
-        <div class="prediction-options">
-          <button data-guess="nada"><span class="beads" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><b>No cambia ninguna pieza</b><span>La proteína queda igual</span></button>
-          <button data-guess="pieza"><span class="beads" aria-hidden="true"><i></i><i></i><i></i><i class="x"></i><i></i><i></i><i></i></span><b>Cambia una pieza</b><span>Solo una pieza es distinta</span></button>
-          <button data-guess="corte"><span class="beads" aria-hidden="true"><i></i><i></i><i></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i></span><b>La proteína se corta</b><span>Queda incompleta</span></button>
-          <button data-guess="desorden"><span class="beads" aria-hidden="true"><i></i><i></i><i></i><i class="w"></i><i class="w"></i><i class="w"></i><i class="w"></i></span><b>Se altera la lectura o el final</b><span>Lo que sigue se lee distinto o no termina donde debía</span></button>
-        </div>
-        <div class="step-actions"><button class="ghost" id="back-2"><span aria-hidden="true">←</span> Volver</button><button id="skip-guess" class="ghost">Ver resultado sin adivinar</button></div>
-      </section>
-      <section class="panel result-panel" data-panel="4" id="result" aria-live="polite" hidden></section>
     </div>
     <aside class="protein-panel">
       <div class="protein-header"><h2>La proteína en 3D</h2><p>Arrastrala para girarla.</p></div>
