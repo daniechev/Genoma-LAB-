@@ -34,10 +34,10 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     return type==='sub' ? CASES.find(c=>c.position===position&&c.base===base)||null : null;
   }
   function simulate({position,type,base}) {
-    if (!Number.isInteger(position)||position<0||position>=DNA.length) throw new Error('Elige una letra entre 1 y 444.');
+    if (!Number.isInteger(position)||position<0||position>=DNA.length) throw new Error('Elegí una letra entre 1 y 444.');
     if (!['sub','del','ins'].includes(type)) throw new Error('Tipo de mutación no válido.');
-    if (type!=='del' && !/^[ATCG]$/.test(base)) throw new Error('Elige A, T, C o G.');
-    if (type==='sub' && base===DNA[position]) throw new Error('Elige una letra diferente para crear una mutación.');
+    if (type!=='del' && !/^[ATCG]$/.test(base)) throw new Error('Elegí A, T, C o G.');
+    if (type==='sub' && base===DNA[position]) throw new Error('Elegí una letra diferente para crear una mutación.');
     const changeIndex=position+(type==='ins'?1:0);
     const mutated = type==='sub' ? DNA.slice(0,position)+base+DNA.slice(position+1) : type==='del' ? DNA.slice(0,position)+DNA.slice(position+1) : DNA.slice(0,position+1)+base+DNA.slice(position+1);
     const startLost = mutated.slice(0,3)!=='ATG';
@@ -55,6 +55,12 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     const differences=[];
     for(let i=0;i<Math.min(mature.length,original.length);i++) if(mature[i]!==original[i]) differences.push(i+1);
     return {position,type,base,changeIndex,mutated,category,effect,startLost,protein,mature,stop:tr.stop,codon,piece:codon,originalCodon:DNA.slice(codon*3,codon*3+3),mutatedCodon:mutated.slice(codon*3,codon*3+3),differences,realCase:findCase(position,type,base),lengthUnknown:!startLost&&tr.stop===-1};
+  }
+  // Prueba todas las sustituciones posibles (444 letras × 3 letras nuevas) y cuenta cada efecto.
+  function substitutionSurvey() {
+    const counts={missense:0,synonymous:0,nonsense:0,'start-loss':0,'stop-loss':0};
+    for(let p=0;p<DNA.length;p++) for(const b of 'ATCG') if(b!==DNA[p]) counts[simulate({position:p,type:'sub',base:b}).effect]++;
+    return counts;
   }
   function parsePDB(text, alphaFold=false) {
     const chains={},hemes=[], seen=new Set();
@@ -84,7 +90,7 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     }
     return {chains,hemes:alphaFold?[]:hemes,beta};
   }
-  const api={DNA,EXPECTED,table,names,CASES,translate,simulate,parsePDB};
+  const api={DNA,EXPECTED,table,names,CASES,translate,simulate,substitutionSurvey,parsePDB};
   if(typeof module!=='undefined')module.exports=api;
   root.Genetics=api;
 })(globalThis);

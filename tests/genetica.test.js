@@ -149,3 +149,9 @@ test('el mismo lugar con otra letra no se marca como caso real', () => {
 test('parsePDB rechaza un archivo sin la cadena beta', () => {
   assert.throws(() => G.parsePDB('HEADER vacío\n', true), /cadena beta/);
 });
+
+test('las 1.332 sustituciones posibles se reparten como muestra el póster', () => {
+  const counts = G.substitutionSurvey();
+  assert.deepEqual(counts, { missense: 957, synonymous: 325, nonsense: 34, 'start-loss': 9, 'stop-loss': 7 });
+  assert.equal(Object.values(counts).reduce((a, b) => a + b, 0), 444 * 3);
+});

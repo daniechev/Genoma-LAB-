@@ -8,7 +8,13 @@ Descargá el repositorio y abrí `index.html` en el navegador. No hace falta ins
 
 > Abrí `index.html` junto con sus carpetas `css/` y `js/`. El archivo solo no funciona.
 
-### Recorrido
+### Para el jurado
+
+La página abre en **Proyecto**, una portada tipo póster con la pregunta, la hipótesis, el método, los resultados y la conclusión. Los resultados de las 1.332 sustituciones se calculan en el momento con el mismo motor del simulador.
+
+El botón **Ver el recorrido guiado** muestra los tres casos reales solo, paso a paso, en unos dos minutos. Se puede pausar, avanzar o volver con los botones, con las flechas del teclado o con un control remoto de presentaciones (AvPág/RePág); Esc lo cierra. Para que arranque directamente, abrí `index.html#jurado`. El recorrido no suma al contador del stand, salvo que el jurado haga su propia predicción.
+
+### Recorrido del simulador
 
 1. **Elegí una letra** de los 444 nucleótidos del gen.
 2. **Hacé un cambio:** reemplazarla, quitarla o agregar una letra nueva.
@@ -33,7 +39,7 @@ css/estilos.css         estilos
 js/datos-modelos.js     coordenadas 3D de la hemoglobina (PDB y AlphaFold)
 js/genetica.js          ADN, código genético, casos reales y clasificación de mutaciones
 js/visor-3d.js          visor 3D dibujado en canvas
-js/app.js               interfaz, pasos, misiones y contador del stand
+js/app.js               interfaz, póster, recorrido guiado, pasos, misiones y contador del stand
 tests/                  pruebas automáticas
 ```
 
@@ -54,7 +60,7 @@ Con [Node.js](https://nodejs.org) 18 o más reciente:
 node --test
 ```
 
-Las pruebas verifican los 64 codones contra el código genético estándar, la traducción del gen completo, cada tipo de mutación y los tres casos reales. Conviene correrlas después de tocar `js/genetica.js`.
+Las pruebas verifican los 64 codones contra el código genético estándar, la traducción del gen completo, cada tipo de mutación, los tres casos reales y el reparto de las 1.332 sustituciones que muestra el póster. Conviene correrlas después de tocar `js/genetica.js`.
 
 ## Datos y créditos
 

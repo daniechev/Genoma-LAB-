@@ -2,45 +2,98 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Explora el ADN de la hemoglobina, crea una mutación y descubre qué cambia en su proteína. Simulador educativo para una feria de ciencias.">
+<meta name="description" content="Explorá el ADN de la hemoglobina, creá una mutación y descubrí qué cambia en su proteína. Simulador educativo para una feria de ciencias.">
 <meta name="theme-color" content="#0e0b24"><title>ADN, genes y proteínas · Laboratorio interactivo</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230e0b24'/%3E%3Cpath d='M9 5c0 11 14 11 14 22M23 5C23 16 9 16 9 27M10 8h12M11 24h10M13 13h6M13 19h6' stroke='%23ff7aa8' fill='none' stroke-width='2'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-<a class="skip" href="#experiment">Saltar al experimento</a>
+<a class="skip" href="#main">Saltar al contenido</a>
 <header class="topbar">
   <a class="brand" href="#" aria-label="ADN, genes y proteínas, inicio"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="brand-gradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9a4d"/><stop offset="1" stop-color="#ff5c9d"/></linearGradient></defs><path d="M9 4c0 12 14 12 14 24M23 4C23 16 9 16 9 28M10 8h12M11 24h10M13 13h6M13 19h6" stroke="url(#brand-gradient)" fill="none" stroke-width="2.4" stroke-linecap="round"/></svg><span>ADN, genes<br><b>y proteínas</b></span></a>
-  <nav aria-label="Secciones"><button class="nav active" data-tab="lab" aria-current="page">Simulador</button><button class="nav" data-tab="learn">Cómo funciona</button></nav>
+  <nav aria-label="Secciones"><button class="nav active" data-tab="proyecto" aria-current="page">Proyecto</button><button class="nav" data-tab="lab">Simulador</button><button class="nav" data-tab="learn">Cómo funciona</button></nav>
   <button id="fullscreen" class="icon-button" title="Pantalla completa" aria-label="Activar pantalla completa">⛶</button>
 </header>
-<main>
-<section id="tab-lab" class="tab-page">
-  <div class="hero"><h1>¿Qué cambia con <em>una letra?</em></h1><p>Modifica el ADN. Haz una predicción. Descubre qué pasa con la proteína.</p></div>
+<main id="main">
+<section id="tab-proyecto" class="tab-page poster">
+  <div class="poster-hero">
+    <p class="eyebrow">FERIA DE CIENCIAS · BIOLOGÍA</p>
+    <h1>¿Qué cambia con <em>una letra?</em></h1>
+    <p>Simulamos qué le pasa a la hemoglobina, la proteína que lleva el oxígeno en la sangre, cuando cambia una sola letra de su gen.</p>
+    <div class="poster-actions"><button class="primary" id="start-tour"><span aria-hidden="true">▶</span> Ver el recorrido guiado <small>3 casos reales · 2 min</small></button><button class="ghost" data-tab="lab">Probar el simulador</button></div>
+  </div>
+  <div class="poster-grid">
+    <article class="poster-card"><span class="lesson-number">01</span><h2>Pregunta</h2><p class="poster-big">¿Qué le pasa a una proteína si cambia <b>una sola letra</b> de su ADN?</p></article>
+    <article class="poster-card"><span class="lesson-number">02</span><h2>Hipótesis</h2><p class="poster-big">Casi siempre va a cambiar la proteína, pero el efecto va a depender de <b>qué letra</b> cambie y <b>cómo</b>.</p></article>
+    <article class="poster-card"><span class="lesson-number">03</span><h2>Método</h2><ol class="method-list">
+      <li>Usamos la receta real del gen <b>HBB</b>: 444 letras, 148 codones.</li>
+      <li>Programamos el <b>código genético</b> (64 codones) para traducir el ADN en proteína.</li>
+      <li>Probamos <b>las 1.332 sustituciones</b> posibles de una letra.</li>
+      <li>Marcamos cada cambio sobre la <b>estructura 3D real</b> (rayos X, PDB 2HHB).</li>
+      <li>Verificamos el programa con <b>18 pruebas automáticas</b>.</li>
+    </ol></article>
+  </div>
+  <article class="poster-card poster-results"><span class="lesson-number">04</span><h2>Resultados</h2>
+    <div class="results-layout">
+      <div><p class="poster-headline" id="survey-headline"></p><p class="muted">De las 1.332 formas de cambiar una letra del gen:</p><div class="survey" id="survey"></div></div>
+      <div class="results-side">
+        <h3>Tres casos reales</h3>
+        <table class="cases-table"><thead><tr><th>Enfermedad</th><th>Cambio en el ADN</th><th>Efecto</th></tr></thead><tbody>
+          <tr><td>Anemia falciforme</td><td><code>GAG → G<b>T</b>G</code></td><td>Glu6Val · cambia 1 pieza</td></tr>
+          <tr><td>Hemoglobina C</td><td><code>GAG → <b>A</b>AG</code></td><td>Glu6Lys · cambia 1 pieza</td></tr>
+          <tr><td>Beta-talasemia</td><td><code><b>C</b>AG → <b>T</b>AG</code></td><td>Gln39Stop · se corta</td></tr>
+        </tbody></table>
+        <h3>En el stand</h3><div class="stand-stats" id="stand-stats"></div><button class="text-button" data-tab="stats">Ver todos los resultados del stand</button>
+      </div>
+    </div>
+  </article>
+  <article class="poster-card poster-conclusion"><span class="lesson-number">05</span><h2>Conclusión</h2>
+    <p class="poster-big">Una sola letra puede no cambiar nada, cambiar una pieza o cortar toda la proteína. Lo que decide es <b>dónde</b> cae el cambio y <b>qué tipo</b> de cambio es: en el mismo codón 7, cambiar la A por T da anemia falciforme, y cambiar la G por A da hemoglobina C.</p>
+    <p class="muted"><b>Límites del modelo:</b> es una simulación educativa. Muestra dónde cambia la secuencia, pero no calcula cómo se pliega la proteína mutada y no sirve como diagnóstico.</p>
+  </article>
+  <p class="poster-sources">Fuentes: estructura <a href="https://www.rcsb.org/structure/2HHB" target="_blank" rel="noreferrer">PDB 2HHB</a> · modelo <a href="https://alphafold.ebi.ac.uk/entry/P68871" target="_blank" rel="noreferrer">AlphaFold P68871</a> · proteína <a href="https://www.uniprot.org/uniprotkb/P68871/entry" target="_blank" rel="noreferrer">UniProt P68871</a></p>
+</section>
+<section id="tab-lab" class="tab-page" hidden>
+  <div class="hero"><h1>¿Qué cambia con <em>una letra?</em></h1><p>Modificá el ADN. Hacé una predicción. Descubrí qué pasa con la proteína.</p></div>
+  <section class="tour-bar" id="tour-bar" aria-label="Recorrido guiado" hidden>
+    <div class="tour-progress" aria-hidden="true"><i id="tour-timer"></i></div>
+    <div class="tour-body">
+      <p class="tour-label" id="tour-label"></p>
+      <p class="tour-text" id="tour-text" aria-live="polite"></p>
+    </div>
+    <div class="tour-controls">
+      <button class="round-button" id="tour-prev" aria-label="Paso anterior">←</button>
+      <button class="round-button" id="tour-pause" aria-label="Pausar">❚❚</button>
+      <button class="round-button" id="tour-next" aria-label="Paso siguiente">→</button>
+      <span class="tour-count" id="tour-count"></span>
+      <button class="ghost tour-exit" id="tour-exit">Salir</button>
+    </div>
+    <div class="tour-end" id="tour-end" hidden><button class="primary" id="tour-try">Probarlo vos <span aria-hidden="true">→</span></button><button class="ghost" id="tour-project">Volver al proyecto</button><button class="ghost" id="tour-replay"><span aria-hidden="true">↺</span> Repetir</button></div>
+  </section>
   <div class="stepbar" id="experiment">
-    <ol class="steps" aria-label="Pasos del experimento"><li class="current" data-step="1"><b>1</b><span>Elige</span></li><li data-step="2"><b>2</b><span>Muta</span></li><li data-step="3"><b>3</b><span>Adivina</span></li><li data-step="4"><b>4</b><span>Descubre</span></li></ol>
+    <ol class="steps" aria-label="Pasos del experimento"><li class="current" data-step="1"><b>1</b><span>Elegí</span></li><li data-step="2"><b>2</b><span>Mutá</span></li><li data-step="3"><b>3</b><span>Adiviná</span></li><li data-step="4"><b>4</b><span>Descubrí</span></li></ol>
     <button id="restart" class="ghost restart" hidden><span aria-hidden="true">↺</span><span class="restart-label">Empezar de nuevo</span></button>
   </div>
   <div class="workspace">
     <div class="stage">
       <section class="panel" data-panel="1">
-        <h2 tabindex="-1">Elige una letra del ADN</h2>
+        <h2 tabindex="-1">Elegí una letra del ADN</h2>
         <p class="lead">Esta es la receta de la hemoglobina: 444 letras. Cada grupo de tres indica una pieza de la proteína.</p>
-        <div class="codon-strip" id="codons" role="group" aria-label="Secuencia de ADN, selecciona una letra"></div>
+        <div class="codon-strip" id="codons" role="group" aria-label="Secuencia de ADN, seleccioná una letra"></div>
         <div class="gene-nav"><button id="previous" class="round-button" aria-label="Ver letras anteriores">←</button><label class="range-label" for="gene-range"><span id="region-label">Grupos 1–4 de 148</span><input id="gene-range" type="range" min="0" max="144" value="0" aria-label="Recorrer el gen"></label><button id="next" class="round-button" aria-label="Ver letras siguientes">→</button></div>
         <div class="step-actions"><p class="picked" id="selection"></p><button class="primary" id="to-step2">Cambiar esta letra <span aria-hidden="true">→</span></button></div>
-        <div class="shortcuts"><button class="shortcut" id="random"><span class="shortcut-icon dice" aria-hidden="true">⚄</span><span><b>Sorpréndeme</b>Probar una mutación al azar</span></button><button class="shortcut" id="mission"><span class="shortcut-icon target" aria-hidden="true">◎</span><span><b>Casos reales</b>Tres mutaciones famosas de la hemoglobina</span></button></div>
+        <div class="shortcuts"><button class="shortcut" id="random"><span class="shortcut-icon dice" aria-hidden="true">⚄</span><span><b>Sorprendeme</b>Probar una mutación al azar</span></button><button class="shortcut" id="mission"><span class="shortcut-icon target" aria-hidden="true">◎</span><span><b>Casos reales</b>Tres mutaciones famosas de la hemoglobina</span></button></div>
       </section>
       <section class="panel" data-panel="2" hidden>
-        <h2 tabindex="-1">Haz un pequeño cambio</h2>
+        <h2 tabindex="-1">Hacé un pequeño cambio</h2>
         <div class="picked-letter"><span class="base big" id="picked-base">A</span><p id="picked-text">Letra 20 de 444, en el grupo 7.</p></div>
         <div class="type-cards" role="group" aria-label="Tipo de mutación"><button data-type="sub" class="active" aria-pressed="true"><b>Cambiar</b><span>Reemplazarla por otra letra</span></button><button data-type="del" aria-pressed="false"><b>Quitar</b><span>Borrar esta letra</span></button><button data-type="ins" aria-pressed="false"><b>Agregar</b><span>Poner una letra nueva después</span></button></div>
-        <p class="help" id="mutation-help">Elige la letra nueva:</p>
+        <p class="help" id="mutation-help">Elegí la letra nueva:</p>
         <div class="base-choices" id="base-choices"></div>
         <div class="step-actions"><button class="ghost" id="back-1"><span aria-hidden="true">←</span> Volver</button><button class="primary" id="mutate">Crear mutación <span aria-hidden="true">→</span></button></div>
       </section>
       <section class="panel" data-panel="3" id="prediction" hidden>
-        <h2 tabindex="-1">¿Qué crees que va a pasar?</h2>
+        <h2 tabindex="-1">¿Qué creés que va a pasar?</h2>
         <p class="lead" id="mutation-summary"></p>
         <div id="dna-comparison" class="dna-comparison"></div>
         <div class="prediction-options">
@@ -54,8 +107,8 @@
       <section class="panel result-panel" data-panel="4" id="result" aria-live="polite" hidden></section>
     </div>
     <aside class="protein-panel">
-      <div class="protein-header"><h2>La proteína en 3D</h2><p>Arrástrala para girarla.</p></div>
-      <div class="canvas-wrap"><canvas id="protein" tabindex="0" aria-label="Modelo 3D de hemoglobina. Arrastra o usa las flechas para girar; más y menos para acercar."></canvas><div class="zoom-buttons"><button id="zoom-in" aria-label="Acercar proteína">+</button><button id="zoom-out" aria-label="Alejar proteína">−</button><button id="reset-view" aria-label="Restablecer vista">⟲</button></div></div>
+      <div class="protein-header"><h2>La proteína en 3D</h2><p>Arrastrala para girarla.</p></div>
+      <div class="canvas-wrap"><canvas id="protein" tabindex="0" aria-label="Modelo 3D de hemoglobina. Arrastrá o usá las flechas para girar; más y menos para acercar."></canvas><div class="zoom-buttons"><button id="zoom-in" aria-label="Acercar proteína">+</button><button id="zoom-out" aria-label="Alejar proteína">−</button><button id="reset-view" aria-label="Restablecer vista">⟲</button></div></div>
       <p class="viewer-overlay" id="viewer-overlay">La hemoglobina ayuda a llevar oxígeno por tu cuerpo.</p>
       <div class="viewer-controls"><button id="focus-mutation" hidden>◎ Ver dónde cayó mi mutación</button></div>
       <div class="science-note" id="science-note" hidden><span aria-hidden="true">ⓘ</span><p>Los colores muestran dónde cambia la secuencia; <strong>no predicen cómo se plegará la proteína mutada.</strong></p></div>
@@ -73,16 +126,16 @@
 <section id="tab-learn" class="tab-page reading-page" hidden><p class="eyebrow">CUATRO IDEAS PARA EMPEZAR</p><h1>De cuatro letras a una proteína.</h1><div class="learning-grid">
   <article><span class="lesson-number">01</span><h2>¿Qué es el ADN?</h2><p>Es una molécula que guarda instrucciones de los seres vivos. Usa cuatro letras: A, T, C y G. En su doble hélice, A se une con T y C con G.</p><div class="pair-demo"><span class="base a">A</span><i>···</i><span class="base t">T</span><span class="base c">C</span><i>···</i><span class="base g">G</span></div><p>Un gen es un tramo de ADN. Algunos genes contienen la receta para fabricar una proteína.</p></article>
   <article><span class="lesson-number">02</span><h2>¿Cómo se lee?</h2><p>La célula hace una copia de trabajo, el ARN. El ribosoma lee esa copia de tres en tres. Cada grupo, llamado <b>codón</b>, indica un aminoácido o una señal de parada.</p><div class="recipe"><span>ADN <b>ATG GAA TTT TGA</b></span><span>ARN <b>AUG GAA UUU UGA</b></span><span>Piezas <b>Met · Glu · Phe · STOP</b></span></div></article>
-  <article><span class="lesson-number">03</span><h2>¿Qué es una proteína?</h2><p>Es una cadena de aminoácidos que se pliega. Su estructura ayuda a determinar su función. Las proteínas transportan sustancias, construyen tejidos y participan en las defensas del cuerpo.</p><p>La hemoglobina lleva oxígeno en la sangre. Tiene cuatro cadenas: dos alfa y dos beta. Aquí exploramos la receta de la cadena beta.</p></article>
-  <article><span class="lesson-number">04</span><h2>¿Qué es una mutación?</h2><p>Es un cambio en la secuencia del ADN. Puedes cambiar, quitar o agregar una letra. El mecanismo es distinto del efecto que produce.</p><div class="recipe"><span>Original <b>LUZ SOL MAR PAN</b></span><span>Cambio <b>LUZ SAL MAR PAN</b></span><span>Sin la S <b>LUZ OLM ARP AN</b></span></div><p>Quitar o agregar una letra desplaza los grupos de tres. Quitar o agregar tres conserva el marco de lectura.</p></article>
+  <article><span class="lesson-number">03</span><h2>¿Qué es una proteína?</h2><p>Es una cadena de aminoácidos que se pliega. Su estructura ayuda a determinar su función. Las proteínas transportan sustancias, construyen tejidos y participan en las defensas del cuerpo.</p><p>La hemoglobina lleva oxígeno en la sangre. Tiene cuatro cadenas: dos alfa y dos beta. Acá exploramos la receta de la cadena beta.</p></article>
+  <article><span class="lesson-number">04</span><h2>¿Qué es una mutación?</h2><p>Es un cambio en la secuencia del ADN. Podés cambiar, quitar o agregar una letra. El mecanismo es distinto del efecto que produce.</p><div class="recipe"><span>Original <b>LUZ SOL MAR PAN</b></span><span>Cambio <b>LUZ SAL MAR PAN</b></span><span>Sin la S <b>LUZ OLM ARP AN</b></span></div><p>Quitar o agregar una letra desplaza los grupos de tres. Quitar o agregar tres conserva el marco de lectura.</p></article>
 </div><details><summary>Cómo interpretar este experimento</summary><p>Usamos la secuencia codificante de HBB: 444 bases y 148 codones, incluido el STOP. Se traduce en 147 aminoácidos; la metionina inicial se retira de la proteína normal y quedan 146 piezas. Por eso, la pieza 6 corresponde al codón 7.</p><p>El modelo traduce desde el inicio de la secuencia hasta el primer STOP. Si se pierde ATG, considera que no se fabrica la proteína por esa vía. Si se pierde el STOP final, no puede calcular la longitud completa porque no incluye el ADN posterior.</p><p>Una mutación silenciosa conserva la secuencia de aminoácidos; eso no demuestra que no tenga otros efectos celulares. Las inserciones y eliminaciones de una base se agrupan como cambio de marco, incluso cuando también afectan al inicio o al STOP.</p><p>La categoría del juego «Se altera la lectura o el final» reúne dos efectos distintos: cambio de marco y pérdida del STOP. La explicación del resultado identifica cuál ocurrió.</p><p>Las piezas ausentes y cambiadas se marcan sobre la estructura original. No calculamos la estructura ni la función de una proteína mutada.</p></details>
 <details><summary>AlphaFold, modelo experimental y fuentes</summary><p>La estructura experimental <a href="https://www.rcsb.org/structure/2HHB" target="_blank" rel="noreferrer">PDB 2HHB</a> fue determinada por Fermi y colaboradores mediante rayos X (1984). Mostramos sus carbonos alfa y el hierro de sus cuatro grupos hemo.</p><p>El modelo <a href="https://alphafold.ebi.ac.uk/entry/P68871" target="_blank" rel="noreferrer">AlphaFold P68871, versión 6</a> predice la estructura de la cadena beta normal. Su pLDDT expresa la confianza de la predicción por aminoácido, no la gravedad de una mutación. Datos de AlphaFold DB bajo CC BY 4.0.</p><p>Secuencia proteica de referencia: <a href="https://www.uniprot.org/uniprotkb/P68871/entry" target="_blank" rel="noreferrer">UniProt P68871</a>. La secuencia codificante es la proporcionada en el documento del proyecto y se comprueba que traduce exactamente a esta proteína.</p><label class="file-label">Cargar otro archivo PDB de AlphaFold P68871<input id="pdb-file" type="file" accept=".pdb"></label><button class="text-button" id="restore-model">Volver al modelo AlphaFold incluido</button><p id="import-status" role="status"></p></details>
 <button class="primary" data-return-lab>Volver al simulador</button></section>
-<section id="tab-stats" class="tab-page reading-page" hidden><p class="eyebrow">EL EXPERIMENTO COLECTIVO</p><h1>¿Qué descubrió el público?</h1><p class="muted">Cada resultado revelado suma una mutación. Los datos se guardan únicamente en este navegador.</p><div class="stats-overview" id="stats-overview"></div><div class="stats-layout"><article class="stats-card"><h2>Mutaciones observadas</h2><div id="stats-bars"></div></article><article class="stats-card"><h2>¿Qué esperar al cambiar una letra?</h2><p>Al probar las 1.332 sustituciones posibles del gen HBB:</p><table><thead><tr><th>Efecto</th><th>Casos</th><th>Porcentaje</th></tr></thead><tbody><tr><td>Silenciosa</td><td>325</td><td>24,4 %</td></tr><tr><td>Cambio de aminoácido</td><td>957</td><td>71,8 %</td></tr><tr><td>STOP prematuro</td><td>34</td><td>2,6 %</td></tr><tr><td>Pérdida del inicio</td><td>9</td><td>0,7 %</td></tr><tr><td>Pérdida del STOP</td><td>7</td><td>0,5 %</td></tr></tbody></table><p class="muted">El modo al azar usa 60 % cambios, 20 % eliminaciones y 20 % inserciones. Sus resultados no se comparan directamente con una tabla que solo incluye sustituciones.</p></article></div><div class="stats-actions"><button id="export" class="secondary">Descargar resultados</button><button id="reset-count" class="text-button danger">Reiniciar contador</button></div><p id="storage-status" role="status"></p><button class="primary" data-return-lab>Volver al simulador</button></section>
+<section id="tab-stats" class="tab-page reading-page" hidden><p class="eyebrow">EL EXPERIMENTO COLECTIVO</p><h1>¿Qué descubrió el público?</h1><p class="muted">Cada resultado revelado suma una mutación. Los datos se guardan únicamente en este navegador.</p><div class="stats-overview" id="stats-overview"></div><div class="stats-layout"><article class="stats-card"><h2>Mutaciones observadas</h2><div id="stats-bars"></div></article><article class="stats-card"><h2>¿Qué esperar al cambiar una letra?</h2><p>Al probar las 1.332 sustituciones posibles del gen HBB:</p><table><thead><tr><th>Efecto</th><th>Casos</th><th>Porcentaje</th></tr></thead><tbody id="survey-table"></tbody></table><p class="muted">El modo al azar usa 60 % cambios, 20 % eliminaciones y 20 % inserciones. Sus resultados no se comparan directamente con una tabla que solo incluye sustituciones.</p></article></div><div class="stats-actions"><button id="export" class="secondary">Descargar resultados</button><button id="reset-count" class="text-button danger">Reiniciar contador</button></div><p id="storage-status" role="status"></p><button class="primary" data-return-lab>Volver al simulador</button></section>
 </main>
 <footer><span>ADN, genes y proteínas · Feria de ciencias</span><button class="footer-link" data-tab="stats">Resultados del stand</button></footer>
 <div class="toast" id="toast" role="status" hidden></div>
-<dialog id="mission-dialog" aria-labelledby="mission-heading"><button class="dialog-close" aria-label="Cerrar" id="close-mission">×</button><p class="eyebrow">MISIÓN / UNA LETRA PUEDE CAMBIARLO TODO</p><h2 id="mission-heading">Elige un caso real.</h2><div class="case-picker" role="group" aria-label="Casos reales"><button data-case="sickle" class="active" aria-pressed="true"><b>Anemia falciforme</b>Glu6Val</button><button data-case="hbc" aria-pressed="false"><b>Hemoglobina C</b>Glu6Lys</button><button data-case="thal" aria-pressed="false"><b>Beta-talasemia</b>Gln39Stop</button></div><div id="case-detail" aria-live="polite"></div><p class="muted">Son casos históricos, sin relación con las personas que visitan el stand.</p><button class="primary" id="start-mission">Ir al codón 7</button></dialog>
+<dialog id="mission-dialog" aria-labelledby="mission-heading"><button class="dialog-close" aria-label="Cerrar" id="close-mission">×</button><p class="eyebrow">MISIÓN / UNA LETRA PUEDE CAMBIARLO TODO</p><h2 id="mission-heading">Elegí un caso real.</h2><div class="case-picker" role="group" aria-label="Casos reales"><button data-case="sickle" class="active" aria-pressed="true"><b>Anemia falciforme</b>Glu6Val</button><button data-case="hbc" aria-pressed="false"><b>Hemoglobina C</b>Glu6Lys</button><button data-case="thal" aria-pressed="false"><b>Beta-talasemia</b>Gln39Stop</button></div><div id="case-detail" aria-live="polite"></div><p class="muted">Son casos históricos, sin relación con las personas que visitan el stand.</p><button class="primary" id="start-mission">Ir al codón 7</button></dialog>
 <script src="js/datos-modelos.js"></script>
 <script src="js/genetica.js"></script>
 <script src="js/visor-3d.js"></script>
