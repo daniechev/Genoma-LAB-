@@ -98,7 +98,7 @@ Las pruebas verifican los 64 codones contra el código genético estándar, la t
 El código se ordena con [Prettier](https://prettier.io):
 
 ```
-npx prettier@3.3.3 --write .
+npx prettier@3.8.1 --write .
 ```
 
 En GitHub, cada cambio corre las pruebas y revisa el formato automáticamente.
