@@ -6,7 +6,23 @@ Laboratorio interactivo para una feria de ciencias. El visitante elige una letra
 
 Descargá el repositorio y abrí `index.html` en el navegador. No hace falta instalar nada ni tener internet: todo funciona sin servidor.
 
-> Abrí `index.html` junto con sus carpetas `css/` y `js/`. El archivo solo no funciona.
+> Abrí `index.html` junto con sus carpetas `css/`, `js/` e `img/`. El archivo solo no funciona.
+
+### En la feria
+
+- **Modo stand:** en **Resultados del stand**, activá *Modo stand* (o abrí `index.html?stand`). Si nadie toca la pantalla durante 90 segundos, la app vuelve al simulador y muestra el recorrido guiado en bucle, sin sumar al contador. Un toque lo corta. Queda guardado en ese navegador.
+- **Cartel con QR:** `cartel.html` es un cartel A4 para imprimir con un código QR que abre la app en el celular de los visitantes.
+- **Tarjeta del descubrimiento:** después de cada resultado, *Guardar mi descubrimiento* arma una imagen con el cambio y su efecto, para descargarla, compartirla o sacarle una foto.
+- **Guion:** [`docs/guion-del-stand.md`](docs/guion-del-stand.md) tiene una explicación de un minuto con analogías y respuestas a las preguntas que suele hacer el jurado.
+
+### Publicarla en internet (GitHub Pages)
+
+El QR apunta a **https://daniechev.github.io/Genoma-LAB-/**. Para que esa dirección funcione hay que hacer dos cosas una sola vez:
+
+1. En GitHub, ir a **Settings → Pages** y en **Source** elegir **GitHub Actions**.
+2. Llevar los cambios a la rama `main`. Cada vez que `main` cambia, el workflow `Publicar en GitHub Pages` corre las pruebas y, si pasan, publica la página.
+
+Si la dirección cambia, hay que generar un QR nuevo y reemplazar `img/qr-sitio.svg`.
 
 ### Para el jurado
 
@@ -47,13 +63,17 @@ Fuentes: Piel y col. 2010 (*Nature Communications*), Taylor y col. 2012 (*Lancet
 
 ```
 index.html              estructura de la página
+cartel.html             cartel A4 para imprimir, con el código QR
 css/estilos.css         estilos
 js/datos-modelos.js     coordenadas 3D de la hemoglobina (PDB y AlphaFold)
 js/datos-mapa.js        mapa del mundo simplificado (Natural Earth)
 js/genetica.js          ADN, código genético, casos reales y clasificación de mutaciones
 js/visor-3d.js          visor 3D dibujado en canvas
-js/app.js               interfaz, póster, recorrido guiado, naturaleza, pasos, misiones y contador del stand
+js/app.js               interfaz, póster, recorrido guiado, naturaleza, misiones, tarjeta, modo stand y contador
+img/qr-sitio.svg        código QR de la dirección pública
+docs/                   guion para presentar en el stand
 tests/                  pruebas automáticas
+.github/workflows/      pruebas en cada cambio y publicación en GitHub Pages
 ```
 
 `js/genetica.js` es el corazón científico. Clasifica cada mutación así:
@@ -73,7 +93,15 @@ Con [Node.js](https://nodejs.org) 18 o más reciente:
 node --test
 ```
 
-Las pruebas verifican los 64 codones contra el código genético estándar, la traducción del gen completo, cada tipo de mutación, los tres casos reales y el reparto de las 1.332 sustituciones que muestra el póster. Conviene correrlas después de tocar `js/genetica.js`.
+Las pruebas verifican los 64 codones contra el código genético estándar, la traducción del gen completo, cada tipo de mutación, los tres casos reales, el reparto de las 1.332 sustituciones que muestra el póster y que el póster diga cuántas pruebas hay. Conviene correrlas después de tocar `js/genetica.js`.
+
+El código se ordena con [Prettier](https://prettier.io):
+
+```
+npx prettier@3.3.3 --write .
+```
+
+En GitHub, cada cambio corre las pruebas y revisa el formato automáticamente.
 
 ## Datos y créditos
 
