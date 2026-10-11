@@ -733,10 +733,11 @@ details p {
   color: var(--text);
 }
 .codon-aa {
-  height: 22px;
+  height: 26px;
   margin-top: 8px;
-  font: 600 14px/22px var(--mono);
-  color: #8e89c4;
+  font: 700 15px/26px var(--mono);
+  color: #a9a4dc;
+  border-radius: 8px;
 }
 .codon-bases.after,
 .codon-row-label.after {
@@ -750,7 +751,9 @@ details p {
   color: var(--accent);
 }
 .codon-aa.diff {
-  color: var(--red) !important;
+  /* La pieza que cambió es lo más importante de la tira: va resaltada como una etiqueta. */
+  color: var(--ink) !important;
+  background: var(--red);
   font-weight: 800;
 }
 .codon-aa.gone {
@@ -956,6 +959,8 @@ details p {
 }
 .cells {
   display: flex;
+  align-items: center;
+  height: 34px;
   gap: 6px;
   margin-bottom: 6px;
 }
@@ -970,7 +975,6 @@ details p {
   transform: rotate(-30deg);
   background: #c9505e;
   height: 20px;
-  margin-top: 7px;
 }
 .map-controls {
   display: flex;
