@@ -1673,7 +1673,9 @@ footer {
   background: #fff;
   color: var(--ink);
   box-shadow: 0 10px 40px #0009;
-  max-width: 90vw;
+  /* Con left: 50% el ancho automático se limita a media pantalla; max-content lo evita. */
+  width: max-content;
+  max-width: min(90vw, 640px);
   border-radius: 14px;
   font-size: 17px;
   font-weight: 600;
@@ -2265,4 +2267,41 @@ body.touring .protein-panel {
 body.stand #card-download,
 body.stand #card-share {
   display: none;
+}
+
+/* Código QR para llevarse la app al celular */
+.poster-qr {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.poster-qr img {
+  width: 170px;
+  height: 170px;
+  flex: none;
+  border-radius: 12px;
+}
+.poster-qr h2 {
+  margin-top: 0;
+}
+.tour-qr {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  font-weight: 700;
+}
+.tour-qr img {
+  width: 96px;
+  height: 96px;
+  border-radius: 8px;
+}
+/* En el stand sí sirve; en un celular no tiene sentido escanear la propia pantalla. */
+body.stand .tour-qr {
+  display: flex;
+}
+@media (max-width: 700px) {
+  .poster-qr {
+    display: none;
+  }
 }
