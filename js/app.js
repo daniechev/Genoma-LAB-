@@ -435,6 +435,12 @@
     ],
   ];
   let lastGuess = null;
+  function resultHeading(r) {
+    if (r.effect === 'start-loss') return 'Falta la señal para empezar';
+    if (r.effect === 'stop-loss') return 'Falta la señal para terminar';
+    if (r.effect === 'frameshift') return 'Se corrió toda la lectura';
+    return titles[r.category];
+  }
   function renderResult() {
     const box = $('result'),
       r = current;
@@ -455,16 +461,9 @@
       return;
     }
     const guess = lastGuess,
-      heading =
-        r.effect === 'start-loss'
-          ? 'Falta la señal para empezar'
-          : r.effect === 'stop-loss'
-            ? 'Falta la señal para terminar'
-            : r.effect === 'frameshift'
-              ? 'Se corrió toda la lectura'
-              : titles[r.category];
+      heading = resultHeading(r);
     const length = r.lengthUnknown ? `${r.mature.length}+` : `${r.mature.length}`;
-    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza">Conocé más animales →</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza">Conocé más animales →</button></p>` : ''}<details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
+    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}<button class="secondary save-card" id="save-card"><span aria-hidden="true">★</span> Guardar mi descubrimiento</button>${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza">Conocé más animales →</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza">Conocé más animales →</button></p>` : ''}<details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
       r.mature
         ? r.mature
             .split('')
@@ -479,6 +478,7 @@
           showTab(b.dataset.goto);
         }),
     );
+    $('save-card').onclick = openCard;
     $('see-3d').onclick = () => {
       if (!$('focus-mutation').hidden) viewer.focusMutation();
       document.querySelector('.protein-panel').scrollIntoView({
@@ -530,6 +530,237 @@
     render();
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
+  // ---- Tarjeta del descubrimiento: una imagen para llevarse el resultado ----
+  const CARD_FONT = "'Segoe UI Variable Text', Aptos, 'Segoe UI', system-ui, sans-serif",
+    BASE_COLORS = { A: '#ff7a66', T: '#ffd447', C: '#4fd8ff', G: '#b693ff' };
+  function roundRect(ctx, x, y, w, h, radius) {
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, radius);
+  }
+  // Escribe un texto en varias líneas sin pasarse del ancho; devuelve dónde terminó.
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 5) {
+    const lines = [];
+    let line = '';
+    for (const word of text.split(' ')) {
+      const test = line ? `${line} ${word}` : word;
+      if (ctx.measureText(test).width > maxWidth && line) {
+        lines.push(line);
+        line = word;
+      } else line = test;
+    }
+    if (line) lines.push(line);
+    if (lines.length > maxLines) {
+      lines.length = maxLines;
+      lines[maxLines - 1] += '…';
+    }
+    lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineHeight));
+    return y + lines.length * lineHeight;
+  }
+  function drawCodon(ctx, codon, x, y, size, mark, removed) {
+    [...codon].forEach((b, i) => {
+      const left = x + i * (size + 12);
+      ctx.globalAlpha = removed && i === mark ? 0.35 : 1;
+      ctx.fillStyle = BASE_COLORS[b];
+      roundRect(ctx, left, y, size, size, 18);
+      ctx.fill();
+      if (i === mark) {
+        ctx.lineWidth = 7;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#1a1335';
+      ctx.font = `800 ${size * 0.58}px ${CARD_FONT}`;
+      ctx.textAlign = 'center';
+      ctx.fillText(b, left + size / 2, y + size * 0.7);
+    });
+    ctx.globalAlpha = 1;
+    ctx.textAlign = 'left';
+  }
+  function cardBadge(r) {
+    if (r.realCase) return `¡Es un caso real: ${r.realCase.name}! · ${r.realCase.notation}`;
+    if (r.species)
+      return `¡Como en ${r.species.id === 'llama' ? 'la' : 'el'} ${r.species.name.toLowerCase()}! · ${r.species.notation}`;
+    if (r.effect === 'start-loss') return 'Como el pez de hielo: sin cadena beta';
+    return '';
+  }
+  function drawCard(canvas, r) {
+    const ctx = canvas.getContext('2d'),
+      W = canvas.width,
+      H = canvas.height,
+      pad = 96;
+    const bg = ctx.createRadialGradient(80, 0, 0, 80, 0, 900);
+    bg.addColorStop(0, '#4b2bb8');
+    bg.addColorStop(1, '#0e0b24');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#1a1744';
+    ctx.strokeStyle = '#3d3890';
+    ctx.lineWidth = 3;
+    roundRect(ctx, 48, 48, W - 96, H - 96, 40);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#c2bdea';
+    ctx.font = `700 28px ${CARD_FONT}`;
+    ctx.fillText('ADN, GENES Y PROTEÍNAS · FERIA DE CIENCIAS', pad, 140);
+    const title = ctx.createLinearGradient(pad, 0, pad + 640, 0);
+    title.addColorStop(0, '#ff9a4d');
+    title.addColorStop(1, '#ff5c9d');
+    ctx.fillStyle = title;
+    ctx.font = `800 80px ${CARD_FONT}`;
+    ctx.fillText('Mi descubrimiento', pad, 236);
+    ctx.fillStyle = '#ffd447';
+    ctx.font = `800 50px ${CARD_FONT}`;
+    ctx.fillText(resultHeading(r), pad, 320);
+    if (lastGuess && lastGuess === r.category) {
+      ctx.fillStyle = '#4fd8ff';
+      ctx.font = `700 30px ${CARD_FONT}`;
+      ctx.fillText('✓ Lo predije bien', pad, 368);
+    }
+
+    // El codón antes y después del cambio, con la letra tocada remarcada.
+    const size = 104,
+      codonWidth = 3 * size + 24,
+      top = 410,
+      before = r.originalCodon,
+      after = r.mutatedCodon,
+      markBefore = r.type !== 'ins' && Math.floor(r.position / 3) === r.codon ? r.position % 3 : -1,
+      markAfter = r.type !== 'del' ? r.changeIndex % 3 : -1,
+      startX = (W - (codonWidth * 2 + 120)) / 2;
+    drawCodon(ctx, before, startX, top, size, markBefore, r.type === 'del');
+    ctx.fillStyle = '#c2bdea';
+    ctx.font = `700 64px ${CARD_FONT}`;
+    ctx.textAlign = 'center';
+    ctx.fillText('→', W / 2, top + size * 0.72);
+    ctx.textAlign = 'left';
+    drawCodon(ctx, after, startX + codonWidth + 120, top, size, markAfter, false);
+    const letter = G.DNA[r.position],
+      action =
+        r.type === 'sub'
+          ? `letra ${r.position + 1}: ${letter} → ${r.base}`
+          : r.type === 'del'
+            ? `quité la letra ${r.position + 1} (${letter})`
+            : `agregué una ${r.base} después de la letra ${r.position + 1}`;
+    ctx.fillStyle = '#c2bdea';
+    ctx.font = `600 32px ${CARD_FONT}`;
+    ctx.textAlign = 'center';
+    ctx.fillText(`Codón ${r.codon + 1} · ${action}`, W / 2, top + size + 62);
+    ctx.textAlign = 'left';
+
+    let y = top + size + 120;
+    const badge = cardBadge(r);
+    if (badge) {
+      ctx.font = `800 34px ${CARD_FONT}`;
+      const bw = Math.min(W - 2 * pad, ctx.measureText(badge).width + 56);
+      ctx.fillStyle = '#ffd44722';
+      ctx.strokeStyle = '#ffd447';
+      ctx.lineWidth = 3;
+      roundRect(ctx, (W - bw) / 2, y, bw, 70, 35);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#ffd447';
+      ctx.textAlign = 'center';
+      ctx.fillText(badge, W / 2, y + 47, W - 2 * pad - 40);
+      ctx.textAlign = 'left';
+      y += 120;
+    }
+    ctx.fillStyle = '#f7f5ff';
+    ctx.font = `500 36px ${CARD_FONT}`;
+    wrapText(ctx, lead(r), pad, y + 20, W - 2 * pad, 50, badge ? 4 : 5);
+
+    // Barras: la proteína normal (146 piezas) contra la mutada.
+    const length = Math.min(146, r.mature.length),
+      first = r.differences[0],
+      same = r.effect === 'frameshift' && first ? first - 1 : length,
+      barX = pad + 250,
+      barW = W - pad - barX,
+      rows = [
+        ['Proteína normal', 146, 0, '146 piezas'],
+        [
+          'Mi proteína',
+          same,
+          length - same,
+          r.lengthUnknown ? `${r.mature.length}+ piezas` : piezas(r.mature.length),
+        ],
+      ];
+    rows.forEach(([label, ok, wrong, count], i) => {
+      const by = 1060 + i * 86;
+      ctx.fillStyle = '#c2bdea';
+      ctx.font = `600 30px ${CARD_FONT}`;
+      ctx.fillText(label, pad, by + 24);
+      ctx.fillStyle = '#100d2c';
+      roundRect(ctx, barX, by, barW, 32, 16);
+      ctx.fill();
+      ctx.fillStyle = '#4fd8ff';
+      if (ok) {
+        roundRect(ctx, barX, by, (barW * ok) / 146, 32, 16);
+        ctx.fill();
+      }
+      if (wrong) {
+        ctx.fillStyle = '#ffb020';
+        ctx.fillRect(barX + (barW * ok) / 146, by, (barW * wrong) / 146, 32);
+      }
+      if (i === 1 && r.effect === 'missense' && r.piece >= 1 && r.piece <= 146) {
+        ctx.fillStyle = '#ff5d6c';
+        ctx.fillRect(barX + (barW * (r.piece - 1)) / 146 - 4, by - 8, 12, 48);
+      }
+      ctx.fillStyle = '#f7f5ff';
+      ctx.font = `700 26px ${CARD_FONT}`;
+      ctx.textAlign = 'right';
+      ctx.fillText(count, W - pad, by - 10);
+      ctx.textAlign = 'left';
+    });
+
+    ctx.fillStyle = '#c2bdea';
+    ctx.font = `500 26px ${CARD_FONT}`;
+    const date = new Date().toLocaleDateString('es-AR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    ctx.fillText(`${date} · Simulación educativa, no es un diagnóstico`, pad, H - 92);
+  }
+  function openCard() {
+    if (!current || !revealed) return;
+    const canvas = $('card-canvas');
+    drawCard(canvas, current);
+    canvas.setAttribute('aria-label', `Tarjeta: ${resultHeading(current)}. ${lead(current)}`);
+    $('card-share').hidden = !navigator.canShare;
+    $('card-dialog').querySelector('.card-photo').textContent = standMode
+      ? 'Sacale una foto con tu celular para llevártela.'
+      : 'Descargala o compartila para llevártela.';
+    $('card-dialog').showModal();
+  }
+  function cardFile() {
+    return new Promise(resolve =>
+      $('card-canvas').toBlob(blob =>
+        resolve(new File([blob], 'mi-descubrimiento-adn.png', { type: 'image/png' })),
+      ),
+    );
+  }
+  $('close-card').onclick = () => $('card-dialog').close();
+  $('card-download').onclick = async () => {
+    const file = await cardFile(),
+      url = URL.createObjectURL(file),
+      a = document.createElement('a');
+    a.href = url;
+    a.download = file.name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+  $('card-share').onclick = async () => {
+    const file = await cardFile();
+    if (!navigator.canShare?.({ files: [file] }))
+      return notify('Este navegador no permite compartir imágenes. Descargala.');
+    try {
+      await navigator.share({
+        files: [file],
+        title: 'Mi descubrimiento',
+        text: '¿Qué cambia con una letra del ADN?',
+      });
+    } catch {}
+  };
+
   // ---- Pestañas y estadísticas del stand ----
   function showTab(tab) {
     all('.tab-page').forEach(p => (p.hidden = p.id !== `tab-${tab}`));
