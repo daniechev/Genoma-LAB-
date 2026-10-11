@@ -836,7 +836,16 @@
       text: 'Conclusión: una sola letra puede no cambiar nada, cambiar una pieza o cortar toda la proteína. Lo que decide es dónde cae el cambio y qué tipo de cambio es.',
     },
   ];
-  const tour = { active: false, i: 0, paused: false, timer: null, remaining: 0, started: 0 };
+  // auto: lo arrancó el modo stand y se repite solo hasta que alguien toque la pantalla.
+  const tour = {
+    active: false,
+    auto: false,
+    i: 0,
+    paused: false,
+    timer: null,
+    remaining: 0,
+    started: 0,
+  };
   function playScene(scene) {
     const { c, stage } = scene;
     const mutation = { position: c.position, type: 'sub', base: c.base };
@@ -878,6 +887,7 @@
     bar.style.animation = scene.end ? 'none' : `tour-timer ${tour.remaining}ms linear forwards`;
     bar.style.width = scene.end ? '100%' : '';
     if (!scene.end && !tour.paused) runTimer();
+    else if (scene.end && tour.auto) tour.timer = setTimeout(() => tourGo(0), 15000);
     bar.style.animationPlayState = tour.paused ? 'paused' : 'running';
   }
   // Lleva el panel a la vista sin que lo tape la barra fija del recorrido.
@@ -900,10 +910,11 @@
     $('tour-pause').textContent = paused ? '▶' : '❚❚';
     $('tour-pause').setAttribute('aria-label', paused ? 'Seguir' : 'Pausar');
   }
-  function startTour() {
+  function startTour(auto = false) {
     if ($('mission-dialog').open) $('mission-dialog').close();
     showTab('lab');
     tour.active = true;
+    tour.auto = auto;
     document.body.classList.add('touring');
     $('tour-bar').hidden = false;
     setPaused(false);
@@ -912,11 +923,12 @@
   function stopTour() {
     if (!tour.active) return;
     tour.active = false;
+    tour.auto = false;
     clearTimeout(tour.timer);
     document.body.classList.remove('touring');
     $('tour-bar').hidden = true;
   }
-  $('start-tour').onclick = startTour;
+  $('start-tour').onclick = () => startTour();
   $('tour-replay').onclick = () => {
     setPaused(false);
     tourGo(0);
@@ -957,6 +969,65 @@
       restart();
     }
   });
+
+  // ---- Modo stand: si nadie usa la pantalla un rato, vuelve al inicio y muestra el recorrido guiado ----
+  // Se activa en «Resultados del stand» o abriendo la página con ?stand. Queda guardado en este navegador.
+  const standKey = 'genomalab-modo-stand',
+    STAND_IDLE = 90000;
+  let standMode = false,
+    lastActivity = performance.now();
+  try {
+    standMode = localStorage.getItem(standKey) === '1';
+  } catch {}
+  function setStandMode(on) {
+    standMode = on;
+    lastActivity = performance.now();
+    $('stand-mode').checked = on;
+    document.body.classList.toggle('stand', on);
+    try {
+      localStorage.setItem(standKey, on ? '1' : '0');
+    } catch {}
+  }
+  setStandMode(standMode || new URLSearchParams(location.search).has('stand'));
+  $('stand-mode').onchange = e => {
+    setStandMode(e.target.checked);
+    notify(
+      e.target.checked
+        ? 'Modo stand activado: tras 90 segundos sin uso, la pantalla vuelve al inicio sola.'
+        : 'Modo stand desactivado.',
+    );
+  };
+  let stopOnClick = false;
+  for (const type of ['pointerdown', 'pointermove', 'keydown', 'wheel'])
+    document.addEventListener(
+      type,
+      e => {
+        lastActivity = performance.now();
+        if (type === 'pointermove') return;
+        // Alguien tomó el control: el recorrido deja de repetirse y, si tocó fuera de la barra, se corta.
+        if (type === 'pointerdown') stopOnClick = tour.auto && !e.target.closest('#tour-bar');
+        tour.auto = false;
+      },
+      { capture: true, passive: true },
+    );
+  // Se corta en el clic (no en el toque) para que ese mismo clic funcione: elegir una letra, girar la proteína…
+  document.addEventListener(
+    'click',
+    () => {
+      if (stopOnClick) stopTour();
+      stopOnClick = false;
+    },
+    { capture: true },
+  );
+  function goIdle() {
+    for (const dialog of document.querySelectorAll('dialog[open]')) dialog.close();
+    stopTour();
+    clearResult();
+    startTour(true);
+  }
+  setInterval(() => {
+    if (standMode && !tour.auto && performance.now() - lastActivity > STAND_IDLE) goIdle();
+  }, 5000);
 
   // Naturaleza: mapa de la malaria y las mutaciones que protegen (esquema por país, códigos ISO 3166 numéricos).
   const AFRICA_HBS =
