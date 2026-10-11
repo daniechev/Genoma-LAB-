@@ -16,11 +16,14 @@
 </header>
 <main id="main">
 <section id="tab-proyecto" class="tab-page poster">
-  <div class="poster-hero">
+  <div class="poster-hero home">
+    <div class="poster-hero-text">
     <p class="eyebrow">FERIA DE CIENCIAS · BIOLOGÍA</p>
     <h1>¿Qué cambia con <em>una letra?</em></h1>
     <p>Simulamos qué le pasa a la hemoglobina, la proteína que lleva el oxígeno en la sangre, cuando cambia una sola letra de su gen.</p>
     <div class="poster-actions"><button class="primary" id="start-tour"><span aria-hidden="true">▶</span> Ver el recorrido guiado <small>3 casos reales · 2 min</small></button><button class="ghost" data-tab="lab">Probar el simulador</button></div>
+    </div>
+    <canvas id="helix" class="helix" aria-hidden="true"></canvas>
   </div>
   <div class="poster-grid">
     <article class="poster-card"><span class="lesson-number">01</span><h2>Pregunta</h2><p class="poster-big">¿Qué le pasa a una proteína si cambia <b>una sola letra</b> de su ADN?</p></article>
@@ -173,6 +176,7 @@
 <script src="js/datos-modelos.js"></script>
 <script src="js/datos-mapa.js"></script>
 <script src="js/genetica.js"></script>
+<script src="js/helice.js"></script>
 <script src="js/visor-3d.js"></script>
 <script src="js/app.js"></script>
 </body></html>

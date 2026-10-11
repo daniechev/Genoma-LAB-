@@ -1423,6 +1423,24 @@
       }),
   );
 
+  // ---- Apariciones al bajar: cada sección entra suavemente la primera vez que se ve ----
+  if ('IntersectionObserver' in window && !viewer.reduced.matches) {
+    const appear = new IntersectionObserver(
+      entries => {
+        for (const entry of entries)
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            appear.unobserve(entry.target);
+          }
+      },
+      { rootMargin: '0px 0px -8% 0px' },
+    );
+    for (const el of document.querySelectorAll('.poster-card, .species, .learning-grid article')) {
+      el.classList.add('reveal');
+      appear.observe(el);
+    }
+  }
+
   centerOn(position);
   renderSurvey();
   renderStats();

@@ -69,6 +69,7 @@ js/datos-modelos.js     coordenadas 3D de la hemoglobina (PDB y AlphaFold)
 js/datos-mapa.js        mapa del mundo simplificado (Natural Earth)
 js/genetica.js          ADN, código genético, casos reales y clasificación de mutaciones
 js/visor-3d.js          visor 3D dibujado en canvas
+js/helice.js            hélice de ADN animada de la portada
 js/app.js               interfaz, póster, recorrido guiado, naturaleza, misiones, tarjeta, modo stand y contador
 img/qr-sitio.svg        código QR de la dirección pública
 docs/                   guion para presentar en el stand
