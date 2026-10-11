@@ -27,12 +27,27 @@ test('la tabla del código genético tiene 64 codones y 3 señales de STOP', () 
 test('cada uno de los 64 codones coincide con el código genético estándar', () => {
   // Escrito de forma independiente a la tabla del programa, por aminoácido.
   const standard = {
-    F: 'TTT TTC', L: 'TTA TTG CTT CTC CTA CTG', I: 'ATT ATC ATA', M: 'ATG',
-    V: 'GTT GTC GTA GTG', S: 'TCT TCC TCA TCG AGT AGC', P: 'CCT CCC CCA CCG',
-    T: 'ACT ACC ACA ACG', A: 'GCT GCC GCA GCG', Y: 'TAT TAC', H: 'CAT CAC',
-    Q: 'CAA CAG', N: 'AAT AAC', K: 'AAA AAG', D: 'GAT GAC', E: 'GAA GAG',
-    C: 'TGT TGC', W: 'TGG', R: 'CGT CGC CGA CGG AGA AGG', G: 'GGT GGC GGA GGG',
-    '*': 'TAA TAG TGA'
+    F: 'TTT TTC',
+    L: 'TTA TTG CTT CTC CTA CTG',
+    I: 'ATT ATC ATA',
+    M: 'ATG',
+    V: 'GTT GTC GTA GTG',
+    S: 'TCT TCC TCA TCG AGT AGC',
+    P: 'CCT CCC CCA CCG',
+    T: 'ACT ACC ACA ACG',
+    A: 'GCT GCC GCA GCG',
+    Y: 'TAT TAC',
+    H: 'CAT CAC',
+    Q: 'CAA CAG',
+    N: 'AAT AAC',
+    K: 'AAA AAG',
+    D: 'GAT GAC',
+    E: 'GAA GAG',
+    C: 'TGT TGC',
+    W: 'TGG',
+    R: 'CGT CGC CGA CGG AGA AGG',
+    G: 'GGT GGC GGA GGG',
+    '*': 'TAA TAG TGA',
   };
   let total = 0;
   for (const [aa, list] of Object.entries(standard)) {
@@ -93,7 +108,10 @@ test('perder el STOP final deja la lectura sin terminar', () => {
 });
 
 test('quitar o agregar una letra corre el marco de lectura', () => {
-  for (const input of [{ position: 30, type: 'del' }, { position: 30, type: 'ins', base: 'A' }]) {
+  for (const input of [
+    { position: 30, type: 'del' },
+    { position: 30, type: 'ins', base: 'A' },
+  ]) {
     const r = G.simulate(input);
     assert.equal(r.category, 'desorden');
     assert.equal(r.effect, 'frameshift');
@@ -131,7 +149,9 @@ test('casos reales: beta-talasemia (Gln39Stop)', () => {
 });
 
 test('cada caso real coincide con su notación científica', () => {
-  const names = Object.fromEntries(Object.entries(G.names).map(([k, v]) => [k, v === 'STOP' ? 'Stop' : v]));
+  const names = Object.fromEntries(
+    Object.entries(G.names).map(([k, v]) => [k, v === 'STOP' ? 'Stop' : v]),
+  );
   for (const c of G.CASES) {
     const r = sub(c.position, c.base);
     const piece = r.codon; // número de pieza en la proteína madura
@@ -152,8 +172,17 @@ test('parsePDB rechaza un archivo sin la cadena beta', () => {
 
 test('las 1.332 sustituciones posibles se reparten como muestra el póster', () => {
   const counts = G.substitutionSurvey();
-  assert.deepEqual(counts, { missense: 957, synonymous: 325, nonsense: 34, 'start-loss': 9, 'stop-loss': 7 });
-  assert.equal(Object.values(counts).reduce((a, b) => a + b, 0), 444 * 3);
+  assert.deepEqual(counts, {
+    missense: 957,
+    synonymous: 325,
+    nonsense: 34,
+    'start-loss': 9,
+    'stop-loss': 7,
+  });
+  assert.equal(
+    Object.values(counts).reduce((a, b) => a + b, 0),
+    444 * 3,
+  );
 });
 
 test('los cambios de otras especies son de una letra y coinciden con su notación', () => {
@@ -161,7 +190,11 @@ test('los cambios de otras especies son de una letra y coinciden con su notació
   for (const c of G.SPECIES) {
     const r = sub(c.position, c.base);
     assert.equal(r.effect, 'missense', c.id);
-    assert.equal(`${names[G.EXPECTED[r.piece]]}${r.piece}${names[G.table[r.mutatedCodon]]}`, c.notation, c.id);
+    assert.equal(
+      `${names[G.EXPECTED[r.piece]]}${r.piece}${names[G.table[r.mutatedCodon]]}`,
+      c.notation,
+      c.id,
+    );
     assert.equal(r.species.id, c.id);
   }
   assert.equal(sub(6, 'G').species, null);
