@@ -40,10 +40,10 @@
   fiber.sort((a, b) => (a.includes('#6b4fc4') ? -1 : 1) - (b.includes('#6b4fc4') ? -1 : 1));
   const spools = [70, 160, 250, 340];
   $('zoom').innerHTML = [
-    `<svg class="z-layer" data-at="0" viewBox="0 0 400 300"><ellipse cx="200" cy="150" rx="180" ry="128" fill="#241d55" stroke="#8b5cf6" stroke-width="3"/><ellipse cx="80" cy="110" rx="22" ry="10" fill="#3a2f80"/><ellipse cx="320" cy="190" rx="26" ry="11" fill="#3a2f80"/><ellipse cx="300" cy="90" rx="14" ry="8" fill="#3a2f80"/><ellipse cx="110" cy="210" rx="18" ry="9" fill="#3a2f80"/><circle class="ring" cx="200" cy="140" r="62" fill="#3b2a7a" stroke="#b693ff" stroke-width="3"/><path d="M160 130c14-20 30 10 44-6s26 18 36 2M166 156c16 10 26-14 40 0s22-10 32 6" fill="none" stroke="#b693ff" stroke-width="3" opacity=".7"/><text x="200" y="232" ${TXT}>núcleo</text></svg>`,
-    `<svg class="z-layer" data-at="1" viewBox="0 0 400 300">${smallX(60, 70, 0.8)}${smallX(330, 80, 0.7)}${smallX(80, 230, 0.6)}${smallX(320, 220, 0.9)}<g fill="none" stroke-linecap="round" stroke-width="44"><path d="M178 40Q206 150 178 260" stroke="#b693ff"/><path d="M222 40Q194 150 222 260" stroke="#b693ff"/></g><g fill="#7c5cd6"><rect x="150" y="120" width="100" height="10"/><rect x="150" y="190" width="100" height="12"/><rect x="150" y="225" width="100" height="8"/></g><rect class="hbb-band" x="150" y="62" width="100" height="14" fill="#ffd447"/><path d="M252 69h40" stroke="#ffd447" stroke-width="2"/><text x="340" y="74" fill="#ffd447" font-size="17" font-weight="700" text-anchor="middle">gen HBB</text><text x="200" y="294" ${TXT}>cromosoma 11</text></svg>`,
-    `<svg class="z-layer" data-at="2" viewBox="0 0 400 300">${fiber.join('')}<text x="200" y="250" ${TXT}>fibra de ADN enrollado</text></svg>`,
-    `<svg class="z-layer" data-at="3" viewBox="0 0 400 300"><path d="M0 190${spools.map(x => `C${x - 40} 190 ${x - 40} 190 ${x - 34} 176M${x + 34} 124C${x + 50} 110 ${x + 60} 190 ${x + 90} 190`).join('')}" fill="none" stroke="#5ef2b0" stroke-width="5"/>${spools.map(x => `<circle cx="${x}" cy="150" r="30" fill="#b693ff"/><ellipse cx="${x}" cy="150" rx="38" ry="40" fill="none" stroke="#5ef2b0" stroke-width="5" stroke-dasharray="150 30" transform="rotate(-30 ${x} 150)"/>`).join('')}<text x="70" y="226" ${TXT}>histona</text><text x="205" y="80" fill="#5ef2b0" font-size="17" text-anchor="middle">ADN</text><text x="200" y="270" ${TXT}>cada carrete es un nucleosoma</text></svg>`,
+    `<svg class="z-layer" data-at="0 1" viewBox="0 0 400 300"><ellipse cx="200" cy="150" rx="180" ry="128" fill="#241d55" stroke="#8b5cf6" stroke-width="3"/><ellipse cx="80" cy="110" rx="22" ry="10" fill="#3a2f80"/><ellipse cx="320" cy="190" rx="26" ry="11" fill="#3a2f80"/><ellipse cx="300" cy="90" rx="14" ry="8" fill="#3a2f80"/><ellipse cx="110" cy="210" rx="18" ry="9" fill="#3a2f80"/><circle class="ring" cx="200" cy="140" r="62" fill="#3b2a7a" stroke="#b693ff" stroke-width="3"/><path d="M160 130c14-20 30 10 44-6s26 18 36 2M166 156c16 10 26-14 40 0s22-10 32 6" fill="none" stroke="#b693ff" stroke-width="3" opacity=".7"/><text x="200" y="232" ${TXT}>núcleo</text></svg>`,
+    `<svg class="z-layer" data-at="2" viewBox="0 0 400 300">${smallX(60, 70, 0.8)}${smallX(330, 80, 0.7)}${smallX(80, 230, 0.6)}${smallX(320, 220, 0.9)}<g fill="none" stroke-linecap="round" stroke-width="44"><path d="M178 40Q206 150 178 260" stroke="#b693ff"/><path d="M222 40Q194 150 222 260" stroke="#b693ff"/></g><g fill="#7c5cd6"><rect x="150" y="120" width="100" height="10"/><rect x="150" y="190" width="100" height="12"/><rect x="150" y="225" width="100" height="8"/></g><rect class="hbb-band" x="150" y="62" width="100" height="14" fill="#ffd447"/><path d="M252 69h40" stroke="#ffd447" stroke-width="2"/><text x="340" y="74" fill="#ffd447" font-size="17" font-weight="700" text-anchor="middle">gen HBB</text><text x="200" y="294" ${TXT}>cromosoma 11</text></svg>`,
+    `<svg class="z-layer" data-at="3" viewBox="0 0 400 300">${fiber.join('')}<text x="200" y="250" ${TXT}>fibra de ADN enrollado</text></svg>`,
+    `<svg class="z-layer" data-at="4 5" viewBox="0 0 400 300"><path d="M0 190${spools.map(x => `C${x - 40} 190 ${x - 40} 190 ${x - 34} 176M${x + 34} 124C${x + 50} 110 ${x + 60} 190 ${x + 90} 190`).join('')}" fill="none" stroke="#5ef2b0" stroke-width="5"/>${spools.map(x => `<circle cx="${x}" cy="150" r="30" fill="#b693ff"/><ellipse cx="${x}" cy="150" rx="38" ry="40" fill="none" stroke="#5ef2b0" stroke-width="5" stroke-dasharray="150 30" transform="rotate(-30 ${x} 150)"/>`).join('')}<text x="70" y="226" ${TXT}>histona</text><text x="205" y="80" fill="#5ef2b0" font-size="17" text-anchor="middle">ADN</text><text x="200" y="270" ${TXT}>cada carrete es un nucleosoma</text></svg>`,
   ].join('');
 
   // ---- Escena 3: la receta se separa de a tres y aparecen las piezas ----
@@ -200,21 +200,34 @@
     beat = Math.max(0, Math.min(beatsOf(current) - 1, b));
     scene.dataset.beat = beat;
     scene.querySelectorAll('.beat').forEach((p, i) => p.classList.toggle('on', i === beat));
-    // El dibujo sigue al texto: «data-at» muestra un elemento solo en ese paso, y «past-N» marca los pasos ya vistos.
-    scene
-      .querySelectorAll('[data-at]')
-      .forEach(el => el.classList.toggle('on', Number(el.dataset.at) === beat));
+    // El dibujo sigue al texto: «data-at» muestra un elemento en esos pasos (y lo marca «gone» cuando ya
+    // pasaron), y «past-N» marca los pasos ya vistos.
+    scene.querySelectorAll('[data-at]').forEach(el => {
+      const at = el.dataset.at.split(' ').map(Number);
+      el.classList.toggle('on', at.includes(beat));
+      el.classList.toggle('gone', Math.max(...at) < beat);
+    });
     for (let k = 1; k < 6; k++) scene.classList.toggle(`past-${k}`, beat >= k);
+    // El camino de arriba marca de qué parte de la cadena habla el paso (de la letra a la población).
+    const spec = (scene.querySelectorAll('.beat')[beat]?.dataset.path ?? scene.dataset.path ?? '')
+      .split('-')
+      .filter(Boolean)
+      .map(Number);
+    document
+      .querySelectorAll('#path li')
+      .forEach((li, i) =>
+        li.classList.toggle('on', spec.length > 0 && i >= spec[0] && i <= spec[spec.length - 1]),
+      );
     if (current === DNA_SCENE) {
       const dna = $('dna');
       dna.classList.toggle('split', beat >= 1);
       dna.classList.toggle('read', beat >= 2);
-      dna.classList.toggle('chain', beat >= 3);
-      dna.classList.toggle('focus', beat >= 4);
+      dna.classList.toggle('chain', beat >= 4);
+      dna.classList.toggle('focus', beat >= 5);
     }
     if (current === CHANGE_SCENE) {
-      $('cell-swap').classList.toggle('fibers', changed && beat === 2);
-      $('cell-swap').classList.toggle('sick', changed && beat >= 3);
+      $('cell-swap').classList.toggle('fibers', changed && beat === 3);
+      $('cell-swap').classList.toggle('sick', changed && beat >= 4);
     }
     updateControls();
   }

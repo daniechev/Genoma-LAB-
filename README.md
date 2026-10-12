@@ -67,7 +67,7 @@ Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la 
 
 ### Introducción e historia guiada
 
-`index.html` abre con una introducción (el título, la pregunta y la hélice de ADN de `js/helice.js`) y sigue con una historia en once escenas, y cada escena en pasos cortos: *Seguir* (o las flechas del teclado, o deslizar el dedo) muestra el párrafo siguiente y cambia el dibujo; al terminar los pasos, pasa a la escena siguiente. La barra de arriba se llena con cada paso.
+`index.html` abre con una introducción (el título, la pregunta y la hélice de ADN de `js/helice.js`) y sigue con una historia en once escenas, y cada escena en pasos cortos: *Seguir* (o las flechas del teclado, o deslizar el dedo) muestra el párrafo siguiente y cambia el dibujo; al terminar los pasos, pasa a la escena siguiente. La barra de arriba se llena con cada paso. Debajo, un camino fijo (*letra › codón › pieza › proteína › célula › cuerpo › población*) ilumina de qué parte de la cadena habla cada paso. Cada paso tiene una sola idea, en una o dos oraciones, y solo quedan los números que explican algo (444 letras, 2 metros de ADN y las barras de ejemplo del escudo).
 
 1. **Tu sangre:** el oxígeno, los glóbulos rojos y la hemoglobina.
 2. **Zoom:** los glóbulos rojos maduros no tienen núcleo; zoom en una célula de la médula: núcleo → cromosoma 11 → fibra → nucleosomas (ADN enrollado en histonas).
@@ -75,9 +75,11 @@ Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la 
 4. **Cambiala vos:** el visitante cambia la A del codón 7 por una T (sin ese cambio no se puede seguir). Después: la valina, las fibras y el glóbulo en forma de hoz.
 5. **¿Por qué no desapareció?:** el mapa de dónde es común la letra y de la malaria.
 6. **El escudo:** las dos copias (ninguna, una o dos T), el parásito, cómo protege una copia, cuántos llegan a tener hijos (números de ejemplo) y la selección balanceada.
-7. **Animales extremos:** llama, mamut lanudo y pez de hielo, una foto por paso.
+7. **Animales extremos:** llama, mamut lanudo y pez de hielo.
 8. **Felinos:** leopardo negro, guepardo rey y gato siamés.
 9. **Personas:** ojos azules, pelirrojos y tibetanos.
+
+   En las escenas 7, 8 y 9, cada caso tiene dos pasos (qué cambió y qué hace; qué consecuencia tiene) y una ficha bajo la foto: **Cambia → Hace que → Resultado**.
 10. **CRISPR:** la guía encuentra el codón 7, la Cas9 corta y el visitante repara la letra (sin elegir la A no se puede seguir). Después, por qué en una persona es mucho más difícil y cómo funciona el tratamiento aprobado en 2023 (vuelve a prender la hemoglobina de bebé en vez de corregir la T).
 11. **Ahora vos:** los tres resultados posibles y el simulador libre.
 
