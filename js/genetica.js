@@ -164,6 +164,40 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
         if (b !== DNA[p]) counts[simulate({ position: p, type: 'sub', base: b }).effect]++;
     return counts;
   }
+  // Tu nombre en proteína: cada pieza tiene una letra (A = alanina, R = arginina…), así que algunos
+  // nombres se pueden escribir con piezas. Las letras B, J, O, U, X y Z no son de ninguna pieza.
+  const PIECE_LETTERS = 'ACDEFGHIKLMNPQRSTVWY';
+  // Para cada pieza se usa el codón que más aparece en el gen HBB (si no aparece, el primero de la tabla).
+  const preferred = {};
+  {
+    const uses = {};
+    for (let i = 0; i < DNA.length; i += 3) {
+      const codon = DNA.slice(i, i + 3);
+      uses[codon] = (uses[codon] || 0) + 1;
+    }
+    for (const codon of Object.keys(table)) {
+      const aa = table[codon];
+      if (aa !== '*' && (!preferred[aa] || (uses[codon] || 0) > (uses[preferred[aa]] || 0)))
+        preferred[aa] = codon;
+    }
+  }
+  function nameToGene(text) {
+    const letters = [
+      ...String(text)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toUpperCase()
+        .replace(/[^A-Z]/g, ''),
+    ].slice(0, 24);
+    const pieces = letters.filter(ch => PIECE_LETTERS.includes(ch)).join('');
+    return {
+      letters,
+      pieces,
+      skipped: [...new Set(letters.filter(ch => !PIECE_LETTERS.includes(ch)))],
+      // La receta empieza con ATG (metionina, que después se retira) y termina con un STOP.
+      dna: 'ATG' + [...pieces].map(aa => preferred[aa]).join('') + 'TAA',
+    };
+  }
   // Lee un archivo PDB y se queda con los carbonos alfa (un punto por aminoácido) y el hierro de los hemo.
   function parsePDB(text, alphaFold = false) {
     const chains = {},
@@ -226,6 +260,7 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     translate,
     simulate,
     substitutionSurvey,
+    nameToGene,
     parsePDB,
   };
   if (typeof module !== 'undefined') module.exports = api;

@@ -2834,3 +2834,371 @@ svg.world .countries path {
     animation: none;
   }
 }
+
+/* Herramienta simple: primero solo «Cambiar por»; agregar y quitar se despliegan aparte. */
+.tool-actions {
+  align-items: center;
+}
+.tool-more {
+  padding: 8px 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+.tool-more[aria-expanded='true'] {
+  color: var(--cyan);
+}
+.tool-extra {
+  padding-top: 2px;
+}
+@media (max-width: 560px) {
+  :root {
+    --tile: 28px;
+  }
+  .codon-strip {
+    gap: 10px;
+    padding: 16px 0;
+  }
+  .codon-labels {
+    width: 46px;
+  }
+  .lab-hero p {
+    display: none;
+  }
+  .lab-hero {
+    margin-bottom: 8px;
+  }
+  .panel-head .lead {
+    font-size: 16px;
+  }
+  .tool {
+    gap: 12px;
+    margin-top: 10px;
+    padding-top: 16px;
+  }
+}
+
+/* Menú: en la compu, arriba; en el celular, una barra fija abajo con íconos, como una app. */
+.nav-icon {
+  display: none;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.nav-short {
+  display: none;
+}
+@media (max-width: 1080px) {
+  .nav {
+    padding: 10px 13px;
+    font-size: 15px;
+  }
+  .nav-long {
+    display: none;
+  }
+  .nav-short {
+    display: inline;
+  }
+  .brand {
+    white-space: nowrap;
+  }
+  .topbar nav {
+    gap: 2px;
+  }
+}
+@media (max-width: 760px) {
+  .topbar {
+    justify-content: space-between;
+  }
+  .topbar nav {
+    position: fixed;
+    z-index: 40;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    width: auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    border-radius: 0;
+    background: #0e0b24f2;
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--hair);
+  }
+  .nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 2px;
+    border-radius: 12px;
+    font-size: 11.5px;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+  .nav-icon {
+    display: block;
+  }
+  .nav-long {
+    display: none;
+  }
+  .nav-short {
+    display: inline;
+  }
+  .nav.active {
+    background: transparent;
+    color: var(--text);
+  }
+  .nav.active .nav-icon {
+    color: var(--accent);
+  }
+  body {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  }
+  .toast {
+    bottom: calc(84px + env(safe-area-inset-bottom));
+  }
+}
+@media print {
+  .topbar nav {
+    display: none;
+  }
+}
+
+/* Historias en pasos: una idea por vez, con un indicador arriba y «Siguiente» al final. */
+.steps {
+  list-style: none;
+  display: flex;
+  gap: 8px;
+  padding: 0;
+  margin: 14px 0 22px;
+  scroll-margin-top: 16px;
+}
+.steps li {
+  flex: 1;
+}
+.step-dot {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 0 0;
+  border-top: 4px solid #ffffff1f;
+  text-align: left;
+}
+.step-dot b {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ffffff14;
+  font: 700 14px var(--mono);
+}
+.step-dot.done {
+  border-top-color: #4fd8ff80;
+}
+.step-dot.active {
+  color: var(--text);
+  border-top-color: var(--accent);
+}
+.step-dot.active b {
+  background: var(--accent);
+  color: var(--ink);
+}
+.step > .nature-sub:first-child {
+  margin-top: 0;
+}
+.step-next {
+  margin-top: 26px;
+}
+@media (max-width: 560px) {
+  .step-dot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    font-size: 13px;
+  }
+  .step-next {
+    width: 100%;
+  }
+}
+
+/* Póster en el celular: más compacto, con el método plegado. */
+@media (min-width: 561px) {
+  .method-more > summary {
+    display: none;
+  }
+}
+.method-more {
+  margin-top: 12px;
+}
+.method-more > summary {
+  font-size: 16px;
+  color: var(--cyan);
+}
+@media (max-width: 560px) {
+  .poster-grid > .poster-card {
+    padding: 20px 0;
+  }
+  .poster-grid .poster-big {
+    font-size: 19px;
+  }
+  .poster-card h2 {
+    margin-bottom: 6px;
+  }
+  .poster-card {
+    padding: 30px 0;
+  }
+  .poster-conclusion {
+    padding: 24px 18px;
+  }
+}
+
+/* Tu nombre en proteína */
+.quick {
+  flex-wrap: wrap;
+}
+.shortcut-icon.name {
+  background: var(--pink);
+  font: 800 13px var(--mono);
+}
+.name-dialog {
+  max-width: 640px;
+}
+.name-dialog h2 {
+  margin-bottom: 8px;
+}
+.name-dialog b {
+  color: var(--accent);
+}
+.name-form {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0 6px;
+}
+.name-form input {
+  flex: 1;
+  min-width: 0;
+  background: var(--well);
+  color: var(--text);
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.name-form input:focus {
+  border-color: var(--cyan);
+}
+.name-form .primary {
+  min-height: 52px;
+  padding: 10px 20px;
+}
+.name-pieces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 10px;
+}
+.name-piece {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+}
+.name-piece b {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 52px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--ink) !important;
+  font: 800 26px var(--mono);
+}
+.name-piece small {
+  font: 700 13px var(--mono);
+  color: var(--muted);
+}
+.name-piece.off b {
+  background: transparent;
+  border: 2px dashed #ffffff40;
+  color: #8e89c4 !important;
+}
+.name-piece.diff b {
+  background: var(--red);
+  box-shadow: 0 0 18px #ff5d6c88;
+}
+.name-note {
+  font-size: 16px;
+  color: var(--muted);
+}
+.name-sub {
+  margin: 18px 0 8px;
+  font-size: 17px;
+}
+.name-dna {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+.name-codon {
+  display: inline-grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 2px;
+}
+.name-codon small {
+  grid-column: 1/-1;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+.name-dna .base.small {
+  width: 22px;
+  height: 30px;
+  font-size: 15px;
+  border-radius: 6px;
+}
+.name-mutation {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-left: 4px solid var(--accent);
+  background: #ffd44712;
+  border-radius: 0 12px 12px 0;
+  font-size: 16px;
+}
+.name-mutation .name-pieces {
+  margin-bottom: 0;
+}
+.name-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+.name-actions .primary {
+  min-height: 52px;
+  font-size: 17px;
+  padding: 10px 20px;
+}
+@media (max-width: 560px) {
+  .name-piece b {
+    width: 38px;
+    height: 44px;
+    font-size: 22px;
+  }
+  .name-actions > * {
+    width: 100%;
+  }
+}

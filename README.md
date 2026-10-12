@@ -36,7 +36,7 @@ El botón **Ver el recorrido guiado** muestra los tres casos reales solo, paso a
 Todo está en una sola pantalla:
 
 1. **Tocá una letra** de los 444 nucleótidos del gen.
-2. **Cambiala, quitala o agregá una letra** con un solo toque. La tira del ADN muestra el *antes* y el *después* de cada codón, con la pieza (aminoácido) que fabrica.
+2. **Cambiala** con un solo toque. Para **quitar o agregar** una letra, tocá *+ Agregar o quitar una letra* (queda plegado para que la pantalla no se vea cargada). La tira del ADN muestra el *antes* y el *después* de cada codón, con la pieza (aminoácido) que fabrica.
 3. **Mirá al instante** qué le pasa a la proteína y dónde cae el cambio en el modelo 3D. **Deshacer** vuelve al gen normal.
 
 Con el **modo desafío** activado, primero hay que predecir qué va a pasar y después se ve el resultado. Las predicciones se suman a los resultados del stand.
@@ -49,11 +49,15 @@ La sección **Casos reales** propone tres mutaciones conocidas para encontrar:
 | Hemoglobina C | codón 7: GAG → AAG | Glu6Lys (cambia una pieza) |
 | Beta-talasemia | codón 40: CAG → TAG | Gln39Stop (la proteína se corta) |
 
+El botón **Tu nombre** escribe el nombre del visitante con piezas: cada aminoácido tiene una letra (A = alanina, L = leucina…), así que la app arma la receta de ADN que lo fabricaría, empezando con ATG y terminando con TAA. Las letras B, J, O, U, X y Z no son de ninguna pieza y se saltean. Con *Mutar una letra al azar* se ve si el nombre queda igual, cambia una pieza o se corta, y *Guardar tarjeta* arma una imagen para llevarse.
+
+En el celular, el menú queda abajo, como en una app, e incluye **Resultados**.
+
 Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la metionina inicial, como en la literatura científica.
 
 ### Naturaleza
 
-La pestaña **Naturaleza** cuenta tres historias, una por vez, para que la página no quede cargada:
+La pestaña **Naturaleza** cuenta tres historias, una por vez, para que la página no quede cargada. Las dos primeras van en tres pasos cortos, con *Siguiente* al final de cada uno:
 
 - **Una mutación que protege:** por qué la anemia falciforme es común donde había malaria. Tiene un mapa con capas (HbS, HbC, talasemias y HbE, con la malaria superpuesta) y el juego **Jugá a la evolución**: un pueblo de 100 personas donde se ve, generación a generación, cómo la malaria hace crecer a los portadores hasta un equilibrio (selección balanceada). Los valores del juego son ilustrativos.
 - **Jaguar y leopardo:** dos primos que viven en continentes distintos. Un mapa muestra dónde vive cada uno, el pelaje dibujado deja ver la diferencia de las rosetas y una tabla compara cuerpo, caza y ambiente. Termina con la **pantera negra**: en el jaguar se deben a 15 letras que faltan en el gen *MC1R* (dominante) y en el leopardo a una sola letra que crea un STOP en el gen *ASIP* (recesiva). El botón *Probá el STOP del leopardo* hace el mismo cambio (TGT → TGA) en la cisteína 93 de la hemoglobina, y el simulador lo reconoce.

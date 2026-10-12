@@ -8,7 +8,7 @@ Una guía para que cualquiera del grupo pueda presentar igual de bien. Los tiemp
 - [ ] En **Resultados del stand** (abajo a la derecha), activar el **modo stand**. Si nadie toca la pantalla durante 90 segundos, la app vuelve sola al inicio y muestra el recorrido guiado.
 - [ ] Imprimir el cartel con el código QR (en **Resultados del stand**, o abriendo `cartel.html`).
 - [ ] Probar que el QR abra la app en un celular.
-- [ ] Si viene el jurado: tener una terminal lista para correr `node --test` (muestra las 21 pruebas automáticas).
+- [ ] Si viene el jurado: tener una terminal lista para correr `node --test` (muestra las 23 pruebas automáticas).
 
 ## Para que se acerquen (10 segundos)
 
@@ -57,7 +57,7 @@ Si el visitante es chico o le gustan los animales, abrí **Naturaleza → Jaguar
 ## Preguntas que suele hacer el jurado
 
 **¿Lo programaron ustedes? ¿Cómo sabe qué pieza sale?**
-Programamos la tabla del código genético (los 64 codones) en `js/genetica.js`. Para cada mutación, el programa lee el ADN de a tres letras hasta el STOP y compara la proteína con la normal. Hay 21 pruebas automáticas; una de ellas verifica que el gen normal da exactamente la proteína real publicada en UniProt.
+Programamos la tabla del código genético (los 64 codones) en `js/genetica.js`. Para cada mutación, el programa lee el ADN de a tres letras hasta el STOP y compara la proteína con la normal. Hay 23 pruebas automáticas; una de ellas verifica que el gen normal da exactamente la proteína real publicada en UniProt.
 
 **¿De dónde sacaron los datos?**
 La proteína, de UniProt (P68871). La estructura 3D, de una medición con rayos X (PDB 2HHB). También se puede ver la predicción de AlphaFold, una inteligencia artificial.

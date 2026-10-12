@@ -196,3 +196,21 @@ test('los cambios de otras especies son de una letra y coinciden con su notació
   }
   assert.equal(sub(6, 'G').species, null);
 });
+
+test('tu nombre en proteína: la receta se traduce de vuelta al nombre', () => {
+  const g = G.nameToGene('Mía Sánchez');
+  assert.deepEqual(g.letters, [...'MIASANCHEZ']);
+  assert.equal(g.pieces, 'MIASANCHE');
+  assert.deepEqual(g.skipped, ['Z']);
+  assert.equal(g.dna.length, 3 * (g.pieces.length + 2));
+  const t = G.translate(g.dna);
+  assert.equal(t.protein, 'M' + g.pieces);
+  assert.equal(t.stop, g.pieces.length + 1);
+});
+
+test('tu nombre en proteína: las letras que no son piezas se saltean', () => {
+  const g = G.nameToGene('Juan Pablo');
+  assert.equal(g.pieces, 'ANPAL');
+  assert.deepEqual(g.skipped, ['J', 'U', 'B', 'O']);
+  assert.equal(G.nameToGene('').dna, 'ATGTAA');
+});

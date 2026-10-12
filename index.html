@@ -13,7 +13,7 @@
 <a class="skip" href="#main">Saltar al contenido</a>
 <header class="topbar">
   <a class="brand" href="#" aria-label="ADN, genes y proteínas, inicio"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="brand-gradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9a4d"/><stop offset="1" stop-color="#ff5c9d"/></linearGradient></defs><path d="M9 4c0 12 14 12 14 24M23 4C23 16 9 16 9 28M10 8h12M11 24h10M13 13h6M13 19h6" stroke="url(#brand-gradient)" fill="none" stroke-width="2.4" stroke-linecap="round"/></svg><span>ADN, genes<br><b>y proteínas</b></span></a>
-  <nav aria-label="Secciones"><button class="nav active" data-tab="proyecto" aria-current="page">Proyecto</button><button class="nav" data-tab="lab">Simulador</button><button class="nav" data-tab="naturaleza">Naturaleza</button><button class="nav" data-tab="learn">Cómo funciona</button></nav>
+  <nav aria-label="Secciones"><button class="nav active" data-tab="proyecto" aria-current="page"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Proyecto</span></button><button class="nav" data-tab="lab"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3c0 9 10 9 10 18M17 3C17 12 7 12 7 21M8 7h8M8 17h8"/></svg><span>Simulador</span></button><button class="nav" data-tab="naturaleza"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19C5 10 11 4 20 4c0 9-6 15-15 15ZM5 19l8-8"/></svg><span>Naturaleza</span></button><button class="nav" data-tab="learn"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5c3-1 6-1 8 1 2-2 5-2 8-1v14c-3-1-6-1-8 1-2-2-5-2-8-1ZM12 6v14"/></svg><span><span class="nav-long">Cómo funciona</span><span class="nav-short">Aprender</span></span></button><button class="nav" data-tab="stats"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V11M12 20V5M19 20v-6M3 20h18"/></svg><span>Resultados</span></button></nav>
   <button id="fullscreen" class="icon-button" title="Pantalla completa" aria-label="Activar pantalla completa">⛶</button>
 </header>
 <main id="main">
@@ -30,13 +30,13 @@
   <div class="poster-grid">
     <article class="poster-card"><span class="lesson-number">01</span><h2>Pregunta</h2><p class="poster-big">¿Qué le pasa a una proteína si cambia <b>una sola letra</b> de su ADN?</p></article>
     <article class="poster-card"><span class="lesson-number">02</span><h2>Hipótesis</h2><p class="poster-big">Casi siempre va a cambiar la proteína, pero el efecto va a depender de <b>qué letra</b> cambie y <b>cómo</b>.</p></article>
-    <article class="poster-card"><span class="lesson-number">03</span><h2>Método</h2><ol class="method-list">
+    <article class="poster-card"><span class="lesson-number">03</span><h2>Método</h2><details class="method-more" open><summary>Cómo lo hicimos, en 5 pasos</summary><ol class="method-list">
       <li>Usamos la receta real del gen <b>HBB</b>: 444 letras, 148 codones.</li>
       <li>Programamos el <b>código genético</b> (64 codones) para traducir el ADN en proteína.</li>
       <li>Probamos <b>las 1.332 sustituciones</b> posibles de una letra.</li>
       <li>Marcamos cada cambio sobre la <b>estructura 3D real</b> (rayos X, PDB 2HHB).</li>
-      <li>Verificamos el programa con <b>21 pruebas automáticas</b>.</li>
-    </ol></article>
+      <li>Verificamos el programa con <b>23 pruebas automáticas</b>.</li>
+    </ol></details></article>
   </div>
   <article class="poster-card poster-results"><span class="lesson-number">04</span><h2>Resultados</h2>
     <div class="results-layout">
@@ -79,7 +79,7 @@
   <div class="workspace" id="experiment">
     <div class="stage">
       <section class="panel dna-panel" aria-labelledby="dna-heading">
-        <div class="panel-head"><h2 id="dna-heading" tabindex="-1">1 · El ADN</h2><div class="quick"><button id="random"><span class="shortcut-icon dice" aria-hidden="true">⚄</span>Al azar</button><button id="mission"><span class="shortcut-icon target" aria-hidden="true">◎</span>Casos reales</button></div><p class="lead">La receta de la hemoglobina tiene 444 letras. Cada grupo de tres, el <b>codón</b>, indica una pieza (aminoácido) de la proteína.</p></div>
+        <div class="panel-head"><h2 id="dna-heading" tabindex="-1">1 · El ADN</h2><div class="quick"><button id="random"><span class="shortcut-icon dice" aria-hidden="true">⚄</span>Al azar</button><button id="mission"><span class="shortcut-icon target" aria-hidden="true">◎</span>Casos reales</button><button id="open-name"><span class="shortcut-icon name" aria-hidden="true">Aa</span>Tu nombre</button></div><p class="lead">La receta de la hemoglobina tiene 444 letras. Cada grupo de tres, el <b>codón</b>, indica una pieza de la proteína.</p></div>
         <div class="codon-strip" id="codons" role="group" aria-label="Secuencia de ADN, seleccioná una letra"></div>
         <div class="gene-nav"><button id="previous" class="round-button" aria-label="Ver letras anteriores">←</button><label class="range-label" for="gene-range"><span id="region-label">Codones 1–4 de 148</span><input id="gene-range" type="range" min="0" max="144" value="0" aria-label="Recorrer el gen"></label><button id="next" class="round-button" aria-label="Ver letras siguientes">→</button></div>
         <div class="tool" id="tool"></div>
@@ -117,6 +117,8 @@
 
   <article class="poster-card nature-block chapter-page" id="chapter-malaria" role="tabpanel" aria-labelledby="ch-malaria">
     <h2>Una mutación que protege</h2>
+    <ol class="steps" aria-label="Pasos de la historia"><li><button class="step-dot" data-goto-step="1"><b>1</b>La idea</button></li><li><button class="step-dot" data-goto-step="2"><b>2</b>El mapa</button></li><li><button class="step-dot" data-goto-step="3"><b>3</b>El juego</button></li></ol>
+    <div class="step" data-step="1">
     <p class="poster-big">La anemia falciforme es grave. ¿Por qué es tan común en algunas regiones? Porque tener <b>una sola copia</b> protege contra la <b>malaria</b>.</p>
     <div class="genotypes">
       <div class="genotype aa"><span class="cells" aria-hidden="true"><i></i><i></i></span><b>Ninguna copia</b><span>Sin anemia, pero sin protección contra la malaria.</span></div>
@@ -124,7 +126,9 @@
       <div class="genotype ss"><span class="cells" aria-hidden="true"><i class="s"></i><i class="s"></i></span><b>Dos copias</b><span>Anemia falciforme: los glóbulos rojos se deforman y se traban.</span></div>
     </div>
     <p class="muted nature-note">Cada persona tiene dos copias del gen: una de su mamá y otra de su papá.</p>
-
+    <button class="primary step-next" data-goto-step="next">Siguiente: ¿dónde pasa? <span aria-hidden="true">→</span></button>
+    </div>
+    <div class="step" data-step="2" hidden>
     <h3 class="nature-sub">¿Dónde pasa?</h3>
     <div class="map-controls" role="group" aria-label="Capa del mapa">
       <button class="chip active" data-layer="hbs" aria-pressed="true">Anemia falciforme</button><button class="chip" data-layer="hbc" aria-pressed="false">Hemoglobina C</button><button class="chip" data-layer="thal" aria-pressed="false">Talasemias y HbE</button>
@@ -134,7 +138,9 @@
       <figcaption id="map-caption"><span class="map-key"><i class="fill"></i><span id="map-layer-name">Mutación frecuente</span></span><span class="map-key"><i class="hatch"></i>Malaria antes de las campañas de control</span><p id="map-text"></p></figcaption>
     </figure>
     <p class="muted map-source">Esquema simplificado por país, para mostrar el patrón general. Basado en Piel y col. (2010), Weatherall y Clegg (2001) y la OMS.</p>
-
+    <button class="primary step-next" data-goto-step="next">Siguiente: jugá a la evolución <span aria-hidden="true">→</span></button>
+    </div>
+    <div class="step" data-step="3" hidden>
     <h3 class="nature-sub">Jugá a la evolución</h3>
     <p>Un pueblo imaginario de 100 personas. Al principio, casi nadie tiene la mutación. Elegí si hay malaria y avanzá las generaciones: ¿qué pasa con los portadores?</p>
     <div class="evolution">
@@ -150,16 +156,22 @@
       </div>
     </div>
     <details><summary>Las reglas del juego</summary><p>Con malaria, de cada 100 personas llegan a tener hijos: 85 sin la mutación, 100 portadores y 20 con anemia falciforme. Sin malaria, los que no tienen la mutación también llegan 100. Son valores ilustrativos, no medidos.</p><p>En cada generación, las copias del gen de los sobrevivientes se mezclan al azar para formar la generación siguiente (equilibrio de Hardy-Weinberg). Con malaria, la mutación crece hasta un equilibrio: los portadores ganan, pero las personas con dos copias se enferman. Por eso no desaparece ni llega a todos. Este fenómeno se llama <b>selección balanceada</b>.</p><p>En la vida real, en muchos países de África entre el 10 % y el 40 % de las personas son portadoras (OMS, región africana).</p></details>
+    <button class="ghost step-next" data-next-chapter="felinos">Siguiente historia: jaguar y leopardo <span aria-hidden="true">→</span></button>
+    </div>
   </article>
 
   <article class="poster-card nature-block chapter-page" id="chapter-felinos" role="tabpanel" aria-labelledby="ch-felinos" hidden>
     <h2>Jaguar y leopardo: ¿gemelos?</h2>
+    <ol class="steps" aria-label="Pasos de la historia"><li><button class="step-dot" data-goto-step="1"><b>1</b>Dónde viven</button></li><li><button class="step-dot" data-goto-step="2"><b>2</b>Diferencias</button></li><li><button class="step-dot" data-goto-step="3"><b>3</b>Pantera negra</button></li></ol>
+    <div class="step" data-step="1">
     <p class="poster-big">Se parecen tanto que mucha gente los confunde. Son <b>primos</b>: los dos son grandes felinos del grupo de las panteras. Pero viven en <b>continentes distintos</b>.</p>
     <figure class="map-figure cats-figure"><svg id="cats-map" class="world" role="img" aria-label="Mapa: el jaguar vive en América, del norte de México al norte de Argentina; el leopardo, en África y el sur de Asia."></svg>
       <figcaption><span class="map-key"><i class="jaguar"></i>Jaguar · América</span><span class="map-key"><i class="leopard"></i>Leopardo · África y Asia</span></figcaption>
     </figure>
     <p class="nature-note">¿Cómo llegaron tan lejos? Sus antepasados vivían en Asia. Hace más de un millón de años, algunos cruzaron a América por un puente de tierra que unía Siberia con Alaska. Separados durante tantas generaciones, cada grupo cambió a su manera.</p>
-
+    <button class="primary step-next" data-goto-step="next">Siguiente: ¿en qué se diferencian? <span aria-hidden="true">→</span></button>
+    </div>
+    <div class="step" data-step="2" hidden>
     <div class="faceoff">
       <div class="cat jaguar"><div class="fur" data-fur="jaguar" aria-hidden="true"></div><h3>Jaguar</h3><p class="latin">Panthera onca</p></div>
       <span class="versus" aria-hidden="true">vs</span>
@@ -172,7 +184,9 @@
       <div><dt>Le gusta</dt><dd class="jaguar">El agua: nada muy bien y caza yacarés en los ríos</dd><dd class="leopard">Casi cualquier ambiente: selvas, sabanas, montañas y desiertos</dd></div>
     </dl>
     <p class="tip"><b>Truco para no confundirlos:</b> si ves puntitos dentro de las manchas, es un jaguar.</p>
-
+    <button class="primary step-next" data-goto-step="next">Siguiente: la pantera negra <span aria-hidden="true">→</span></button>
+    </div>
+    <div class="step" data-step="3" hidden>
     <h3 class="nature-sub">La pantera negra: el mismo color, dos recetas distintas</h3>
     <p>La «pantera negra» no es una especie: es un jaguar o un leopardo con una mutación que oscurece su pelo. ¡Las manchas siguen ahí! Se ven cuando les da el sol.</p>
     <div class="black-cats">
@@ -181,6 +195,8 @@
     </div>
     <div class="try-leopard"><p>La hemoglobina humana también tiene una cisteína, en la pieza 93, escrita TG<b>T</b>. Si cambiás la última letra por <b>A</b>, queda TGA: <b>el mismo STOP</b> que el del leopardo.</p><button class="primary species-try" data-try="leopard">Probá el STOP del leopardo <span aria-hidden="true">→</span></button></div>
     <p class="muted map-source">Distribución: esquema aproximado. Fuentes: Eizirik y col. (2003), <i>Current Biology</i>; Schneider y col. (2012), <i>PLoS ONE</i>.</p>
+    <button class="ghost step-next" data-next-chapter="animales">Siguiente historia: animales récord <span aria-hidden="true">→</span></button>
+    </div>
   </article>
 
   <article class="poster-card nature-block chapter-page" id="chapter-animales" role="tabpanel" aria-labelledby="ch-animales" hidden>
@@ -212,6 +228,7 @@
 <footer><span>ADN, genes y proteínas · Feria de ciencias</span><button class="footer-link" data-tab="stats">Resultados del stand</button></footer>
 <div class="toast" id="toast" role="status" hidden></div>
 <dialog id="mission-dialog" aria-labelledby="mission-heading"><button class="dialog-close" aria-label="Cerrar" id="close-mission">×</button><p class="eyebrow">MISIÓN / UNA LETRA PUEDE CAMBIARLO TODO</p><h2 id="mission-heading">Elegí un caso real.</h2><div class="case-picker" role="group" aria-label="Casos reales"><button data-case="sickle" class="active" aria-pressed="true"><b>Anemia falciforme</b>Glu6Val</button><button data-case="hbc" aria-pressed="false"><b>Hemoglobina C</b>Glu6Lys</button><button data-case="thal" aria-pressed="false"><b>Beta-talasemia</b>Gln39Stop</button></div><div id="case-detail" aria-live="polite"></div><p class="muted">Son casos históricos, sin relación con las personas que visitan el stand.</p><button class="primary" id="start-mission">Ir al codón 7</button></dialog>
+<dialog id="name-dialog" class="name-dialog" aria-labelledby="name-heading"><button class="dialog-close" aria-label="Cerrar" id="close-name">×</button><p class="eyebrow">TU NOMBRE EN PROTEÍNA</p><h2 id="name-heading">¿Se puede escribir tu nombre con piezas?</h2><p class="muted">Cada pieza de una proteína tiene una letra: <b>A</b> es alanina, <b>L</b> es leucina, <b>N</b> es asparagina… Escribí tu nombre y armamos la receta de ADN que lo fabricaría.</p><form id="name-form" class="name-form"><input id="name-input" maxlength="30" autocomplete="off" spellcheck="false" placeholder="Tu nombre" aria-label="Tu nombre"><button class="primary">Traducir</button></form><div id="name-result" aria-live="polite"></div></dialog>
 <dialog id="card-dialog" class="card-dialog" aria-labelledby="card-heading"><button class="dialog-close" aria-label="Cerrar" id="close-card">×</button><h2 id="card-heading">Tu descubrimiento</h2><canvas id="card-canvas" width="1080" height="1350" role="img"></canvas><p class="muted card-photo">Sacale una foto con tu celular para llevártela.</p><div class="card-actions"><button class="primary" id="card-download">Descargar imagen</button><button class="secondary" id="card-share" hidden>Compartir</button></div></dialog>
 <script src="js/datos-modelos.js"></script>
 <script src="js/datos-mapa.js"></script>

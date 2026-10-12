@@ -294,7 +294,8 @@
   function centerOn(p) {
     offset = Math.floor(p / 3) - Math.floor(perView / 2);
   }
-  // Herramienta: con la letra elegida, un toque cambia, quita o agrega.
+  // Herramienta: con la letra elegida, un toque la cambia. Agregar y quitar quedan plegados para no cargar la pantalla.
+  let moreTools = false;
   function renderTool() {
     const b = G.DNA[position],
       codon = Math.floor(position / 3),
@@ -308,7 +309,7 @@
         : r.type === 'del'
           ? `Quitaste la letra ${r.position + 1} (${b}).`
           : `Agregaste una ${r.base} después de la letra ${r.position + 1}.`;
-    tool.innerHTML = `<div class="tool-info"><span class="base big ${b.toLowerCase()}">${b}</span><div><b>Letra ${position + 1} de 444</b><span>Codón ${codon + 1}: ${triplet} → ${aaName(triplet)}</span></div>${r ? `<div class="tool-change"><p class="tool-summary">${summary}</p><button class="ghost tool-undo" id="undo"><span aria-hidden="true">↶</span> Deshacer</button></div>` : ''}</div><div class="tool-actions"><div class="tool-group"><span>Cambiar por</span><div class="tool-bases" data-kind="sub"></div></div><div class="tool-group"><span>Agregar después</span><div class="tool-bases" data-kind="ins"></div></div><div class="tool-group"><span>Quitar</span><button class="ghost tool-del${r?.type === 'del' ? ' active' : ''}" id="delete" aria-pressed="${r?.type === 'del'}">✕ Quitar la ${b}</button></div></div>`;
+    tool.innerHTML = `<div class="tool-info"><span class="base big ${b.toLowerCase()}">${b}</span><div><b>Letra ${position + 1} de 444</b><span>Codón ${codon + 1}: ${triplet} → ${aaName(triplet)}</span></div>${r ? `<div class="tool-change"><p class="tool-summary">${summary}</p><button class="ghost tool-undo" id="undo"><span aria-hidden="true">↶</span> Deshacer</button></div>` : ''}</div><div class="tool-actions"><div class="tool-group main"><span>Cambiar la ${b} por</span><div class="tool-bases" data-kind="sub"></div></div><button class="text-button tool-more" id="tool-more" aria-expanded="${moreTools}" aria-controls="tool-extra">${moreTools ? 'Ocultar agregar y quitar' : '+ Agregar o quitar una letra'}</button></div><div class="tool-actions tool-extra" id="tool-extra"${moreTools ? '' : ' hidden'}><div class="tool-group"><span>Agregar después</span><div class="tool-bases" data-kind="ins"></div></div><div class="tool-group"><span>Quitar</span><button class="ghost tool-del${r?.type === 'del' ? ' active' : ''}" id="delete" aria-pressed="${r?.type === 'del'}">✕ Quitar la ${b}</button></div></div>`;
     for (const box of tool.querySelectorAll('.tool-bases')) {
       const kind = box.dataset.kind;
       for (const option of 'ATCG') {
@@ -325,6 +326,11 @@
       }
     }
     $('delete').onclick = () => apply({ position, type: 'del' });
+    $('tool-more').onclick = () => {
+      moreTools = !moreTools;
+      renderTool();
+      $('tool-more').focus({ preventScroll: true });
+    };
     $('undo') && ($('undo').onclick = undo);
   }
   function render() {
@@ -354,6 +360,7 @@
     clearResult();
     position = input.position;
     current = result;
+    if (input.type !== 'sub') moreTools = true;
     if (Math.floor(position / 3) < offset || Math.floor(position / 3) >= offset + perView)
       centerOn(position);
     if (guess) render();
@@ -465,7 +472,7 @@
     const guess = lastGuess,
       heading = resultHeading(r);
     const length = r.lengthUnknown ? `${r.mature.length}+` : `${r.mature.length}`;
-    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza:malaria">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza:${r.species.id === 'leopard' ? 'felinos' : 'animales'}">${r.species.id === 'leopard' ? 'Jaguar y leopardo →' : 'Conocé más animales →'}</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza:animales">Conocé más animales →</button></p>` : ''}<button class="secondary save-card" id="save-card"><span aria-hidden="true">★</span> Guardar mi descubrimiento</button><details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
+    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza:malaria">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza:${r.species.id === 'leopard' ? 'felinos:3' : 'animales'}">${r.species.id === 'leopard' ? 'Jaguar y leopardo →' : 'Conocé más animales →'}</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza:animales">Conocé más animales →</button></p>` : ''}<button class="secondary save-card" id="save-card"><span aria-hidden="true">★</span> Guardar mi descubrimiento</button><details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
       r.mature
         ? r.mature
             .split('')
@@ -477,9 +484,9 @@
       b =>
         (b.onclick = () => {
           stopTour();
-          const [tab, chapter] = b.dataset.goto.split(':');
+          const [tab, chapter, step] = b.dataset.goto.split(':');
           showTab(tab);
-          if (chapter) showChapter(chapter);
+          if (chapter) showChapter(chapter, Number(step) || 1);
         }),
     );
     $('save-card').onclick = openCard;
@@ -765,6 +772,200 @@
       });
     } catch {}
   };
+
+  // ---- Tu nombre en proteína: las letras del nombre son piezas, y la receta se puede mutar ----
+  const nameState = { gene: null, mutation: null };
+  const nameTiles = (letters, compare = null) =>
+    letters
+      .map((ch, i) => {
+        const piece = G.names[ch] && ch !== '*';
+        return `<span class="name-piece${piece ? '' : ' off'}${compare && compare[i] !== ch ? ' diff' : ''}"><b>${ch}</b><small>${piece ? G.names[ch] : '—'}</small></span>`;
+      })
+      .join('');
+  function nameDNA(dna, mark = -1) {
+    const groups = [];
+    for (let i = 0; i < dna.length; i += 3) {
+      const last = i + 3 >= dna.length,
+        label = i === 0 ? 'inicio' : last ? 'STOP' : '';
+      groups.push(
+        `<span class="name-codon">${[...dna.slice(i, i + 3)].map((b, j) => `<span class="base small ${b.toLowerCase()}${i + j === mark ? ' changed' : ''}">${b}</span>`).join('')}${label ? `<small>${label}</small>` : ''}</span>`,
+      );
+    }
+    return groups.join('');
+  }
+  // Qué le pasó al nombre con la mutación: la misma clasificación que en el simulador, en chiquito.
+  function nameOutcome(gene, m) {
+    const startLost = m.dna.slice(0, 3) !== 'ATG',
+      t = G.translate(m.dna),
+      after = startLost ? '' : t.protein.slice(1);
+    const letter = `Cambiaste la letra ${m.position + 1} de la receta: ${gene.dna[m.position]} → ${m.base}.`;
+    if (startLost)
+      return {
+        after,
+        text: `${letter} <b>Se perdió el inicio ATG:</b> la célula no encuentra dónde empezar y tu nombre no se fabrica.`,
+      };
+    if (t.stop === -1)
+      return {
+        after,
+        text: `${letter} <b>Se perdió el STOP:</b> la lectura sigue de largo y no sabe dónde terminar.`,
+      };
+    if (after.length < gene.pieces.length)
+      return {
+        after,
+        text: `${letter} <b>Apareció un STOP antes de tiempo:</b> tu nombre quedó cortado.`,
+      };
+    if (after === gene.pieces)
+      return {
+        after,
+        text: `${letter} <b>Mutación silenciosa:</b> cambió la receta, pero el codón indica la misma pieza y tu nombre quedó igual.`,
+      };
+    return { after, text: `${letter} <b>Cambió una pieza:</b> ahora tu nombre dice otra cosa.` };
+  }
+  function renderName() {
+    const box = $('name-result'),
+      g = nameState.gene,
+      m = nameState.mutation;
+    if (!g || !g.letters.length) {
+      box.innerHTML = '';
+      return;
+    }
+    if (!g.pieces) {
+      box.innerHTML = `<p class="name-note">Ninguna letra de <b>${g.letters.join('')}</b> es una pieza. ¡Probá con otro nombre o un apodo!</p>`;
+      return;
+    }
+    const skipped = g.skipped.length
+      ? `<p class="name-note">${g.skipped.length === 1 ? `La <b>${g.skipped[0]}</b> no es` : `Las letras <b>${g.skipped.join(', ')}</b> no son`} de ninguna pieza: las proteínas usan 20 piezas y a ninguna le tocó la B, la J, la O, la U, la X ni la Z. Se saltea${g.skipped.length === 1 ? '' : 'n'}.</p>`
+      : '<p class="name-note">¡Todas las letras de tu nombre son piezas!</p>';
+    const outcome = m && nameOutcome(g, m);
+    box.innerHTML = `<div class="name-pieces">${nameTiles(g.letters)}</div>${skipped}<h3 class="name-sub">La receta: ${g.dna.length} letras de ADN</h3><div class="name-dna">${nameDNA(m ? m.dna : g.dna, m ? m.position : -1)}</div>${
+      outcome
+        ? `<div class="name-mutation"><p>${outcome.text}</p>${outcome.after ? `<div class="name-pieces">${nameTiles([...outcome.after], g.pieces)}</div>` : ''}</div>`
+        : ''
+    }<div class="name-actions"><button class="primary" id="name-mutate"><span aria-hidden="true">⚄</span> ${m ? 'Mutar otra letra' : 'Mutar una letra al azar'}</button>${m ? '<button class="ghost" id="name-undo"><span aria-hidden="true">↶</span> Volver al original</button>' : ''}<button class="secondary" id="name-card"><span aria-hidden="true">★</span> Guardar tarjeta</button></div>`;
+    $('name-mutate').onclick = () => {
+      const position = Math.floor(Math.random() * g.dna.length),
+        options = [...'ATCG'].filter(b => b !== g.dna[position]),
+        base = options[Math.floor(Math.random() * options.length)];
+      nameState.mutation = {
+        position,
+        base,
+        dna: g.dna.slice(0, position) + base + g.dna.slice(position + 1),
+      };
+      renderName();
+      $('name-mutate').focus({ preventScroll: true });
+    };
+    if (m)
+      $('name-undo').onclick = () => {
+        nameState.mutation = null;
+        renderName();
+        $('name-mutate').focus({ preventScroll: true });
+      };
+    $('name-card').onclick = openNameCard;
+  }
+  $('open-name').onclick = () => {
+    $('name-dialog').showModal();
+    $('name-input').focus();
+  };
+  $('close-name').onclick = () => $('name-dialog').close();
+  $('name-form').onsubmit = e => {
+    e.preventDefault();
+    nameState.gene = G.nameToGene($('name-input').value);
+    nameState.mutation = null;
+    renderName();
+  };
+  function drawNameCard(canvas, g) {
+    const ctx = canvas.getContext('2d'),
+      W = canvas.width,
+      H = canvas.height,
+      pad = 96;
+    const bg = ctx.createRadialGradient(80, 0, 0, 80, 0, 900);
+    bg.addColorStop(0, '#4b2bb8');
+    bg.addColorStop(1, '#0e0b24');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#1a1744';
+    ctx.strokeStyle = '#3d3890';
+    ctx.lineWidth = 3;
+    roundRect(ctx, 48, 48, W - 96, H - 96, 40);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#c2bdea';
+    ctx.font = `700 28px ${CARD_FONT}`;
+    ctx.fillText('ADN, GENES Y PROTEÍNAS · FERIA DE CIENCIAS', pad, 140);
+    const title = ctx.createLinearGradient(pad, 0, pad + 700, 0);
+    title.addColorStop(0, '#ff9a4d');
+    title.addColorStop(1, '#ff5c9d');
+    ctx.fillStyle = title;
+    ctx.font = `800 76px ${CARD_FONT}`;
+    ctx.fillText('Mi nombre en proteína', pad, 236);
+
+    // Las piezas del nombre, en una o dos filas de fichas.
+    const pieces = [...g.pieces],
+      perRow = Math.min(8, Math.max(4, Math.ceil(pieces.length / 2))),
+      gap = 14,
+      size = Math.min(132, (W - 2 * pad - (perRow - 1) * gap) / perRow);
+    pieces.forEach((aa, i) => {
+      const row = Math.floor(i / perRow),
+        inRow = Math.min(perRow, pieces.length - row * perRow),
+        x = (W - (inRow * size + (inRow - 1) * gap)) / 2 + (i % perRow) * (size + gap),
+        y = 320 + row * (size + 70);
+      ctx.fillStyle = '#ffd447';
+      roundRect(ctx, x, y, size, size, 20);
+      ctx.fill();
+      ctx.fillStyle = '#1a1335';
+      ctx.font = `800 ${size * 0.6}px ${CARD_FONT}`;
+      ctx.textAlign = 'center';
+      ctx.fillText(aa, x + size / 2, y + size * 0.72);
+      ctx.fillStyle = '#c2bdea';
+      ctx.font = `600 ${Math.round(size * 0.27)}px ${CARD_FONT}`;
+      ctx.fillText(G.names[aa], x + size / 2, y + size + 36);
+      ctx.textAlign = 'left';
+    });
+    let y = 320 + Math.ceil(pieces.length / perRow) * (size + 70) + 70;
+    ctx.fillStyle = '#f7f5ff';
+    ctx.font = `600 34px ${CARD_FONT}`;
+    ctx.fillText(`Mi receta de ADN (${g.dna.length} letras):`, pad, y);
+    ctx.font = `700 40px 'Cascadia Mono', Consolas, monospace`;
+    const codons = g.dna.match(/.{3}/g);
+    let line = '',
+      lineY = y + 70;
+    for (const codon of codons) {
+      const test = line ? `${line} ${codon}` : codon;
+      if (ctx.measureText(test).width > W - 2 * pad && line) {
+        ctx.fillStyle = '#4fd8ff';
+        ctx.fillText(line, pad, lineY);
+        line = codon;
+        lineY += 58;
+      } else line = test;
+    }
+    ctx.fillStyle = '#4fd8ff';
+    ctx.fillText(line, pad, lineY);
+    ctx.fillStyle = '#c2bdea';
+    ctx.font = `500 30px ${CARD_FONT}`;
+    wrapText(
+      ctx,
+      'Empieza con ATG (la señal de inicio) y termina con TAA (STOP). Cada grupo de tres letras fabrica una pieza.',
+      pad,
+      Math.min(lineY + 76, H - 220),
+      W - 2 * pad,
+      42,
+      3,
+    );
+    ctx.font = `500 26px ${CARD_FONT}`;
+    ctx.fillText('Simulación educativa · daniechev.github.io/Genoma-LAB-', pad, H - 92);
+  }
+  function openNameCard() {
+    const g = nameState.gene;
+    if (!g?.pieces) return;
+    const canvas = $('card-canvas');
+    drawNameCard(canvas, g);
+    canvas.setAttribute('aria-label', `Tarjeta: mi nombre en proteína, ${g.pieces}.`);
+    $('card-share').hidden = !navigator.canShare;
+    $('card-dialog').querySelector('.card-photo').textContent = standMode
+      ? 'Sacale una foto con tu celular para llevártela.'
+      : 'Descargala o compartila para llevártela.';
+    $('card-dialog').showModal();
+  }
 
   // ---- Pestañas y estadísticas del stand ----
   function showTab(tab) {
@@ -1324,8 +1525,8 @@
   );
   $('map-malaria').onchange = renderMap;
 
-  // Capítulos de Naturaleza: se ve una historia por vez para que la página no quede cargada.
-  function showChapter(name) {
+  // Capítulos de Naturaleza: se ve una historia por vez, y las largas van de a un paso, para que no quede cargada.
+  function showChapter(name, step = 1) {
     all('.chapter').forEach(b => {
       const on = b.dataset.chapter === name;
       b.classList.toggle('active', on);
@@ -1333,7 +1534,42 @@
       b.tabIndex = on ? 0 : -1;
     });
     all('.chapter-page').forEach(p => (p.hidden = p.id !== `chapter-${name}`));
+    showStep($(`chapter-${name}`), step, false);
   }
+  function showStep(page, n, scroll = true) {
+    const steps = [...page.querySelectorAll('.step')];
+    if (!steps.length) return;
+    n = Math.max(1, Math.min(steps.length, n));
+    steps.forEach((s, i) => (s.hidden = i + 1 !== n));
+    page.querySelectorAll('.step-dot').forEach((b, i) => {
+      b.classList.toggle('active', i + 1 === n);
+      b.classList.toggle('done', i + 1 < n);
+      if (i + 1 === n) b.setAttribute('aria-current', 'step');
+      else b.removeAttribute('aria-current');
+    });
+    if (!page.querySelector('.step:not([hidden]) .evolution')) evoStop();
+    if (scroll)
+      page.querySelector('.steps').scrollIntoView({
+        block: 'start',
+        behavior: viewer.reduced.matches ? 'instant' : 'smooth',
+      });
+  }
+  all('[data-goto-step]').forEach(b => {
+    b.onclick = () => {
+      const page = b.closest('.chapter-page'),
+        now = [...page.querySelectorAll('.step')].findIndex(s => !s.hidden) + 1;
+      showStep(page, b.dataset.gotoStep === 'next' ? now + 1 : Number(b.dataset.gotoStep));
+    };
+  });
+  all('[data-next-chapter]').forEach(b => {
+    b.onclick = () => {
+      showChapter(b.dataset.nextChapter);
+      document.querySelector('.chapters').scrollIntoView({
+        block: 'start',
+        behavior: viewer.reduced.matches ? 'instant' : 'smooth',
+      });
+    };
+  });
   all('.chapter').forEach(b => {
     b.onclick = () => showChapter(b.dataset.chapter);
     b.onkeydown = e => {
@@ -1595,6 +1831,12 @@
       appear.observe(el);
     }
   }
+
+  // En el celular, el método del póster arranca plegado para que la portada no sea tan larga.
+  const phone = matchMedia('(max-width: 560px)'),
+    foldMethod = () => (document.querySelector('.method-more').open = !phone.matches);
+  phone.addEventListener('change', foldMethod);
+  foldMethod();
 
   centerOn(position);
   renderSurvey();
