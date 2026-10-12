@@ -4,8 +4,8 @@ Una guía para que cualquiera del grupo pueda presentar igual de bien. Los tiemp
 
 ## Antes de abrir el stand
 
-- [ ] Abrir `index.html` y ponerla en pantalla completa (botón ⛶ arriba a la derecha, o F11).
-- [ ] En **Resultados del stand** (en el pie de página, abajo a la derecha), activar el **modo stand**. Si nadie toca la pantalla durante 90 segundos, la app vuelve sola al inicio y muestra el recorrido guiado.
+- [ ] Abrir `index.html?stand` y ponerla en pantalla completa (F11). La historia avanza sola si nadie toca la pantalla, hace el cambio de letra por su cuenta y vuelve a empezar: atrae gente mientras están ocupados.
+- [ ] En el simulador (`laboratorio.html`), abrir **Resultados del stand** (en el pie de página) y activar el **modo stand**. Si nadie toca la pantalla durante 90 segundos, vuelve sola a la historia.
 - [ ] Imprimir el cartel con el código QR (en **Resultados del stand**, o abriendo `cartel.html`).
 - [ ] Probar que el QR abra la app en un celular.
 - [ ] Si viene el jurado: tener una terminal lista para correr `node --test` (muestra las 24 pruebas automáticas).
@@ -13,6 +13,8 @@ Una guía para que cualquiera del grupo pueda presentar igual de bien. Los tiemp
 ## Para que se acerquen (10 segundos)
 
 > «¿Sabías que cambiar **una sola letra** de tu ADN puede causar una enfermedad? ¿Querés probar?»
+
+**Con la historia de la pantalla:** invitá a la persona a tocar **Empezar** y acompañala. La pantalla cuenta lo mismo que la explicación de abajo; en la escena 3, dejá que ella misma cambie la letra. Al final, el botón **Abrir el simulador** la lleva a probar otras letras.
 
 ## La explicación de un minuto
 
@@ -96,4 +98,4 @@ No calcula la forma ni la función de la proteína mutada, no incluye el ADN que
 
 ## Recorrido guiado para el jurado
 
-Abrí `index.html#jurado`: arranca solo un recorrido de unos dos minutos por los tres casos reales. Se avanza con las flechas o con un control remoto de presentaciones, la barra espaciadora lo pausa y Esc lo cierra.
+Abrí `laboratorio.html#jurado`: arranca solo un recorrido de unos dos minutos por los tres casos reales. Se avanza con las flechas o con un control remoto de presentaciones, la barra espaciadora lo pausa y Esc lo cierra.

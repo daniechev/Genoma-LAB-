@@ -1,16 +1,20 @@
 # Genoma LAB · ¿Qué cambia con una letra?
 
-Laboratorio interactivo para una feria de ciencias. El visitante elige una letra del ADN de la **hemoglobina** (gen *HBB*), la cambia, predice qué le va a pasar a la proteína y ve el resultado en 3D.
+Sitio interactivo para una feria de ciencias, en tres partes:
+
+1. **Introducción** (`index.html`): el título y la pregunta, con una hélice de ADN girando.
+2. **Historia guiada** (`index.html`): seis escenas en las que el visitante descubre qué es la hemoglobina, cómo se lee su receta y **cambia él mismo** una letra del ADN para ver aparecer la anemia falciforme.
+3. **Simulador** (`laboratorio.html`): cambiar cualquier letra del gen *HBB*, predecir qué le pasa a la proteína y verla en 3D. Ahí también están las historias de **Naturaleza** y el **Proyecto** para el jurado.
 
 ## Cómo usarlo
 
 Descargá el repositorio y abrí `index.html` en el navegador. No hace falta instalar nada ni tener internet: todo funciona sin servidor.
 
-> Abrí `index.html` junto con sus carpetas `css/`, `js/` e `img/`. El archivo solo no funciona.
+> Abrí `index.html` junto con sus carpetas `css/`, `js/` e `img/`. El archivo solo no funciona. Para ir directo al simulador, abrí `laboratorio.html`.
 
 ### En la feria
 
-- **Modo stand:** en **Resultados del stand**, activá *Modo stand* (o abrí `index.html?stand`). Si nadie toca la pantalla durante 90 segundos, la app vuelve al simulador y muestra el recorrido guiado en bucle, sin sumar al contador. Un toque lo corta. Queda guardado en ese navegador.
+- **Modo stand:** abrí `index.html?stand`: la historia avanza sola si nadie toca la pantalla, hace el cambio de letra por su cuenta y vuelve a empezar. Para que el simulador también vuelva solo a la historia, activá *Modo stand* en **Resultados del stand** (pie de página de `laboratorio.html`): si nadie toca la pantalla durante 90 segundos, abre `index.html?stand`. Queda guardado en ese navegador.
 - **Cartel con QR:** `cartel.html` es un cartel A4 para imprimir con un código QR que abre la app en el celular de los visitantes.
 - **Tarjeta del descubrimiento:** después de cada resultado, *Guardar mi descubrimiento* arma una imagen con el cambio y su efecto, para descargarla, compartirla o sacarle una foto.
 - **Sin internet:** publicada en GitHub Pages, la app se guarda en el celular la primera vez que se abre (aparece el aviso *«Listo: la app ya funciona aunque no tengas internet»*). Después funciona aunque se corte el wifi, y se puede agregar a la pantalla de inicio como una app. Si se cambia un archivo, la copia se renueva sola en la visita siguiente; si se agrega un archivo nuevo, hay que sumarlo a la lista `ARCHIVOS` de `sw.js` (una prueba avisa si falta).
@@ -27,9 +31,9 @@ Si la dirección cambia, hay que generar un QR nuevo y reemplazar `img/qr-sitio.
 
 ### Para el jurado
 
-La página abre en **Proyecto**, una portada tipo póster con la pregunta, la hipótesis, el método, los resultados y la conclusión. Los resultados de las 1.332 sustituciones se calculan en el momento con el mismo motor del simulador.
+En la introducción, *Para el jurado: el proyecto completo* abre la pestaña **Proyecto** de `laboratorio.html` (también `laboratorio.html#proyecto`): un póster con la pregunta, la hipótesis, el método, los resultados y la conclusión. Los resultados de las 1.332 sustituciones se calculan en el momento con el mismo motor del simulador.
 
-El botón **Ver el recorrido guiado** muestra los tres casos reales solo, paso a paso, en unos dos minutos. Se puede pausar, avanzar o volver con los botones, con las flechas del teclado o con un control remoto de presentaciones (AvPág/RePág); Esc lo cierra. Para que arranque directamente, abrí `index.html#jurado`. El recorrido no suma al contador del stand, salvo que el jurado haga su propia predicción.
+El botón **Ver el recorrido guiado** muestra los tres casos reales solo, paso a paso, en unos dos minutos. Se puede pausar, avanzar o volver con los botones, con las flechas del teclado o con un control remoto de presentaciones (AvPág/RePág); Esc lo cierra. Para que arranque directamente, abrí `laboratorio.html#jurado`. El recorrido no suma al contador del stand, salvo que el jurado haga su propia predicción.
 
 ### El simulador
 
@@ -61,9 +65,9 @@ Hay animaciones cortas solo donde explican algo: el ribosoma del resultado, los 
 
 Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la metionina inicial, como en la literatura científica.
 
-### Historia guiada (prototipo)
+### Introducción e historia guiada
 
-`historia.html` cuenta el proyecto en seis escenas, y cada escena en pasos cortos: *Seguir* (o las flechas del teclado, o deslizar el dedo) muestra el párrafo siguiente y cambia el dibujo; al terminar los pasos, pasa a la escena siguiente. La barra de arriba se llena con cada paso.
+`index.html` abre con una introducción (el título, la pregunta y la hélice de ADN de `js/helice.js`) y sigue con una historia en seis escenas, y cada escena en pasos cortos: *Seguir* (o las flechas del teclado, o deslizar el dedo) muestra el párrafo siguiente y cambia el dibujo; al terminar los pasos, pasa a la escena siguiente. La barra de arriba se llena con cada paso.
 
 1. **Tu sangre:** el oxígeno, los glóbulos rojos y la hemoglobina.
 2. **La receta:** las cuatro letras, la lectura de a tres (codones), las piezas, el collar de 146 piezas y el codón 7.
@@ -74,17 +78,17 @@ Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la 
 
 Entre escenas, las *View Transitions* del navegador conectan los dibujos: se entra en el glóbulo y aparece el ADN, el codón 7 crece hasta el codón grande, y la T que cambió el visitante viaja al mapa, a la foto del leopardo y a la barra final. Donde el navegador no las tiene, o con movimiento reducido, la escena cambia directo. El fondo toma un color distinto en cada escena.
 
-Con `historia.html?stand` avanza sola si nadie toca la pantalla, hace el cambio de letra por su cuenta y vuelve a empezar. Los enlaces a la app usan `index.html#simulador` y `index.html#naturaleza:felinos:3`.
+Con `index.html?stand` avanza sola si nadie toca la pantalla, hace el cambio de letra por su cuenta y vuelve a empezar. Al final, *Abrir el simulador* lleva a `laboratorio.html`. Los enlaces a la app usan `laboratorio.html#simulador`, `#proyecto` y `#naturaleza:felinos:3`.
 
-### Inicio
+### Laboratorio
 
-La app tiene tres pestañas: **Inicio**, **Simulador** y **Naturaleza**. En el Inicio están el título, el recorrido guiado y **Ir directo a**, con cuatro atajos (el simulador, los casos reales, tu nombre en proteína y las historias de la naturaleza). Debajo, plegados, **El proyecto** (el póster para el jurado: pregunta, hipótesis, método, resultados y conclusión) y **Cómo funciona** (cuatro ideas, notas para docentes y créditos de las fotos). **Resultados del stand** queda en el pie de página: es una herramienta para quienes atienden el stand.
+`laboratorio.html` abre en el **Simulador**. Sus pestañas son **Historia** (vuelve a `index.html`), **Simulador**, **Naturaleza** y **Proyecto** (el póster para el jurado, con *Cómo funciona* plegado debajo: cuatro ideas, notas para docentes y créditos de las fotos). **Resultados del stand** queda en el pie de página: es una herramienta para quienes atienden el stand.
 
 ### Naturaleza
 
 La pestaña **Naturaleza** tiene seis historias, elegidas porque muestran bien «una letra que cambia»: malaria, pantera negra, guepardo rey, gato siamés, llama y ojos celestes. Arriba hay un índice para ir directo a cada una; al final de cada historia, *Siguiente* lleva a la próxima.
 
-Hay otras historias escritas que quedaron ocultas para que la página no esté cargada (el mapa y las diferencias del jaguar y el leopardo, el ánsar indio, el mamut, el pez de hielo, los pelirrojos y los tibetanos). Siguen en `index.html` con el atributo `data-oculto`: para volver a mostrar una, se borra ese atributo. Los enlaces que llevan a una historia oculta se esconden solos.
+Hay otras historias escritas que quedaron ocultas para que la página no esté cargada (el mapa y las diferencias del jaguar y el leopardo, el ánsar indio, el mamut, el pez de hielo, los pelirrojos y los tibetanos). Siguen en `laboratorio.html` con el atributo `data-oculto`: para volver a mostrar una, se borra ese atributo. Los enlaces que llevan a una historia oculta se esconden solos.
 
 - **Una mutación que protege:** por qué la anemia falciforme es común donde había malaria. Tiene un mapa con capas (HbS, HbC, talasemias y HbE, con la malaria superpuesta) y el juego **Jugá a la evolución**: un pueblo de 100 personas donde se ve, generación a generación, cómo la malaria hace crecer a los portadores hasta un equilibrio (selección balanceada). Los valores del juego son ilustrativos.
 - **Felinos:** en cinco pasos. Primero el **jaguar y el leopardo**, dos primos que viven en continentes distintos. Un mapa muestra dónde vive cada uno, el pelaje dibujado deja ver la diferencia de las rosetas y una tabla compara cuerpo, caza y ambiente. Termina con la **pantera negra**: en el jaguar se deben a 15 letras que faltan en el gen *MC1R* (dominante) y en el leopardo a una sola letra que crea un STOP en el gen *ASIP* (recesiva). El botón *Probá el STOP del leopardo* hace el mismo cambio (TGT → TGA) en la cisteína 93 de la hemoglobina, y el simulador lo reconoce. Sigue el **guepardo rey**, con rayas en vez de manchas por una letra de más en el gen *Taqpep* (recesiva); el botón *Probá la letra del guepardo rey* agrega una A después de la letra 417 de HBB, la lectura se corre y no aparece el STOP. Ahí también está el dato de que todos los guepardos son casi gemelos (14 de 14 injertos de piel aceptados). Cierra el **gato siamés**, con un dibujo que se oscurece según la temperatura que elija el visitante (tirosinasa que solo funciona con frío).
@@ -95,21 +99,24 @@ Fuentes: Piel y col. 2010 (*Nature Communications*), Taylor y col. 2012 (*Lancet
 
 ### Fotos
 
-Las fotos de animales y de los ojos son de [Wikimedia Commons](https://commons.wikimedia.org), con licencias libres; los créditos están en **Inicio → Cómo funciona → Créditos de las fotos** y en `img/fotos/creditos.json`. Se bajan con GitHub Actions (workflow *Fotos de Wikimedia Commons*): sin `herramientas/fotos/elegidas.json`, busca candidatas según `buscar.json` y arma hojas de contacto numeradas; con ese archivo, baja las elegidas achicadas a `img/fotos/` y escribe los créditos. Si se agrega una foto, hay que sumarla a `ARCHIVOS` en `sw.js`.
+Las fotos de animales y de los ojos son de [Wikimedia Commons](https://commons.wikimedia.org), con licencias libres; los créditos están en **Proyecto → Cómo funciona → Créditos de las fotos** y en `img/fotos/creditos.json`. Se bajan con GitHub Actions (workflow *Fotos de Wikimedia Commons*): sin `herramientas/fotos/elegidas.json`, busca candidatas según `buscar.json` y arma hojas de contacto numeradas; con ese archivo, baja las elegidas achicadas a `img/fotos/` y escribe los créditos. Si se agrega una foto, hay que sumarla a `ARCHIVOS` en `sw.js`.
 
 ## Estructura
 
 ```
-index.html              estructura de la página
+index.html              introducción e historia guiada (la página de inicio)
+laboratorio.html        simulador, naturaleza y póster del proyecto
 cartel.html             cartel A4 para imprimir, con el código QR
 sw.js                   copia de la app para usarla sin internet
 manifest.webmanifest    nombre e ícono para instalarla en el celular
-css/estilos.css         estilos
+css/estilos.css         estilos del laboratorio
+css/historia.css        estilos de la introducción y la historia
 js/datos-modelos.js     coordenadas 3D de la hemoglobina (PDB y AlphaFold)
 js/datos-mapa.js        mapa del mundo simplificado (Natural Earth)
 js/genetica.js          ADN, código genético, casos reales y clasificación de mutaciones
 js/visor-3d.js          visor 3D dibujado en canvas
-js/helice.js            hélice de ADN animada de la portada
+js/helice.js            hélice de ADN animada de la introducción y del póster
+js/historia.js          escenas, pasos, transiciones y modo stand de la historia
 js/app.js               interfaz, póster, recorrido guiado, naturaleza, misiones, tarjeta, modo stand y contador
 img/                    código QR de la dirección pública e íconos de la app
 docs/                   guion para presentar en el stand

@@ -34,7 +34,7 @@ jobs:
       - name: Preparar los archivos de la página
         run: |
           mkdir sitio
-          cp -r index.html cartel.html historia.html sw.js manifest.webmanifest css js img sitio/
+          cp -r index.html laboratorio.html cartel.html sw.js manifest.webmanifest css js img sitio/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: sitio

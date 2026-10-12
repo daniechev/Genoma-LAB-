@@ -1475,11 +1475,9 @@
     },
     { capture: true },
   );
+  // Si nadie toca la pantalla, vuelve a la historia guiada del inicio, que se repite sola.
   function goIdle() {
-    for (const dialog of document.querySelectorAll('dialog[open]')) dialog.close();
-    stopTour();
-    clearResult();
-    startTour(true);
+    location.href = 'index.html?stand';
   }
   setInterval(() => {
     if (standMode && !tour.auto && performance.now() - lastActivity > STAND_IDLE) goIdle();
@@ -2131,10 +2129,12 @@
   renderAnimalsMap();
   renderEvolution();
   if (location.hash === '#jurado') startTour();
-  // Enlaces desde la historia guiada: index.html#simulador o index.html#naturaleza:felinos:3.
+  // Enlaces desde la historia guiada: laboratorio.html#simulador, #proyecto o #naturaleza:felinos:3.
+  // Sin enlace, la app abre en el simulador.
   const startAt = decodeURIComponent(location.hash.slice(1));
-  if (startAt === 'simulador') goTo('lab');
+  if (startAt === 'proyecto') goTo('proyecto');
   else if (startAt.startsWith('naturaleza')) goTo(startAt);
+  else if (startAt !== 'jurado') goTo('lab');
 
   // ---- Sin internet: guarda una copia de la app en el dispositivo (solo funciona publicada en la web) ----
   if (

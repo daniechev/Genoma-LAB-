@@ -1,4 +1,4 @@
-// Historia guiada: seis escenas, cada una contada en pasos cortos («beats»). «Seguir», las flechas del
+// Página de inicio: una introducción y una historia guiada de seis escenas, cada una contada en pasos cortos («beats»). «Seguir», las flechas del
 // teclado o deslizar el dedo avanzan un paso; al terminar los pasos de una escena se pasa a la siguiente.
 // En el modo stand (historia.html?stand) avanza sola si nadie toca la pantalla, y vuelve a empezar al final.
 (() => {
@@ -11,6 +11,9 @@
     changed = false;
 
   const beatsOf = i => scenes[i].querySelectorAll('.beat').length || 1;
+  // La escena 0 es la introducción; la historia va de la 1 a la 6.
+  const DNA_SCENE = 2,
+    CHANGE_SCENE = 3;
 
   // ---- Escena 1: glóbulos rojos que pasan ----
   $('blood').innerHTML =
@@ -127,14 +130,14 @@
     beat = Math.max(0, Math.min(beatsOf(current) - 1, b));
     scene.dataset.beat = beat;
     scene.querySelectorAll('.beat').forEach((p, i) => p.classList.toggle('on', i === beat));
-    if (current === 1) {
+    if (current === DNA_SCENE) {
       const dna = $('dna');
       dna.classList.toggle('split', beat >= 1);
       dna.classList.toggle('read', beat >= 2);
       dna.classList.toggle('chain', beat >= 3);
       dna.classList.toggle('focus', beat >= 4);
     }
-    if (current === 2) {
+    if (current === CHANGE_SCENE) {
       $('cell-swap').classList.toggle('fibers', changed && beat === 2);
       $('cell-swap').classList.toggle('sick', changed && beat >= 3);
     }
@@ -143,7 +146,8 @@
 
   // ---- Navegación ----
   $('progress').innerHTML = scenes
-    .map((_, i) => `<li><button data-go="${i}" aria-label="Escena ${i + 1}"></button></li>`)
+    .slice(1)
+    .map((_, i) => `<li><button data-go="${i + 1}" aria-label="Escena ${i + 1}"></button></li>`)
     .join('');
   document
     .querySelectorAll('[data-go]')
@@ -151,16 +155,17 @@
 
   function updateControls() {
     const last = current === scenes.length - 1,
-      blocked = current === 2 && !changed;
-    $('back').disabled = current === 0 && beat === 0;
+      blocked = current === CHANGE_SCENE && !changed;
+    $('back').disabled = current === 0;
     // Al final se oculta sin moverse de lugar, así la flecha de volver no salta.
     $('next').style.visibility = last ? 'hidden' : '';
     $('next').disabled = blocked;
     $('next').innerHTML = blocked
       ? 'Cambiá la letra para seguir'
       : 'Seguir <span aria-hidden="true">→</span>';
-    document.querySelectorAll('[data-go]').forEach((b, i) => {
-      const fill = i < current ? 100 : i > current ? 0 : ((beat + 1) / beatsOf(i)) * 100;
+    document.querySelectorAll('[data-go]').forEach(b => {
+      const i = Number(b.dataset.go),
+        fill = i < current ? 100 : i > current ? 0 : ((beat + 1) / beatsOf(i)) * 100;
       b.style.setProperty('--fill', `${fill}%`);
       if (i === current) b.setAttribute('aria-current', 'step');
       else b.removeAttribute('aria-current');
@@ -183,11 +188,11 @@
   }
   function render(n, b) {
     current = n;
-    document.body.dataset.scene = n + 1;
+    document.body.dataset.scene = n;
     scenes.forEach((s, i) => (s.hidden = i !== n));
-    if (n === 2 && !changed) resetChange();
+    if (n === CHANGE_SCENE && !changed) resetChange();
     setBeat(b);
-    history.replaceState(null, '', `#${n + 1}`);
+    history.replaceState(null, '', n ? `#${n}` : location.pathname + location.search);
     scenes[n].querySelector('h1').focus({ preventScroll: true });
     window.scrollTo({ top: 0 });
   }
@@ -204,6 +209,11 @@
   $('back').onclick = back;
   $('restart').onclick = () => {
     changed = false;
+    show(1);
+  };
+  $('start').onclick = () => show(1);
+  document.querySelector('[data-go-intro]').onclick = e => {
+    e.preventDefault();
     show(0);
   };
   scenes.forEach(s => s.querySelector('h1').setAttribute('tabindex', '-1'));
@@ -237,7 +247,7 @@
     ['pointerdown', 'keydown'].forEach(t => document.addEventListener(t, () => (idle = 0), true));
     setInterval(() => {
       idle += 1;
-      if (current === 2 && !changed && idle >= 4) {
+      if (current === CHANGE_SCENE && !changed && idle >= 4) {
         idle = 0;
         $('tap-a').click();
         setTimeout(() => choose('T'), 900);
@@ -251,6 +261,14 @@
     }, 1000);
   }
 
-  const start = Number(location.hash.slice(1)) - 1;
-  show(start >= 0 && start < 3 ? start : 0);
+  // Se puede abrir en una escena (#1, #2 o #3); más adelante no, porque antes hay que cambiar la letra.
+  const start = Number(location.hash.slice(1));
+  show(start >= 0 && start <= CHANGE_SCENE ? start : 0);
+
+  // Sin internet: guarda una copia del sitio en el dispositivo (solo funciona publicado en la web).
+  if (
+    'serviceWorker' in navigator &&
+    (location.protocol === 'https:' || location.hostname === 'localhost')
+  )
+    navigator.serviceWorker.register('sw.js').catch(() => {});
 })();

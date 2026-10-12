@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', 'laboratorio.html'), 'utf8');
 
 test('el póster dice cuántas pruebas automáticas hay de verdad', () => {
   const total = fs
@@ -14,7 +14,7 @@ test('el póster dice cuántas pruebas automáticas hay de verdad', () => {
     .reduce((a, b) => a + b, 0);
   const shown = html.match(/<b>(\d+) pruebas automáticas<\/b>/);
   assert.ok(shown, 'el póster debe mencionar las pruebas automáticas');
-  assert.equal(Number(shown[1]), total, 'actualizá el número de pruebas en index.html');
+  assert.equal(Number(shown[1]), total, 'actualizá el número de pruebas en laboratorio.html');
 });
 
 test('la copia sin internet incluye todos los archivos que usa la página', () => {
@@ -28,7 +28,7 @@ test('la copia sin internet incluye todos los archivos que usa la página', () =
   );
   const manifest = JSON.parse(fs.readFileSync(path.join(root, 'manifest.webmanifest'), 'utf8'));
   const used = [
-    ...['index.html', 'cartel.html', 'historia.html'].flatMap(page =>
+    ...['index.html', 'laboratorio.html', 'cartel.html'].flatMap(page =>
       [...fs.readFileSync(path.join(root, page), 'utf8').matchAll(/(?:src|href)="([^"#:]+)"/g)].map(
         m => m[1],
       ),
@@ -39,6 +39,6 @@ test('la copia sin internet incluye todos los archivos que usa la página', () =
   for (const file of saved.filter(f => f !== './'))
     assert.ok(fs.existsSync(path.join(root, file)), `${file} está en sw.js pero no existe`);
   const pages = fs.readFileSync(path.join(root, '.github', 'workflows', 'pages.yml'), 'utf8');
-  for (const file of ['sw.js', 'manifest.webmanifest', 'historia.html'])
+  for (const file of ['sw.js', 'manifest.webmanifest', 'laboratorio.html'])
     assert.match(pages, new RegExp(file.replace('.', '\\.')), `pages.yml debe publicar ${file}`);
 });

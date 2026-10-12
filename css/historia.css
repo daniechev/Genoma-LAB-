@@ -945,3 +945,53 @@ body[data-scene='6'] {
 .scene[data-beat='1'] .photo-card.leopard {
   opacity: 0.4;
 }
+
+/* Introducción: título grande, la hélice de ADN girando y el botón para empezar. */
+body[data-scene='0'] {
+  --tint: #7c5cff;
+}
+body[data-scene='0'] .progress,
+body[data-scene='0'] .story-skip,
+body[data-scene='0'] .story-controls {
+  visibility: hidden;
+}
+.intro-title {
+  font-size: clamp(44px, 6.2vw, 92px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.intro-title em {
+  font-style: normal;
+  background: var(--cta);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.intro-helix {
+  display: block;
+  width: 100%;
+  height: min(72vh, 620px);
+}
+.intro-jury {
+  margin-top: 26px !important;
+}
+.intro-jury a {
+  color: var(--muted);
+  text-underline-offset: 4px;
+}
+.intro-jury a:hover {
+  color: var(--mint);
+}
+@media (max-width: 820px) {
+  .intro-helix {
+    height: 200px;
+  }
+}
+.scene.intro {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+}
+@media (max-width: 820px) {
+  .scene.intro {
+    grid-template-columns: 1fr;
+  }
+}
