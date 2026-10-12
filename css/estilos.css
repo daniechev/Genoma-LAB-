@@ -3202,3 +3202,221 @@ svg.world .countries path {
     width: 100%;
   }
 }
+
+/* Capítulo «En las personas» y felinos nuevos */
+.chapters {
+  grid-template-columns: repeat(4, 1fr);
+}
+@media (max-width: 1180px) and (min-width: 901px) {
+  .chapters {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.chapter-icon.personas {
+  background: #ff5c9d26;
+  color: var(--pink);
+}
+.cat.cheetah h3 {
+  color: var(--amber);
+}
+.cat.king h3 {
+  color: var(--accent);
+}
+.cat.cheetah .fur,
+.cat.king .fur {
+  outline: 2px solid #ffd44755;
+  outline-offset: 4px;
+}
+.twins {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  margin-top: 30px;
+  padding: 22px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #4fd8ff14, transparent 70%);
+  border: 1px solid #4fd8ff40;
+}
+.twins-number {
+  flex: none;
+  font-size: clamp(40px, 6vw, 64px);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--cyan);
+}
+.twins h4 {
+  margin: 0 0 6px;
+  font-size: 21px;
+}
+.twins p {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.siamese {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 26px;
+  align-items: center;
+  margin-top: 22px;
+}
+#siamese-cat {
+  width: 100%;
+  height: auto;
+  border-radius: 22px;
+  background: radial-gradient(70% 70% at 50% 60%, #ffffff10, transparent);
+}
+#siamese-cat g {
+  transition:
+    fill 0.4s,
+    stroke 0.4s;
+}
+.siamese-side label {
+  font-size: 17px;
+}
+.siamese-side label b {
+  color: var(--accent);
+}
+#siamese-temp {
+  width: 100%;
+  margin-top: 12px;
+  accent-color: var(--pink);
+}
+.siamese-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted);
+}
+#siamese-text {
+  margin-top: 14px;
+  font-size: 16px;
+  color: var(--muted);
+  min-height: 4.5em;
+}
+.eyes {
+  display: flex;
+  gap: 26px;
+  margin: 6px 0 18px;
+}
+.iris {
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+}
+.iris svg {
+  width: 96px;
+  height: 96px;
+  display: block;
+  margin-bottom: 6px;
+}
+.eye-quiz {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+.eye-quiz p {
+  width: 100%;
+}
+.eye-answer {
+  margin-top: 12px;
+  padding-left: 14px;
+  border-left: 3px solid var(--accent);
+  font-size: 17px;
+}
+.eye-answer:empty {
+  display: none;
+}
+.switches,
+.altitude {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 22px;
+}
+.switch-card,
+.altitude > div {
+  padding: 20px;
+  border-radius: 20px;
+  background: #ffffff08;
+  border: 1px solid var(--hair);
+}
+.switch-card h4,
+.altitude h4 {
+  margin: 12px 0 6px;
+  font-size: 21px;
+}
+.altitude h4 {
+  margin-top: 0;
+}
+.switch-card p,
+.altitude p {
+  margin: 0;
+  font-size: 16px;
+  color: var(--muted);
+}
+.switch-card b,
+.altitude b {
+  color: var(--text);
+}
+.switch {
+  display: inline-block;
+  vertical-align: middle;
+  width: 64px;
+  height: 34px;
+  border-radius: 999px;
+  background: #ffffff1f;
+  position: relative;
+  margin-right: 12px;
+}
+.switch i {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+}
+.switch-card.on .switch {
+  background: var(--accent);
+}
+.switch-card.on .switch i {
+  left: 34px;
+}
+.hair {
+  display: inline-block;
+  vertical-align: middle;
+  width: 90px;
+  height: 34px;
+  border-radius: 999px;
+}
+.hair.black {
+  background: repeating-linear-gradient(115deg, #0c0a10 0 6px, #241d2c 6px 9px);
+}
+.hair.red {
+  background: repeating-linear-gradient(115deg, #b8461f 0 6px, #e0743a 6px 9px);
+}
+@media (max-width: 700px) {
+  .siamese,
+  .switches,
+  .altitude {
+    grid-template-columns: 1fr;
+  }
+  .twins {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .iris svg {
+    width: 76px;
+    height: 76px;
+  }
+}
+.step .poster-big + .nature-note,
+.step .poster-big + p {
+  margin-top: 12px;
+}

@@ -187,7 +187,7 @@ test('las 1.332 sustituciones posibles se reparten como muestra el póster', () 
 
 test('los cambios de otras especies son de una letra y coinciden con su notación', () => {
   const names = G.names;
-  for (const c of G.SPECIES) {
+  for (const c of G.SPECIES.filter(c => !c.type)) {
     const r = sub(c.position, c.base);
     assert.equal(r.effect, c.effect || 'missense', c.id);
     const after = G.table[r.mutatedCodon] === '*' ? 'Stop' : names[G.table[r.mutatedCodon]];
@@ -213,4 +213,14 @@ test('tu nombre en proteína: las letras que no son piezas se saltean', () => {
   assert.equal(g.pieces, 'ANPAL');
   assert.deepEqual(g.skipped, ['J', 'U', 'B', 'O']);
   assert.equal(G.nameToGene('').dna, 'ATGTAA');
+});
+
+test('guepardo rey: agregar una A cerca del final corre la lectura y la deja sin STOP', () => {
+  const c = G.SPECIES.find(s => s.id === 'kingcheetah');
+  const r = G.simulate({ position: c.position, type: 'ins', base: c.base });
+  assert.equal(r.effect, 'frameshift');
+  assert.equal(r.codon + 1, 140);
+  assert.ok(r.lengthUnknown, 'la lectura sigue de largo, como en el guepardo rey');
+  assert.equal(r.species.id, 'kingcheetah');
+  assert.equal(G.simulate({ position: c.position, type: 'sub', base: 'C' }).species, null);
 });

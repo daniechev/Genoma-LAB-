@@ -64,6 +64,7 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     { id: 'thal', name: 'Beta-talasemia', notation: 'Gln39Stop', position: 117, base: 'T' },
   ];
   // Cambios de otras especies que en el gen humano son de una sola letra (la pieza se cuenta sin la metionina inicial).
+  // type: 'sub' si no se indica.
   const SPECIES = [
     { id: 'llama', name: 'Llama', notation: 'His2Asn', position: 6, base: 'A' },
     { id: 'mammoth12', name: 'Mamut lanudo', notation: 'Thr12Ala', position: 36, base: 'G' },
@@ -78,11 +79,23 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
       base: 'A',
       effect: 'nonsense',
     },
+    // El guepardo rey tiene una letra de más en el gen Taqpep, que cambia el final de la proteína;
+    // acá se imita agregando una A cerca del final de HBB: la lectura se corre y sigue de largo.
+    {
+      id: 'kingcheetah',
+      name: 'Guepardo rey',
+      notation: 'inserción en el codón 140',
+      type: 'ins',
+      position: 416,
+      base: 'A',
+      effect: 'frameshift',
+    },
   ];
   function findSpecies(position, type, base) {
-    return type === 'sub'
-      ? SPECIES.find(c => c.position === position && c.base === base) || null
-      : null;
+    return (
+      SPECIES.find(c => c.position === position && c.base === base && (c.type || 'sub') === type) ||
+      null
+    );
   }
   function findCase(position, type, base) {
     return type === 'sub'

@@ -53,6 +53,8 @@
       '<b>¡Uno de los cambios del mamut lanudo!</b> La pieza 12 pasa de treonina a alanina. Junto con otros dos cambios (Ala86Ser y Glu101Gln), ayudaba a que su hemoglobina soltara bien el oxígeno aunque hiciera mucho frío.',
     mammoth86:
       '<b>¡Uno de los cambios del mamut lanudo!</b> La pieza 86 pasa de alanina a serina. Junto con otros dos cambios (Thr12Ala y Glu101Gln), ayudaba a que su hemoglobina soltara bien el oxígeno aunque hiciera mucho frío.',
+    kingcheetah:
+      '<b>¡Como el guepardo rey!</b> Agregaste una letra cerca del final: la lectura se corre, las últimas piezas cambian y ya no aparece el STOP. Al guepardo rey le pasó algo parecido en otro gen, el <i>Taqpep</i>: una letra de más cambió el final de la proteína y sus manchas se volvieron rayas.',
     mammoth101:
       '<b>¡Uno de los cambios del mamut lanudo!</b> La pieza 101 pasa de glutamato a glutamina. Junto con otros dos cambios (Thr12Ala y Ala86Ser), ayudaba a que su hemoglobina soltara bien el oxígeno aunque hiciera mucho frío.',
   };
@@ -472,7 +474,7 @@
     const guess = lastGuess,
       heading = resultHeading(r);
     const length = r.lengthUnknown ? `${r.mature.length}+` : `${r.mature.length}`;
-    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza:malaria">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza:${r.species.id === 'leopard' ? 'felinos:3' : 'animales'}">${r.species.id === 'leopard' ? 'Jaguar y leopardo →' : 'Conocé más animales →'}</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza:animales">Conocé más animales →</button></p>` : ''}<button class="secondary save-card" id="save-card"><span aria-hidden="true">★</span> Guardar mi descubrimiento</button><details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
+    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza:malaria">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza:${{ leopard: 'felinos:3', kingcheetah: 'felinos:4' }[r.species.id] || 'animales'}">${{ leopard: 'La pantera negra →', kingcheetah: 'El guepardo rey →' }[r.species.id] || 'Conocé más animales →'}</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza:animales">Conocé más animales →</button></p>` : ''}<button class="secondary save-card" id="save-card"><span aria-hidden="true">★</span> Guardar mi descubrimiento</button><details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
       r.mature
         ? r.mature
             .split('')
@@ -480,15 +482,7 @@
             .join('')
         : 'No se fabrica en este modelo.'
     }</div></details>`;
-    box.querySelectorAll('[data-goto]').forEach(
-      b =>
-        (b.onclick = () => {
-          stopTour();
-          const [tab, chapter, step] = b.dataset.goto.split(':');
-          showTab(tab);
-          if (chapter) showChapter(chapter, Number(step) || 1);
-        }),
-    );
+    box.querySelectorAll('[data-goto]').forEach(b => (b.onclick = () => goTo(b.dataset.goto)));
     $('save-card').onclick = openCard;
     $('see-3d').onclick = () => {
       if (!$('focus-mutation').hidden) viewer.focusMutation();
@@ -587,9 +581,19 @@
     ctx.globalAlpha = 1;
     ctx.textAlign = 'left';
   }
+  // Lleva a una pestaña y, si se indica, a un capítulo y paso de Naturaleza (por ejemplo, «naturaleza:felinos:3»).
+  function goTo(spec) {
+    stopTour();
+    const [tab, chapter, step] = spec.split(':');
+    showTab(tab);
+    if (!chapter) return;
+    showChapter(chapter, Number(step) || 1);
+    $(`chapter-${chapter}`).scrollIntoView({ block: 'start', behavior: 'instant' });
+  }
   function cardBadge(r) {
     if (r.realCase) return `¡Es un caso real: ${r.realCase.name}! · ${r.realCase.notation}`;
     if (r.species?.id === 'leopard') return '¡El mismo STOP que el del leopardo negro! · TGA';
+    if (r.species?.id === 'kingcheetah') return '¡Como el guepardo rey! · una letra de más';
     if (r.species)
       return `¡Como en ${r.species.id === 'llama' ? 'la' : 'el'} ${r.species.name.toLowerCase()}! · ${r.species.notation}`;
     if (r.effect === 'start-loss') return 'Como el pez de hielo: sin cadena beta';
@@ -1708,7 +1712,110 @@
       }
     return `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice"><rect width="320" height="180" fill="${base}"/><g fill="${inner}">${centers}</g><g fill="${spot}" opacity="${black ? 0.8 : 0.92}">${rings}</g>${black ? `<defs><linearGradient id="shine-${kind}" x1="0" y1="0" x2="1" y2="1"><stop offset=".3" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".16"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="320" height="180" fill="url(#shine-${kind})"/>` : ''}</svg>`;
   }
-  all('[data-fur]').forEach(el => (el.innerHTML = furSVG(el.dataset.fur)));
+  // Guepardo: manchas chicas, redondas y llenas. Guepardo rey: manchones grandes que se juntan y rayas en el lomo.
+  function cheetahSVG(king) {
+    let seed = king ? 7 : 3;
+    const rand = () => (seed = (seed * 9301 + 49297) % 233280) / 233280,
+      f = n => n.toFixed(1);
+    let spots = '';
+    if (king) {
+      for (const y of [16, 44, 72])
+        spots += `<path d="M-10 ${y} C 60 ${y - 10}, 120 ${y + 12}, 190 ${y} S 290 ${y - 8}, 340 ${y + 4}" stroke="#2a1a10" stroke-width="${y === 44 ? 20 : 14}" fill="none" stroke-linecap="round"/>`;
+      for (let y = 104; y < 200; y += 34)
+        for (let x = -10 + (y % 68 ? 24 : 0); x < 340; x += 58) {
+          const cx = x + rand() * 16,
+            cy = y + rand() * 10;
+          for (let k = 0; k < 3; k++)
+            spots += `<ellipse cx="${f(cx + (rand() - 0.5) * 26)}" cy="${f(cy + (rand() - 0.5) * 14)}" rx="${f(11 + rand() * 9)}" ry="${f(8 + rand() * 5)}"/>`;
+        }
+    } else
+      for (let row = 0, y = 6; y < 190; row++, y += 17)
+        for (let x = (row % 2) * 10 - 6; x < 330; x += 21)
+          spots += `<circle cx="${f(x + (rand() - 0.5) * 8)}" cy="${f(y + (rand() - 0.5) * 6)}" r="${f(4.2 + rand() * 2)}"/>`;
+    return `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice"><rect width="320" height="180" fill="#e3b768"/><g fill="#2a1a10">${spots}</g></svg>`;
+  }
+  all('[data-fur]').forEach(
+    el =>
+      (el.innerHTML = el.dataset.fur.startsWith('cheetah')
+        ? cheetahSVG(false)
+        : el.dataset.fur === 'king'
+          ? cheetahSVG(true)
+          : furSVG(el.dataset.fur)),
+  );
+
+  // Gato siamés: cada parte del cuerpo se enfría distinto según el ambiente. La enzima del color solo funciona
+  // donde la piel está por debajo de unos 36 °C (valores ilustrativos).
+  const SIAMESE_PARTS = [
+    [
+      'tail',
+      0.85,
+      '<path d="M250 132 C 300 128, 318 92, 304 58" stroke-width="16" fill="none" stroke-linecap="round"/>',
+    ],
+    [
+      'legs',
+      0.5,
+      '<rect x="96" y="140" width="20" height="44" rx="9"/><rect x="128" y="142" width="20" height="42" rx="9"/><rect x="206" y="140" width="20" height="44" rx="9"/><rect x="232" y="138" width="20" height="46" rx="9"/>',
+    ],
+    ['body', 0.12, '<ellipse cx="176" cy="126" rx="88" ry="38"/>'],
+    [
+      'paws',
+      0.9,
+      '<ellipse cx="106" cy="186" rx="13" ry="7"/><ellipse cx="138" cy="186" rx="13" ry="7"/><ellipse cx="216" cy="186" rx="13" ry="7"/><ellipse cx="242" cy="186" rx="13" ry="7"/>',
+    ],
+    ['ears', 0.95, '<path d="M54 66 L 58 26 L 82 54 Z"/><path d="M96 52 L 114 18 L 124 58 Z"/>'],
+    ['head', 0.3, '<circle cx="88" cy="84" r="38"/>'],
+    ['mask', 0.55, '<ellipse cx="82" cy="96" rx="24" ry="22"/>'],
+  ];
+  function renderSiamese() {
+    const ambient = Number($('siamese-temp').value),
+      mix = (a, b, t) =>
+        '#' +
+        [0, 2, 4]
+          .map(i =>
+            Math.round(parseInt(a.substr(i, 2), 16) * (1 - t) + parseInt(b.substr(i, 2), 16) * t)
+              .toString(16)
+              .padStart(2, '0'),
+          )
+          .join('');
+    $('siamese-cat').innerHTML =
+      SIAMESE_PARTS.map(([id, exposure, shape]) => {
+        const skin = 38.5 - exposure * (38.5 - ambient) * 0.55,
+          dark = Math.max(0, Math.min(1, (36 - skin) / 3)),
+          color = mix('efe3cd', '3b2820', dark);
+        return `<g class="cat-${id}" fill="${color}" stroke="${color}">${shape}</g>`;
+      }).join('') +
+      '<g fill="#5fb8ff"><ellipse cx="72" cy="80" rx="6" ry="7"/><ellipse cx="100" cy="80" rx="6" ry="7"/></g><path d="M82 96 l6 5 6 -5" stroke="#1a1335" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+    $('siamese-temp-label').textContent = `${ambient} °C`;
+    $('siamese-text').textContent =
+      ambient >= 32
+        ? 'Con mucho calor, ninguna parte se enfría lo suficiente: la enzima casi no funciona y el gato queda claro, como un gatito recién nacido.'
+        : ambient <= 10
+          ? 'Con frío, se enfrían más partes del cuerpo: la enzima funciona en más lugares y el pelaje se oscurece más.'
+          : 'Las orejas, la cara, las patas y la cola están más frías que el resto: ahí la enzima funciona y el pelo sale oscuro. El cuerpo, más calentito, queda claro.';
+  }
+  $('siamese-temp').oninput = renderSiamese;
+  renderSiamese();
+
+  // Ojos celestes: una pregunta rápida para el público.
+  const EYE_ANSWERS = {
+    blue: 'Entonces seguramente tenés esta letra en tus dos copias del gen. La heredaste de aquel antepasado de hace miles de años: ¡todas las personas de ojos celestes que pasan por el stand son parientes lejanas!',
+    green:
+      'Los ojos verdes tienen poco pigmento, pero un poco más que los celestes. Suelen combinar esta letra con cambios en otros genes.',
+    brown:
+      'Tu interruptor probablemente está en la versión original, que fabrica mucho pigmento. Es la más común del mundo: la de los ojos celestes apareció mucho después.',
+  };
+  all('[data-eyes]').forEach(
+    b =>
+      (b.onclick = () => {
+        all('[data-eyes]').forEach(x => {
+          x.classList.toggle('active', x === b);
+          x.setAttribute('aria-pressed', String(x === b));
+        });
+        $('eye-answer').textContent = EYE_ANSWERS[b.dataset.eyes];
+      }),
+  );
+  // Enlaces entre historias (por ejemplo, del jaguar negro a los pelirrojos).
+  all('.nature [data-goto]').forEach(b => (b.onclick = () => goTo(b.dataset.goto)));
 
   // Jugá a la evolución: frecuencia de la mutación (q) en un pueblo, generación a generación.
   // Hardy-Weinberg con selección: q' = (p·q·wAS + q²·wSS) / (p²·wAA + 2·p·q·wAS + q²·wSS). Valores ilustrativos.
@@ -1798,7 +1905,7 @@
   );
   const tries = {
     ...Object.fromEntries(
-      G.SPECIES.map(c => [c.id, { position: c.position, type: 'sub', base: c.base }]),
+      G.SPECIES.map(c => [c.id, { position: c.position, type: c.type || 'sub', base: c.base }]),
     ),
     icefish: { position: 0, type: 'sub', base: 'C' },
   };
