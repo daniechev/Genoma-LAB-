@@ -480,7 +480,7 @@
     const guess = lastGuess,
       heading = resultHeading(r);
     const length = r.lengthUnknown ? `${r.mature.length}+` : `${r.mature.length}`;
-    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza:malaria">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza:${{ leopard: 'felinos:3', kingcheetah: 'felinos:4' }[r.species.id] || 'animales'}">${{ leopard: 'La pantera negra →', kingcheetah: 'El guepardo rey →' }[r.species.id] || 'Conocé más animales →'}</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza:animales">Conocé más animales →</button></p>` : ''}<button class="secondary save-card" id="save-card"><span aria-hidden="true">★</span> Guardar mi descubrimiento</button><details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
+    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza:malaria">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza:${{ leopard: 'felinos:3', kingcheetah: 'felinos:4' }[r.species.id] || `animales:${r.species.id}`}">${{ leopard: 'La pantera negra →', kingcheetah: 'El guepardo rey →' }[r.species.id] || 'Conocé más animales →'}</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza:animales:icefish">Conocé más animales →</button></p>` : ''}<button class="secondary save-card" id="save-card"><span aria-hidden="true">★</span> Guardar mi descubrimiento</button><details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
       r.mature
         ? r.mature
             .split('')
@@ -488,6 +488,7 @@
             .join('')
         : 'No se fabrica en este modelo.'
     }</div></details>`;
+    hideDeadLinks(box);
     box.querySelectorAll('[data-goto]').forEach(b => (b.onclick = () => goTo(b.dataset.goto)));
     $('save-card').onclick = openCard;
     $('see-3d').onclick = () => {
@@ -593,7 +594,7 @@
     const [tab, chapter, step] = spec.split(':');
     showTab(tab);
     if (!chapter) return;
-    showChapter(chapter, Number(step) || 1);
+    showChapter(chapter, step);
     // En «Animales récord» el paso es un animal: se abre su tarjeta.
     const species = step && document.querySelector(`[data-species="${step}"]`);
     if (species) {
@@ -1545,35 +1546,64 @@
 
   // Capítulos de Naturaleza: se ve una historia por vez, y las largas van de a un paso, para que no quede cargada.
   function showChapter(name, step = 1) {
-    all('.chapter').forEach(b => {
-      const on = b.dataset.chapter === name;
-      b.classList.toggle('active', on);
-      if (on) b.setAttribute('aria-current', 'true');
-      else b.removeAttribute('aria-current');
-    });
     all('.chapter-page').forEach(p => (p.hidden = p.id !== `chapter-${name}`));
-    markStory(name, step);
     showStep($(`chapter-${name}`), step, false);
   }
   // Resalta en el índice la historia que se está viendo.
   function markStory(name, step) {
-    all('.story-links button').forEach(b =>
-      b.classList.toggle('active', b.dataset.goto === `naturaleza:${name}:${step}`),
-    );
+    all('.story-links button').forEach(b => {
+      const [, chapter, n] = b.dataset.goto.split(':');
+      b.classList.toggle('active', chapter === name && (!step || n === String(step)));
+    });
   }
+  // Las historias que se sacaron para que la página no quede cargada siguen en el HTML con «data-oculto»:
+  // los pasos visibles conservan su número, y los enlaces que llevaban a una historia oculta no se muestran.
+  const visibleSteps = page => [...page.querySelectorAll('.step:not([data-oculto])')];
+  function isHidden(spec) {
+    const [, chapter, step] = spec.split(':');
+    if (!chapter || !step) return false;
+    const target = /^\d+$/.test(step)
+      ? document.querySelector(`#chapter-${chapter} .step[data-step="${step}"]`)
+      : document.querySelector(`[data-species="${step}"]`);
+    return !!target?.hasAttribute('data-oculto');
+  }
+  function hideDeadLinks(root) {
+    root.querySelectorAll('[data-goto^="naturaleza:"]').forEach(b => {
+      if (!isHidden(b.dataset.goto)) return;
+      const parent = b.parentElement;
+      b.hidden = true;
+      if (parent.textContent.trim() === b.textContent.trim()) parent.hidden = true;
+    });
+  }
+  all('.chapter-page').forEach(page => {
+    const steps = visibleSteps(page),
+      shown = steps.map(s => s.dataset.step);
+    page.querySelectorAll('.step-dot').forEach(d => {
+      if (!shown.includes(d.dataset.gotoStep)) d.parentElement.hidden = true;
+    });
+    if (steps.length < 2) page.querySelector('.steps')?.setAttribute('hidden', '');
+    // El «Siguiente» del último paso visible no tiene adónde ir.
+    steps.at(-1)?.querySelector('[data-goto-step="next"]')?.setAttribute('hidden', '');
+  });
+  hideDeadLinks(document);
   function showStep(page, n, scroll = true) {
-    const steps = [...page.querySelectorAll('.step')];
-    if (!steps.length) return;
-    n = Math.max(1, Math.min(steps.length, n));
-    steps.forEach((s, i) => (s.hidden = i + 1 !== n));
-    page.querySelectorAll('.step-dot').forEach((b, i) => {
-      b.classList.toggle('active', i + 1 === n);
-      b.classList.toggle('done', i + 1 < n);
-      if (i + 1 === n) b.setAttribute('aria-current', 'step');
+    const steps = visibleSteps(page);
+    if (!steps.length) {
+      markStory(page.id.replace('chapter-', ''));
+      return;
+    }
+    const current = steps.find(s => s.dataset.step === String(n)) || steps[0],
+      index = steps.indexOf(current);
+    page.querySelectorAll('.step').forEach(s => (s.hidden = s !== current));
+    page.querySelectorAll('.step-dot').forEach(b => {
+      const i = steps.findIndex(s => s.dataset.step === b.dataset.gotoStep);
+      b.classList.toggle('active', i === index);
+      b.classList.toggle('done', i >= 0 && i < index);
+      if (i === index) b.setAttribute('aria-current', 'step');
       else b.removeAttribute('aria-current');
     });
-    markStory(page.id.replace('chapter-', ''), n);
-    if (!page.querySelector('.step:not([hidden]) .evolution')) evoStop();
+    markStory(page.id.replace('chapter-', ''), current.dataset.step);
+    if (!current.querySelector('.evolution')) evoStop();
     if (scroll)
       page.querySelector('.steps').scrollIntoView({
         block: 'start',
@@ -1583,22 +1613,24 @@
   all('[data-goto-step]').forEach(b => {
     b.onclick = () => {
       const page = b.closest('.chapter-page'),
-        now = [...page.querySelectorAll('.step')].findIndex(s => !s.hidden) + 1;
-      showStep(page, b.dataset.gotoStep === 'next' ? now + 1 : Number(b.dataset.gotoStep));
+        steps = visibleSteps(page),
+        now = steps.findIndex(s => !s.hidden);
+      showStep(
+        page,
+        b.dataset.gotoStep === 'next' ? steps[now + 1]?.dataset.step : b.dataset.gotoStep,
+      );
     };
   });
   all('[data-next-chapter]').forEach(b => {
     b.onclick = () => {
       showChapter(b.dataset.nextChapter);
-      document.querySelector('.chapters').scrollIntoView({
+      $(`chapter-${b.dataset.nextChapter}`).scrollIntoView({
         block: 'start',
         behavior: viewer.reduced.matches ? 'instant' : 'smooth',
       });
     };
   });
-  all('.chapter').forEach(b => {
-    b.onclick = () => goTo(`naturaleza:${b.dataset.chapter}`);
-  });
+  markStory('malaria', 1);
 
   // Misma proyección que el mapa (Natural Earth): pasa de longitud y latitud a un punto del dibujo.
   function project(lon, lat) {

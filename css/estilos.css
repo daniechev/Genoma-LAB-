@@ -2922,7 +2922,7 @@ svg.world .countries path {
     margin: 0;
     width: auto;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 0;
     padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
     border-radius: 0;
@@ -3992,4 +3992,125 @@ body::after {
 }
 .altitude {
   margin-bottom: 20px;
+}
+
+/* Naturaleza: un índice simple con las seis historias. */
+[data-oculto] {
+  display: none !important;
+}
+.story-index {
+  margin: 8px 0 34px;
+}
+.story-index .story-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 28px;
+  padding: 0;
+}
+.story-index .story-links button {
+  display: grid;
+  gap: 2px;
+  padding: 12px 0;
+  border-top: 1px solid var(--hair);
+  border-radius: 0;
+}
+.story-index .story-links button::before {
+  display: none;
+}
+.story-index .story-links b {
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 600;
+}
+.story-index .story-links span {
+  font-size: 14px;
+}
+.story-index .story-links button.active {
+  border-top-color: var(--mint);
+}
+.story-index .story-links button.active b {
+  color: var(--mint);
+}
+.story-index .story-links button:hover b {
+  color: var(--mint);
+}
+.species-grid {
+  grid-template-columns: minmax(0, 640px);
+}
+@media (max-width: 700px) {
+  .story-index .story-links {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+  }
+}
+
+/* Inicio: el póster y «Cómo funciona» quedan plegados. */
+.poster-fold {
+  border-top: 1px solid var(--hair);
+  margin: 0;
+}
+.poster-fold > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  padding: 22px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.poster-fold > summary::-webkit-details-marker {
+  display: none;
+}
+.poster-fold > summary::after {
+  content: '+';
+  margin-left: auto;
+  font: 400 26px/1 var(--mono);
+  color: var(--muted);
+}
+.poster-fold[open] > summary::after {
+  content: '−';
+}
+.poster-fold > summary b {
+  font-size: clamp(22px, 2.4vw, 30px);
+}
+.poster-fold > summary span {
+  color: var(--muted);
+  font-size: 16px;
+}
+.poster-fold + .poster-qr {
+  border-top: 1px solid var(--hair);
+}
+.chip,
+.chip[aria-pressed='true'],
+.chip.active {
+  background: none;
+  border: 1px solid #ffffff33;
+  box-shadow: none;
+}
+.chip[aria-pressed='true'],
+.chip.active {
+  border-color: var(--mint);
+  color: var(--mint);
+}
+.poster-fold > summary {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
+.poster-fold > summary::after {
+  grid-column: 3;
+  grid-row: 1;
+}
+@media (max-width: 760px) {
+  .poster-fold > summary {
+    grid-template-columns: 1fr auto;
+  }
+  .poster-fold > summary span {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .poster-fold > summary::after {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
 }

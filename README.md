@@ -61,13 +61,15 @@ Hay animaciones cortas solo donde explican algo: el ribosoma del resultado, los 
 
 Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la metionina inicial, como en la literatura científica.
 
-### Portada: ir directo
+### Inicio
 
-Debajo del título, **Ir directo a** tiene ocho atajos: el simulador, los casos reales, tu nombre en proteína y las historias más llamativas de Naturaleza (malaria, pantera negra, guepardo rey, ojos celestes y animales récord). Cada uno lleva a su lugar con un solo toque.
+La app tiene tres pestañas: **Inicio**, **Simulador** y **Naturaleza**. En el Inicio están el título, el recorrido guiado y **Ir directo a**, con cuatro atajos (el simulador, los casos reales, tu nombre en proteína y las historias de la naturaleza). Debajo, plegados, **El proyecto** (el póster para el jurado: pregunta, hipótesis, método, resultados y conclusión) y **Cómo funciona** (cuatro ideas, notas para docentes y créditos de las fotos). **Resultados del stand** queda en el pie de página: es una herramienta para quienes atienden el stand.
 
 ### Naturaleza
 
-La pestaña **Naturaleza** cuenta sus historias una por vez, para que la página no quede cargada. Arriba hay un índice: cada capítulo muestra sus historias como botones, así se llega a cualquiera con un toque (el de *Animales récord* abre directamente la tarjeta del animal). Dentro de cada capítulo también se puede avanzar con *Siguiente*:
+La pestaña **Naturaleza** tiene seis historias, elegidas porque muestran bien «una letra que cambia»: malaria, pantera negra, guepardo rey, gato siamés, llama y ojos celestes. Arriba hay un índice para ir directo a cada una; al final de cada historia, *Siguiente* lleva a la próxima.
+
+Hay otras historias escritas que quedaron ocultas para que la página no esté cargada (el mapa y las diferencias del jaguar y el leopardo, el ánsar indio, el mamut, el pez de hielo, los pelirrojos y los tibetanos). Siguen en `index.html` con el atributo `data-oculto`: para volver a mostrar una, se borra ese atributo. Los enlaces que llevan a una historia oculta se esconden solos.
 
 - **Una mutación que protege:** por qué la anemia falciforme es común donde había malaria. Tiene un mapa con capas (HbS, HbC, talasemias y HbE, con la malaria superpuesta) y el juego **Jugá a la evolución**: un pueblo de 100 personas donde se ve, generación a generación, cómo la malaria hace crecer a los portadores hasta un equilibrio (selección balanceada). Los valores del juego son ilustrativos.
 - **Felinos:** en cinco pasos. Primero el **jaguar y el leopardo**, dos primos que viven en continentes distintos. Un mapa muestra dónde vive cada uno, el pelaje dibujado deja ver la diferencia de las rosetas y una tabla compara cuerpo, caza y ambiente. Termina con la **pantera negra**: en el jaguar se deben a 15 letras que faltan en el gen *MC1R* (dominante) y en el leopardo a una sola letra que crea un STOP en el gen *ASIP* (recesiva). El botón *Probá el STOP del leopardo* hace el mismo cambio (TGT → TGA) en la cisteína 93 de la hemoglobina, y el simulador lo reconoce. Sigue el **guepardo rey**, con rayas en vez de manchas por una letra de más en el gen *Taqpep* (recesiva); el botón *Probá la letra del guepardo rey* agrega una A después de la letra 417 de HBB, la lectura se corre y no aparece el STOP. Ahí también está el dato de que todos los guepardos son casi gemelos (14 de 14 injertos de piel aceptados). Cierra el **gato siamés**, con un dibujo que se oscurece según la temperatura que elija el visitante (tirosinasa que solo funciona con frío).
@@ -78,7 +80,7 @@ Fuentes: Piel y col. 2010 (*Nature Communications*), Taylor y col. 2012 (*Lancet
 
 ### Fotos
 
-Las fotos de animales y de los ojos son de [Wikimedia Commons](https://commons.wikimedia.org), con licencias libres; los créditos están en **Cómo funciona → Créditos de las fotos** y en `img/fotos/creditos.json`. Se bajan con GitHub Actions (workflow *Fotos de Wikimedia Commons*): sin `herramientas/fotos/elegidas.json`, busca candidatas según `buscar.json` y arma hojas de contacto numeradas; con ese archivo, baja las elegidas achicadas a `img/fotos/` y escribe los créditos. Si se agrega una foto, hay que sumarla a `ARCHIVOS` en `sw.js`.
+Las fotos de animales y de los ojos son de [Wikimedia Commons](https://commons.wikimedia.org), con licencias libres; los créditos están en **Inicio → Cómo funciona → Créditos de las fotos** y en `img/fotos/creditos.json`. Se bajan con GitHub Actions (workflow *Fotos de Wikimedia Commons*): sin `herramientas/fotos/elegidas.json`, busca candidatas según `buscar.json` y arma hojas de contacto numeradas; con ese archivo, baja las elegidas achicadas a `img/fotos/` y escribe los créditos. Si se agrega una foto, hay que sumarla a `ARCHIVOS` en `sw.js`.
 
 ## Estructura
 

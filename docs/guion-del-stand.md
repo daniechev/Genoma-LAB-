@@ -5,7 +5,7 @@ Una guía para que cualquiera del grupo pueda presentar igual de bien. Los tiemp
 ## Antes de abrir el stand
 
 - [ ] Abrir `index.html` y ponerla en pantalla completa (botón ⛶ arriba a la derecha, o F11).
-- [ ] En **Resultados del stand** (abajo a la derecha), activar el **modo stand**. Si nadie toca la pantalla durante 90 segundos, la app vuelve sola al inicio y muestra el recorrido guiado.
+- [ ] En **Resultados del stand** (en el pie de página, abajo a la derecha), activar el **modo stand**. Si nadie toca la pantalla durante 90 segundos, la app vuelve sola al inicio y muestra el recorrido guiado.
 - [ ] Imprimir el cartel con el código QR (en **Resultados del stand**, o abriendo `cartel.html`).
 - [ ] Probar que el QR abra la app en un celular.
 - [ ] Si viene el jurado: tener una terminal lista para correr `node --test` (muestra las 24 pruebas automáticas).
@@ -32,17 +32,17 @@ Una guía para que cualquiera del grupo pueda presentar igual de bien. Los tiemp
 
 > «Una letra puede no cambiar nada, cambiar una pieza o cortar toda la proteína. Depende de **dónde** cae el cambio y de **qué tipo** de cambio es. ¿Querés probar vos?»
 
-Para saltar rápido a cualquier historia, usá los atajos **Ir directo a** de la portada o el índice de arriba de **Naturaleza**.
+Para saltar rápido a cualquier historia, usá los atajos **Ir directo a** del Inicio o el índice de arriba de **Naturaleza** (seis historias).
 
 Si tienen más tiempo, la pestaña **Naturaleza** cuenta por qué esta mutación es tan común: protege contra la malaria.
 
-Si el visitante es chico o le gustan los animales, abrí **Naturaleza → Felinos**:
+Si el visitante es chico o le gustan los animales, abrí **Naturaleza → Pantera negra**:
 
-> «¿Jaguar o leopardo? Mirá las manchas: si tienen puntitos adentro, es un jaguar. Y la pantera negra no es una especie: al leopardo le cambió **una sola letra** y apareció un STOP. ¿Lo probamos en la hemoglobina?»
+> «La pantera negra no es una especie: es un jaguar o un leopardo con una mutación. Al leopardo le cambió **una sola letra** y apareció un STOP. ¿Lo probamos en la hemoglobina?»
 
 > «Este guepardo con rayas parecía otra especie, pero tiene **una letra de más**. Y el siamés: mové la temperatura y mirá cómo se oscurecen las partes frías.»
 
-Para las familias, **Naturaleza → En las personas** engancha enseguida:
+Para las familias, **Naturaleza → Ojos celestes** engancha enseguida:
 
 > «¿Tenés ojos celestes? Entonces seguramente tenés esta letra cambiada, la misma que heredaron casi todas las personas de ojos celestes de un antepasado de hace miles de años: **son todos parientes lejanos**.»
 
@@ -89,7 +89,7 @@ Probamos las 1.332 formas de cambiar una letra por otra (444 letras × 3 letras 
 Porque tener una sola copia de la mutación protege contra la malaria. Donde había mucha malaria, los portadores sobrevivían más. Está en la pestaña **Naturaleza**, con un juego que lo simula generación a generación.
 
 **¿Todo esto pasa en la hemoglobina?**
-No. Los ejemplos de **Naturaleza** son de otros genes (*Taqpep*, *MC1R*, *HERC2*, *EPAS1*…). Sirven para mostrar que los mismos tipos de cambio (una letra distinta, una letra de más, un STOP) explican cosas reales. Cuando el simulador puede imitar un caso en la hemoglobina, hay un botón para probarlo.
+No. Los ejemplos de **Naturaleza** son de otros genes (*Taqpep*, *MC1R*, *ASIP*, *HERC2*…). Sirven para mostrar que los mismos tipos de cambio (una letra distinta, una letra de más, un STOP) explican cosas reales. Cuando el simulador puede imitar un caso en la hemoglobina, hay un botón para probarlo.
 
 **¿Qué límites tiene el simulador?**
 No calcula la forma ni la función de la proteína mutada, no incluye el ADN que está después del gen y no sirve como diagnóstico.
