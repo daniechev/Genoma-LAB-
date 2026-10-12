@@ -32,6 +32,8 @@ Una guía para que cualquiera del grupo pueda presentar igual de bien. Los tiemp
 
 > «Una letra puede no cambiar nada, cambiar una pieza o cortar toda la proteína. Depende de **dónde** cae el cambio y de **qué tipo** de cambio es. ¿Querés probar vos?»
 
+Para saltar rápido a cualquier historia, usá los atajos **Ir directo a** de la portada o el índice de arriba de **Naturaleza**.
+
 Si tienen más tiempo, la pestaña **Naturaleza** cuenta por qué esta mutación es tan común: protege contra la malaria.
 
 Si el visitante es chico o le gustan los animales, abrí **Naturaleza → Felinos**:

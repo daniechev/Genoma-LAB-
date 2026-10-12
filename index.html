@@ -27,6 +27,7 @@
     </div>
     <canvas id="helix" class="helix" aria-hidden="true"></canvas>
   </div>
+  <section class="shortcuts" aria-label="Ir directo"><p class="eyebrow">IR DIRECTO A</p><div class="shortcut-grid"><button class="shortcut" data-goto="lab"><span class="shortcut-mark dna" aria-hidden="true">ATG</span><b>Cambiá una letra</b><span>El simulador</span></button><button class="shortcut" data-open="mission"><span class="shortcut-mark target" aria-hidden="true">◎</span><b>Casos reales</b><span>Anemia falciforme y más</span></button><button class="shortcut" data-open="open-name"><span class="shortcut-mark name" aria-hidden="true">Aa</span><b>Tu nombre en proteína</b><span>Escribilo con piezas</span></button><button class="shortcut" data-goto="naturaleza:malaria:1"><span class="shortcut-mark malaria" aria-hidden="true">●◐</span><b>Malaria</b><span>Una mutación que protege</span></button><button class="shortcut photo" data-goto="naturaleza:felinos:3"><img src="img/fotos/leopardo-negro.webp" alt="" loading="lazy" decoding="async"><b>La pantera negra</b><span>Una letra y un STOP</span></button><button class="shortcut photo" data-goto="naturaleza:felinos:4"><img src="img/fotos/guepardo-rey.webp" alt="" loading="lazy" decoding="async"><b>El guepardo rey</b><span>Rayas en vez de manchas</span></button><button class="shortcut photo" data-goto="naturaleza:personas:1"><img src="img/fotos/ojo-celeste.webp" alt="" loading="lazy" decoding="async"><b>Ojos celestes</b><span>Todos parientes</span></button><button class="shortcut photo" data-goto="naturaleza:animales:llama"><img src="img/fotos/llama.webp" alt="" loading="lazy" decoding="async"><b>Animales récord</b><span>Llama, mamut y más</span></button></div></section>
   <div class="poster-grid">
     <article class="poster-card"><span class="lesson-number">01</span><h2>Pregunta</h2><p class="poster-big">¿Qué le pasa a una proteína si cambia <b>una sola letra</b> de su ADN?</p></article>
     <article class="poster-card"><span class="lesson-number">02</span><h2>Hipótesis</h2><p class="poster-big">Casi siempre va a cambiar la proteína, pero el efecto va a depender de <b>qué letra</b> cambie y <b>cómo</b>.</p></article>
@@ -107,16 +108,16 @@
   <p class="disclaimer">Una simulación educativa con una secuencia pública. No es un diagnóstico.</p>
 </section>
 <section id="tab-naturaleza" class="tab-page nature" hidden>
-  <div class="poster-hero"><p class="eyebrow">MÁS ALLÁ DEL LABORATORIO</p><h1>Una letra <em>en la naturaleza</em></h1><p>Las mismas letras que cambiás en el simulador también cambiaron en personas y animales reales. Elegí una historia.</p></div>
+  <div class="poster-hero"><p class="eyebrow">MÁS ALLÁ DEL LABORATORIO</p><h1>Una letra <em>en la naturaleza</em></h1><p>Las mismas letras que cambiás en el simulador también cambiaron en personas y animales reales. Tocá una historia para ir directo.</p></div>
 
-  <div class="chapters" role="tablist" aria-label="Historias">
-    <button class="chapter active" role="tab" id="ch-malaria" aria-selected="true" aria-controls="chapter-malaria" data-chapter="malaria"><span class="chapter-icon malaria" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="17" cy="24" r="11" fill="currentColor"/><circle cx="17" cy="24" r="4" fill="#0b0820" opacity=".45"/><path d="M30 31c4-9 9-12 14-12-2 8-7 13-14 12Z" fill="currentColor" opacity=".75"/></svg></span><b>Una mutación que protege</b><span>Anemia falciforme y malaria</span></button>
-    <button class="chapter" role="tab" id="ch-felinos" aria-selected="false" aria-controls="chapter-felinos" data-chapter="felinos" tabindex="-1"><span class="chapter-icon felinos" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M10 12l6 6h16l6-6 2 16c0 9-7 14-16 14S8 37 8 28Z" fill="currentColor"/><g fill="#0b0820" opacity=".55"><circle cx="18" cy="27" r="2.6"/><circle cx="30" cy="27" r="2.6"/><path d="M21 34h6l-3 3Z"/></g></svg></span><b>Felinos</b><span>Jaguar, leopardo, guepardo y gato</span></button>
-    <button class="chapter" role="tab" id="ch-animales" aria-selected="false" aria-controls="chapter-animales" data-chapter="animales" tabindex="-1"><span class="chapter-icon animales" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M4 40 18 16l8 12 6-8 12 20Z" fill="currentColor"/><path d="m18 16 4 7-4-2-3 3Z" fill="#fff" opacity=".85"/></svg></span><b>Animales récord</b><span>Llama, mamut y más</span></button>
-    <button class="chapter" role="tab" id="ch-personas" aria-selected="false" aria-controls="chapter-personas" data-chapter="personas" tabindex="-1"><span class="chapter-icon personas" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="15" r="8" fill="currentColor"/><path d="M8 42c1-10 8-16 16-16s15 6 16 16Z" fill="currentColor"/></svg></span><b>En las personas</b><span>Ojos, pelo y altura</span></button>
+  <div class="chapters" aria-label="Historias">
+    <div class="chapter-group"><button class="chapter active" id="ch-malaria" aria-controls="chapter-malaria" data-chapter="malaria"><span class="chapter-icon malaria" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="17" cy="24" r="11" fill="currentColor"/><circle cx="17" cy="24" r="4" fill="#0b0820" opacity=".45"/><path d="M30 31c4-9 9-12 14-12-2 8-7 13-14 12Z" fill="currentColor" opacity=".75"/></svg></span><b>Una mutación que protege</b></button><div class="story-links"><button data-goto="naturaleza:malaria:1">Malaria y anemia</button><button data-goto="naturaleza:malaria:2">El mapa</button><button data-goto="naturaleza:malaria:3">El juego</button></div></div>
+    <div class="chapter-group"><button class="chapter" id="ch-felinos" aria-controls="chapter-felinos" data-chapter="felinos"><span class="chapter-icon felinos" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M10 12l6 6h16l6-6 2 16c0 9-7 14-16 14S8 37 8 28Z" fill="currentColor"/><g fill="#0b0820" opacity=".55"><circle cx="18" cy="27" r="2.6"/><circle cx="30" cy="27" r="2.6"/><path d="M21 34h6l-3 3Z"/></g></svg></span><b>Felinos</b></button><div class="story-links"><button data-goto="naturaleza:felinos:1">Jaguar o leopardo</button><button data-goto="naturaleza:felinos:2">Diferencias</button><button data-goto="naturaleza:felinos:3">Pantera negra</button><button data-goto="naturaleza:felinos:4">Guepardo rey</button><button data-goto="naturaleza:felinos:5">Siamés</button></div></div>
+    <div class="chapter-group"><button class="chapter" id="ch-animales" aria-controls="chapter-animales" data-chapter="animales"><span class="chapter-icon animales" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M4 40 18 16l8 12 6-8 12 20Z" fill="currentColor"/><path d="m18 16 4 7-4-2-3 3Z" fill="#fff" opacity=".85"/></svg></span><b>Animales récord</b></button><div class="story-links"><button data-goto="naturaleza:animales:llama">Llama</button><button data-goto="naturaleza:animales:goose">Ánsar indio</button><button data-goto="naturaleza:animales:mammoth">Mamut</button><button data-goto="naturaleza:animales:icefish">Pez de hielo</button></div></div>
+    <div class="chapter-group"><button class="chapter" id="ch-personas" aria-controls="chapter-personas" data-chapter="personas"><span class="chapter-icon personas" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="15" r="8" fill="currentColor"/><path d="M8 42c1-10 8-16 16-16s15 6 16 16Z" fill="currentColor"/></svg></span><b>En las personas</b></button><div class="story-links"><button data-goto="naturaleza:personas:1">Ojos celestes</button><button data-goto="naturaleza:personas:2">Pelirrojos</button><button data-goto="naturaleza:personas:3">Tibetanos</button></div></div>
   </div>
 
-  <article class="poster-card nature-block chapter-page" id="chapter-malaria" role="tabpanel" aria-labelledby="ch-malaria">
+  <article class="poster-card nature-block chapter-page" id="chapter-malaria" aria-labelledby="ch-malaria">
     <h2>Una mutación que protege</h2>
     <ol class="steps" aria-label="Pasos de la historia"><li><button class="step-dot" data-goto-step="1"><b>1</b>La idea</button></li><li><button class="step-dot" data-goto-step="2"><b>2</b>El mapa</button></li><li><button class="step-dot" data-goto-step="3"><b>3</b>El juego</button></li></ol>
     <div class="step" data-step="1">
@@ -161,7 +162,7 @@
     </div>
   </article>
 
-  <article class="poster-card nature-block chapter-page" id="chapter-felinos" role="tabpanel" aria-labelledby="ch-felinos" hidden>
+  <article class="poster-card nature-block chapter-page" id="chapter-felinos" aria-labelledby="ch-felinos" hidden>
     <h2>Felinos: manchas, rayas y colores</h2>
     <ol class="steps" aria-label="Pasos de la historia"><li><button class="step-dot" data-goto-step="1"><b>1</b>Dónde viven</button></li><li><button class="step-dot" data-goto-step="2"><b>2</b>Diferencias</button></li><li><button class="step-dot" data-goto-step="3"><b>3</b>Pantera negra</button></li><li><button class="step-dot" data-goto-step="4"><b>4</b>Guepardo rey</button></li><li><button class="step-dot" data-goto-step="5"><b>5</b>Siamés</button></li></ol>
     <div class="step" data-step="1">
@@ -229,7 +230,7 @@
     </div>
   </article>
 
-  <article class="poster-card nature-block chapter-page" id="chapter-animales" role="tabpanel" aria-labelledby="ch-animales" hidden>
+  <article class="poster-card nature-block chapter-page" id="chapter-animales" aria-labelledby="ch-animales" hidden>
     <h2>Animales con hemoglobinas especiales</h2>
     <p class="poster-big">Cada especie ajustó su hemoglobina a su ambiente. Tocá un animal en el mapa.</p>
     <figure class="map-figure"><svg id="animals-map" class="world" role="group" aria-label="Mapa con los animales"></svg></figure>
@@ -245,7 +246,7 @@
     </div>
   </article>
 
-  <article class="poster-card nature-block chapter-page" id="chapter-personas" role="tabpanel" aria-labelledby="ch-personas" hidden>
+  <article class="poster-card nature-block chapter-page" id="chapter-personas" aria-labelledby="ch-personas" hidden>
     <h2>Una letra en las personas</h2>
     <ol class="steps" aria-label="Pasos de la historia"><li><button class="step-dot" data-goto-step="1"><b>1</b>Ojos celestes</button></li><li><button class="step-dot" data-goto-step="2"><b>2</b>Pelirrojos</button></li><li><button class="step-dot" data-goto-step="3"><b>3</b>Tibetanos</button></li></ol>
     <div class="step" data-step="1">

@@ -3204,14 +3204,6 @@ svg.world .countries path {
 }
 
 /* Capítulo «En las personas» y felinos nuevos */
-.chapters {
-  grid-template-columns: repeat(4, 1fr);
-}
-@media (max-width: 1180px) and (min-width: 901px) {
-  .chapters {
-    grid-template-columns: 1fr 1fr;
-  }
-}
 .chapter-icon.personas {
   background: #5ef2b026;
   color: var(--mint);
@@ -3750,4 +3742,152 @@ svg.world .countries path {
   font-size: 11px;
   font-weight: 600;
   fill: #c2bdea;
+}
+
+/* Índice de Naturaleza: cada capítulo muestra sus historias para ir directo, sin pasos intermedios. */
+.chapters {
+  grid-template-columns: repeat(4, 1fr);
+  align-items: start;
+}
+.chapter-group {
+  display: grid;
+  gap: 10px;
+}
+.chapter {
+  grid-template-rows: auto;
+  padding: 12px 14px;
+}
+.chapter-icon {
+  grid-row: auto;
+  width: 44px;
+  height: 44px;
+}
+.story-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.story-links button {
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #ffffff0a;
+  border: 1px solid var(--hair);
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+.story-links button:hover {
+  color: var(--text);
+  background: #ffffff14;
+}
+.story-links button.active {
+  color: var(--ink);
+  background: var(--cta);
+  border-color: transparent;
+}
+.species.flash {
+  outline: 2px solid var(--mint);
+  outline-offset: 4px;
+}
+@media (max-width: 1180px) {
+  .chapters {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .chapters {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .chapter {
+    padding: 6px 10px;
+  }
+  .chapter-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+  }
+  .chapter-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  .chapter b {
+    font-size: 16px;
+  }
+  .story-links button {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
+
+/* Portada: atajos para llegar a cada parte con un solo toque. */
+.shortcuts {
+  display: block;
+  margin: 0 0 34px;
+}
+.shortcut-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.shortcut {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  text-align: left;
+  padding: 14px;
+  border-radius: 18px;
+  background: #ffffff08;
+  border: 1px solid var(--hair);
+  color: var(--muted);
+  font-size: 14px;
+  transition:
+    transform 0.2s,
+    background 0.2s,
+    border-color 0.2s;
+}
+.shortcut:hover {
+  transform: translateY(-2px);
+  background: #ffffff10;
+  border-color: #5ef2b066;
+}
+.shortcut b {
+  color: var(--text);
+  font-size: 16px;
+}
+.shortcut img {
+  width: calc(100% + 28px);
+  margin: -14px -14px 10px;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  border-radius: 17px 17px 0 0;
+}
+.shortcut-mark {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 1;
+  margin: -14px -14px 10px;
+  border-radius: 17px 17px 0 0;
+  font: 700 26px var(--mono);
+  color: var(--ink);
+  background: var(--cta);
+}
+.shortcut-mark.target {
+  background: linear-gradient(135deg, #ffb020, #ffd76a);
+}
+.shortcut-mark.name {
+  background: linear-gradient(135deg, #b48cff, #4fd8ff);
+}
+.shortcut-mark.malaria {
+  background: linear-gradient(135deg, #ff5d6c, #ff9aa5);
+  letter-spacing: 6px;
+}
+@media (max-width: 900px) {
+  .shortcut-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .shortcut-mark {
+    font-size: 22px;
+  }
 }

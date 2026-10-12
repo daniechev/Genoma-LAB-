@@ -594,6 +594,16 @@
     showTab(tab);
     if (!chapter) return;
     showChapter(chapter, Number(step) || 1);
+    // En «Animales récord» el paso es un animal: se abre su tarjeta.
+    const species = step && document.querySelector(`[data-species="${step}"]`);
+    if (species) {
+      const open = species.querySelector('.species-open');
+      if (open.getAttribute('aria-expanded') !== 'true') open.click();
+      species.scrollIntoView({ block: 'start', behavior: 'instant' });
+      species.classList.add('flash');
+      setTimeout(() => species.classList.remove('flash'), 1200);
+      return;
+    }
     $(`chapter-${chapter}`).scrollIntoView({ block: 'start', behavior: 'instant' });
   }
   function cardBadge(r) {
@@ -1540,11 +1550,18 @@
     all('.chapter').forEach(b => {
       const on = b.dataset.chapter === name;
       b.classList.toggle('active', on);
-      b.setAttribute('aria-selected', String(on));
-      b.tabIndex = on ? 0 : -1;
+      if (on) b.setAttribute('aria-current', 'true');
+      else b.removeAttribute('aria-current');
     });
     all('.chapter-page').forEach(p => (p.hidden = p.id !== `chapter-${name}`));
+    markStory(name, step);
     showStep($(`chapter-${name}`), step, false);
+  }
+  // Resalta en el índice la historia que se está viendo.
+  function markStory(name, step) {
+    all('.story-links button').forEach(b =>
+      b.classList.toggle('active', b.dataset.goto === `naturaleza:${name}:${step}`),
+    );
   }
   function showStep(page, n, scroll = true) {
     const steps = [...page.querySelectorAll('.step')];
@@ -1557,6 +1574,7 @@
       if (i + 1 === n) b.setAttribute('aria-current', 'step');
       else b.removeAttribute('aria-current');
     });
+    markStory(page.id.replace('chapter-', ''), n);
     if (!page.querySelector('.step:not([hidden]) .evolution')) evoStop();
     if (scroll)
       page.querySelector('.steps').scrollIntoView({
@@ -1581,15 +1599,7 @@
     };
   });
   all('.chapter').forEach(b => {
-    b.onclick = () => showChapter(b.dataset.chapter);
-    b.onkeydown = e => {
-      const tabs = all('.chapter'),
-        step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
-      if (!step) return;
-      const next = tabs[(tabs.indexOf(b) + step + tabs.length) % tabs.length];
-      showChapter(next.dataset.chapter);
-      next.focus();
-    };
+    b.onclick = () => goTo(`naturaleza:${b.dataset.chapter}`);
   });
 
   // Misma proyección que el mapa (Natural Earth): pasa de longitud y latitud a un punto del dibujo.
@@ -1942,7 +1952,17 @@
       }),
   );
   // Enlaces entre historias (por ejemplo, del jaguar negro a los pelirrojos).
-  all('.nature [data-goto]').forEach(b => (b.onclick = () => goTo(b.dataset.goto)));
+  all('.nature [data-goto], .shortcuts [data-goto]').forEach(
+    b => (b.onclick = () => goTo(b.dataset.goto)),
+  );
+  // Atajos de la portada que abren una ventana del simulador (casos reales, tu nombre).
+  all('.shortcuts [data-open]').forEach(
+    b =>
+      (b.onclick = () => {
+        goTo('lab');
+        $(b.dataset.open).click();
+      }),
+  );
 
   // Jugá a la evolución: frecuencia de la mutación (q) en un pueblo, generación a generación.
   // Hardy-Weinberg con selección: q' = (p·q·wAS + q²·wSS) / (p²·wAA + 2·p·q·wAS + q²·wSS). Valores ilustrativos.
