@@ -3744,83 +3744,85 @@ svg.world .countries path {
   fill: #c2bdea;
 }
 
-/* Índice de Naturaleza: cada capítulo muestra sus historias para ir directo, sin pasos intermedios. */
+/* Índice de Naturaleza: cada capítulo es una columna con sus historias, para ir directo. Solo texto y líneas finas. */
 .chapters {
   grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
   align-items: start;
 }
 .chapter-group {
   display: grid;
-  gap: 10px;
+  align-content: start;
 }
-.chapter {
-  grid-template-rows: auto;
-  padding: 12px 14px;
+.chapters .chapter {
+  display: block;
+  padding: 0 0 10px;
+  border: 0;
+  border-bottom: 1px solid var(--hair);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  transform: none;
 }
-.chapter-icon {
-  grid-row: auto;
-  width: 44px;
-  height: 44px;
+.chapters .chapter b {
+  font-size: 13px;
+  font-family: var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.chapters .chapter.active b,
+.chapters .chapter:hover b {
+  color: var(--text);
 }
 .story-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  display: grid;
+  padding-top: 6px;
 }
 .story-links button {
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: #ffffff0a;
-  border: 1px solid var(--hair);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  background: none;
   color: var(--muted);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 16px;
+  text-align: left;
+}
+.story-links button::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: transparent;
+  flex: none;
 }
 .story-links button:hover {
   color: var(--text);
-  background: #ffffff14;
 }
 .story-links button.active {
-  color: var(--ink);
-  background: var(--cta);
-  border-color: transparent;
+  color: var(--mint);
+  font-weight: 600;
+}
+.story-links button.active::before {
+  background: var(--mint);
 }
 .species.flash {
   outline: 2px solid var(--mint);
   outline-offset: 4px;
 }
-@media (max-width: 1180px) {
+@media (max-width: 900px) {
   .chapters {
     grid-template-columns: 1fr 1fr;
-  }
-}
-@media (max-width: 560px) {
-  .chapters {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-  .chapter {
-    padding: 6px 10px;
-  }
-  .chapter-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 11px;
-  }
-  .chapter-icon svg {
-    width: 22px;
-    height: 22px;
-  }
-  .chapter b {
-    font-size: 16px;
+    gap: 22px 18px;
   }
   .story-links button {
-    font-size: 13px;
-    padding: 6px 10px;
+    font-size: 15px;
+    padding: 6px 0;
   }
 }
 
-/* Portada: atajos para llegar a cada parte con un solo toque. */
+/* Portada: atajos para llegar a cada parte con un solo toque. Lista simple, sin cajas. */
 .shortcuts {
   display: block;
   margin: 0 0 34px;
@@ -3828,66 +3830,61 @@ svg.world .countries path {
 .shortcut-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  column-gap: 28px;
 }
 .shortcut {
   display: grid;
-  align-content: start;
-  gap: 2px;
-  text-align: left;
-  padding: 14px;
-  border-radius: 18px;
-  background: #ffffff08;
-  border: 1px solid var(--hair);
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 2px;
+  padding: 14px 0;
+  border: 0;
+  border-top: 1px solid var(--hair);
+  border-radius: 0;
+  background: none;
   color: var(--muted);
   font-size: 14px;
-  transition:
-    transform 0.2s,
-    background 0.2s,
-    border-color 0.2s;
-}
-.shortcut:hover {
-  transform: translateY(-2px);
-  background: #ffffff10;
-  border-color: #5ef2b066;
+  text-align: left;
 }
 .shortcut b {
   color: var(--text);
-  font-size: 16px;
+  font-size: 17px;
+  font-weight: 600;
 }
-.shortcut img {
-  width: calc(100% + 28px);
-  margin: -14px -14px 10px;
-  aspect-ratio: 2 / 1;
-  object-fit: cover;
-  border-radius: 17px 17px 0 0;
+.shortcut span {
+  grid-column: 1;
 }
-.shortcut-mark {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 3 / 1;
-  margin: -14px -14px 10px;
-  border-radius: 17px 17px 0 0;
-  font: 700 26px var(--mono);
-  color: var(--ink);
-  background: var(--cta);
+.shortcut i {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font-style: normal;
+  color: var(--muted);
+  transition:
+    transform 0.2s,
+    color 0.2s;
 }
-.shortcut-mark.target {
-  background: linear-gradient(135deg, #ffb020, #ffd76a);
+.shortcut:hover b,
+.shortcut:hover i {
+  color: var(--mint);
 }
-.shortcut-mark.name {
-  background: linear-gradient(135deg, #b48cff, #4fd8ff);
-}
-.shortcut-mark.malaria {
-  background: linear-gradient(135deg, #ff5d6c, #ff9aa5);
-  letter-spacing: 6px;
+.shortcut:hover i {
+  transform: translateX(4px);
 }
 @media (max-width: 900px) {
   .shortcut-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    grid-template-columns: 1fr;
   }
-  .shortcut-mark {
-    font-size: 22px;
+  .shortcut {
+    padding: 11px 0;
+  }
+  .shortcut span {
+    display: none;
+  }
+  .shortcut i {
+    grid-row: 1;
+  }
+  .shortcut b {
+    font-size: 16px;
   }
 }
