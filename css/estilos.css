@@ -9,8 +9,8 @@
   --muted: #c2bdea;
   --accent: #ffd447;
   --cyan: #4fd8ff;
-  --pink: #ff5c9d;
-  --orange: #ff9a4d;
+  --mint: #5ef2b0;
+  --sky: #4fd8ff;
   --red: #ff5d6c;
   --amber: #ffb020;
   --ink: #1a1335;
@@ -19,7 +19,7 @@
   --C: #4fd8ff;
   --G: #b693ff;
   --tile: 36px;
-  --cta: linear-gradient(135deg, var(--orange), var(--pink));
+  --cta: linear-gradient(135deg, var(--mint), var(--sky));
   --mono: 'Cascadia Mono', Consolas, monospace;
 }
 * {
@@ -229,7 +229,7 @@ main {
   font-weight: 800;
   font-size: 19px;
   min-height: 58px;
-  box-shadow: 0 10px 28px #ff5c9d4d;
+  box-shadow: 0 10px 28px #5ef2b040;
 }
 .primary:hover:not(:disabled) {
   transform: translateY(-2px);
@@ -318,7 +318,7 @@ button.base:hover:not(:disabled) {
 .range-label input {
   display: block;
   width: 100%;
-  accent-color: var(--pink);
+  accent-color: var(--mint);
   height: 30px;
   margin-top: 2px;
 }
@@ -586,7 +586,7 @@ details p {
 .result-metrics > div {
   flex: 1;
   min-width: 150px;
-  border-left: 3px solid var(--pink);
+  border-left: 3px solid var(--mint);
   padding-left: 12px;
   font-size: 15px;
   color: var(--muted);
@@ -879,7 +879,7 @@ details p {
 .challenge input {
   width: 20px;
   height: 20px;
-  accent-color: var(--pink);
+  accent-color: var(--mint);
 }
 .challenge:has(input:checked) {
   border-color: var(--accent);
@@ -1216,8 +1216,8 @@ details p {
   height: 40px;
 }
 .species-icon.mountain {
-  background: #ff9a4d33;
-  color: var(--orange);
+  background: #5ef2b02e;
+  color: var(--mint);
 }
 .species-icon.sky {
   background: #b693ff33;
@@ -1446,7 +1446,7 @@ details .viewer-caption {
 .viewer-settings input {
   width: 22px;
   height: 22px;
-  accent-color: var(--pink);
+  accent-color: var(--mint);
 }
 .viewer-settings button {
   justify-self: start;
@@ -2361,7 +2361,7 @@ body::before {
   pointer-events: none;
   background:
     radial-gradient(40vmax 30vmax at 15% 10%, #5b2fd170, transparent 70%),
-    radial-gradient(34vmax 28vmax at 88% 28%, #ff5c9d33, transparent 70%),
+    radial-gradient(34vmax 28vmax at 88% 28%, #1fd6a02b, transparent 70%),
     radial-gradient(40vmax 34vmax at 55% 100%, #1fb6ff26, transparent 70%);
   animation: aurora 36s ease-in-out infinite alternate;
 }
@@ -2501,10 +2501,10 @@ body::after {
   background: #ffffff0f;
 }
 .chapter.active {
-  background: linear-gradient(135deg, #ff9a4d26, #ff5c9d1f);
-  border-color: #ff9a4d99;
+  background: linear-gradient(135deg, #5ef2b022, #4fd8ff1a);
+  border-color: #5ef2b099;
   color: var(--text);
-  box-shadow: 0 16px 50px #ff5c9d1f;
+  box-shadow: 0 16px 50px #5ef2b01a;
 }
 .chapter b {
   font-size: 18px;
@@ -2623,7 +2623,7 @@ svg.world .countries path {
   stroke: var(--accent);
 }
 .pin.mountain {
-  color: var(--orange);
+  color: var(--mint);
 }
 .pin.sky {
   color: var(--G);
@@ -3070,7 +3070,7 @@ svg.world .countries path {
   flex-wrap: wrap;
 }
 .shortcut-icon.name {
-  background: var(--pink);
+  background: var(--mint);
   font: 800 13px var(--mono);
 }
 .name-dialog {
@@ -3213,8 +3213,8 @@ svg.world .countries path {
   }
 }
 .chapter-icon.personas {
-  background: #ff5c9d26;
-  color: var(--pink);
+  background: #5ef2b026;
+  color: var(--mint);
 }
 .cat.cheetah h3 {
   color: var(--amber);
@@ -3269,7 +3269,7 @@ svg.world .countries path {
 #siamese-temp {
   width: 100%;
   margin-top: 12px;
-  accent-color: var(--pink);
+  accent-color: var(--mint);
 }
 .siamese-scale {
   display: flex;
@@ -3640,7 +3640,7 @@ svg.world .countries path {
   justify-items: center;
   padding: 4px 10px;
   border-radius: 12px;
-  background: #ff9a4de6;
+  background: #ffb020e6;
   color: var(--ink);
   font-size: 12px;
   line-height: 1.2;

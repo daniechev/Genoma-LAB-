@@ -626,8 +626,8 @@
     ctx.font = `700 28px ${CARD_FONT}`;
     ctx.fillText('ADN, GENES Y PROTEÍNAS · FERIA DE CIENCIAS', pad, 140);
     const title = ctx.createLinearGradient(pad, 0, pad + 640, 0);
-    title.addColorStop(0, '#ff9a4d');
-    title.addColorStop(1, '#ff5c9d');
+    title.addColorStop(0, '#5ef2b0');
+    title.addColorStop(1, '#4fd8ff');
     ctx.fillStyle = title;
     ctx.font = `800 80px ${CARD_FONT}`;
     ctx.fillText('Mi descubrimiento', pad, 236);
@@ -903,8 +903,8 @@
     ctx.font = `700 28px ${CARD_FONT}`;
     ctx.fillText('ADN, GENES Y PROTEÍNAS · FERIA DE CIENCIAS', pad, 140);
     const title = ctx.createLinearGradient(pad, 0, pad + 700, 0);
-    title.addColorStop(0, '#ff9a4d');
-    title.addColorStop(1, '#ff5c9d');
+    title.addColorStop(0, '#5ef2b0');
+    title.addColorStop(1, '#4fd8ff');
     ctx.fillStyle = title;
     ctx.font = `800 76px ${CARD_FONT}`;
     ctx.fillText('Mi nombre en proteína', pad, 236);
