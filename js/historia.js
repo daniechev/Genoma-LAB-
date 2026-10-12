@@ -1,6 +1,6 @@
-// Página de inicio: una introducción y una historia guiada de seis escenas, cada una contada en pasos cortos («beats»). «Seguir», las flechas del
+// Página de inicio: una introducción y una historia guiada de nueve escenas, cada una contada en pasos cortos («beats»). «Seguir», las flechas del
 // teclado o deslizar el dedo avanzan un paso; al terminar los pasos de una escena se pasa a la siguiente.
-// En el modo stand (historia.html?stand) avanza sola si nadie toca la pantalla, y vuelve a empezar al final.
+// En el modo stand (index.html?stand) avanza sola si nadie toca la pantalla, y vuelve a empezar al final.
 (() => {
   const $ = id => document.getElementById(id),
     scenes = [...document.querySelectorAll('.scene')],
@@ -11,7 +11,7 @@
     changed = false;
 
   const beatsOf = i => scenes[i].querySelectorAll('.beat').length || 1;
-  // La escena 0 es la introducción; la historia va de la 1 a la 6.
+  // La escena 0 es la introducción; la historia va de la 1 a la 9.
   const DNA_SCENE = 2,
     CHANGE_SCENE = 3;
 
@@ -131,6 +131,11 @@
     beat = Math.max(0, Math.min(beatsOf(current) - 1, b));
     scene.dataset.beat = beat;
     scene.querySelectorAll('.beat').forEach((p, i) => p.classList.toggle('on', i === beat));
+    // El dibujo sigue al texto: «data-at» muestra un elemento solo en ese paso, y «past-N» marca los pasos ya vistos.
+    scene
+      .querySelectorAll('[data-at]')
+      .forEach(el => el.classList.toggle('on', Number(el.dataset.at) === beat));
+    for (let k = 1; k < 6; k++) scene.classList.toggle(`past-${k}`, beat >= k);
     if (current === DNA_SCENE) {
       const dna = $('dna');
       dna.classList.toggle('split', beat >= 1);

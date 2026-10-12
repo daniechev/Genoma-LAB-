@@ -3,7 +3,7 @@
 Sitio interactivo para una feria de ciencias, en tres partes:
 
 1. **Introducción** (`index.html`): el título y la pregunta, con una hélice de ADN girando.
-2. **Historia guiada** (`index.html`): seis escenas en las que el visitante descubre qué es la hemoglobina, cómo se lee su receta y **cambia él mismo** una letra del ADN para ver aparecer la anemia falciforme.
+2. **Historia guiada** (`index.html`): nueve escenas en las que el visitante descubre qué es la hemoglobina, cómo se lee su receta y **cambia él mismo** una letra del ADN para ver aparecer la anemia falciforme; después, por qué esa letra protege de la malaria y qué cambió una letra en animales y personas.
 3. **Simulador** (`laboratorio.html`): cambiar cualquier letra del gen *HBB*, predecir qué le pasa a la proteína y verla en 3D. Ahí también están las historias de **Naturaleza**.
 
 ## Cómo usarlo
@@ -67,16 +67,19 @@ Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la 
 
 ### Introducción e historia guiada
 
-`index.html` abre con una introducción (el título, la pregunta y la hélice de ADN de `js/helice.js`) y sigue con una historia en seis escenas, y cada escena en pasos cortos: *Seguir* (o las flechas del teclado, o deslizar el dedo) muestra el párrafo siguiente y cambia el dibujo; al terminar los pasos, pasa a la escena siguiente. La barra de arriba se llena con cada paso.
+`index.html` abre con una introducción (el título, la pregunta y la hélice de ADN de `js/helice.js`) y sigue con una historia en nueve escenas, y cada escena en pasos cortos: *Seguir* (o las flechas del teclado, o deslizar el dedo) muestra el párrafo siguiente y cambia el dibujo; al terminar los pasos, pasa a la escena siguiente. La barra de arriba se llena con cada paso.
 
 1. **Tu sangre:** el oxígeno, los glóbulos rojos y la hemoglobina.
 2. **La receta:** las cuatro letras, la lectura de a tres (codones), las piezas, el collar de 146 piezas y el codón 7.
 3. **Cambiala vos:** el visitante cambia la A del codón 7 por una T (sin ese cambio no se puede seguir). Después: la valina, las fibras y el glóbulo en forma de hoz.
-4. **¿Por qué no desapareció?:** dónde es común la letra, la malaria, las dos copias y la selección natural.
-5. **No solo en la sangre:** el leopardo negro y los ojos azules, con enlaces a sus historias completas.
-6. **Ahora vos:** los tres resultados posibles y el simulador libre.
+4. **¿Por qué no desapareció?:** el mapa de dónde es común la letra y de la malaria.
+5. **El escudo:** las dos copias (ninguna, una o dos T), el parásito, cómo protege una copia, cuántos llegan a tener hijos (números de ejemplo) y la selección balanceada.
+6. **Animales extremos:** llama, ánsar indio, mamut lanudo y pez de hielo, una foto por paso.
+7. **Felinos:** leopardo negro, jaguar negro, guepardo rey y gato siamés.
+8. **Personas:** ojos azules, pelirrojos y tibetanos.
+9. **Ahora vos:** los tres resultados posibles y el simulador libre.
 
-Entre escenas, las *View Transitions* del navegador conectan los dibujos: se entra en el glóbulo y aparece el ADN, el codón 7 crece hasta el codón grande, y la T que cambió el visitante viaja al mapa, a la foto del leopardo y a la barra final. Donde el navegador no las tiene, o con movimiento reducido, la escena cambia directo. El fondo toma un color distinto en cada escena.
+Entre escenas, las *View Transitions* del navegador conectan los dibujos: se entra en el glóbulo y aparece el ADN, el codón 7 crece hasta el codón grande, y la T que cambió el visitante viaja al mapa y después a la copia de la escena del escudo. Donde el navegador no las tiene, o con movimiento reducido, la escena cambia directo. El fondo toma un color distinto en cada escena.
 
 Con `index.html?stand` avanza sola si nadie toca la pantalla, hace el cambio de letra por su cuenta y vuelve a empezar. Al final, *Abrir el simulador* lleva a `laboratorio.html`. Los enlaces a la app usan `laboratorio.html#simulador` y `#naturaleza:felinos:3`.
 
@@ -99,7 +102,7 @@ Fuentes: Piel y col. 2010 (*Nature Communications*), Taylor y col. 2012 (*Lancet
 
 ### Fotos
 
-Las fotos de animales y de los ojos son de [Wikimedia Commons](https://commons.wikimedia.org), con licencias libres; los créditos están al final de **Naturaleza** (*Créditos de las fotos*), al pie de la escena 5 de la historia y en `img/fotos/creditos.json`. Se bajan con GitHub Actions (workflow *Fotos de Wikimedia Commons*): sin `herramientas/fotos/elegidas.json`, busca candidatas según `buscar.json` y arma hojas de contacto numeradas; con ese archivo, baja las elegidas achicadas a `img/fotos/` y escribe los créditos. Si se agrega una foto, hay que sumarla a `ARCHIVOS` en `sw.js`.
+Las fotos de animales y de los ojos son de [Wikimedia Commons](https://commons.wikimedia.org), con licencias libres; los créditos están al final de **Naturaleza** (*Créditos de las fotos*), al pie de las escenas 6, 7 y 8 de la historia y en `img/fotos/creditos.json`. Se bajan con GitHub Actions (workflow *Fotos de Wikimedia Commons*): sin `herramientas/fotos/elegidas.json`, busca candidatas según `buscar.json` y arma hojas de contacto numeradas; con ese archivo, baja las elegidas achicadas a `img/fotos/` y escribe los créditos. Si se agrega una foto, hay que sumarla a `ARCHIVOS` en `sw.js`.
 
 ## Estructura
 
