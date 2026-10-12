@@ -53,6 +53,12 @@ El botón **Tu nombre** escribe el nombre del visitante con piezas: cada aminoá
 
 En el celular, el menú queda abajo, como en una app, e incluye **Resultados**.
 
+Al ver el resultado, la barra *Tu proteína* se arma de izquierda a derecha mientras un punto blanco (el ribosoma) la recorre; si aparece un STOP, se frena ahí y lo marca.
+
+### Animaciones
+
+Hay animaciones cortas solo donde explican algo: el ribosoma del resultado, los **ojos celestes** (zoom al ojo, el iris pasa de marrón a celeste con la letra A → G y aparece el árbol de parientes), el **guepardo rey** (las manchas se juntan en rayas) y el **cuello de botella** de los guepardos (muchas variantes, quedan unos pocos y vuelven a crecer casi iguales). Arrancan solas la primera vez que se ven, se repiten con ↺ y, si el dispositivo pide reducir el movimiento, muestran directamente el cuadro final.
+
 Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la metionina inicial, como en la literatura científica.
 
 ### Naturaleza

@@ -417,7 +417,13 @@
         ? `<i class="pin${r.effect === 'missense' ? ' bad' : ''}" style="left:${pct(r.piece - 0.5)}"></i>`
         : '';
     const count = r.lengthUnknown ? `${r.mature.length}+ piezas` : piezas(r.mature.length);
-    return `<div class="chain-compare"><div class="chain-row"><span>Proteína normal</span><div class="chain-bar"><i class="ok full" style="width:100%"></i></div><b>146 piezas</b></div><div class="chain-row"><span>Tu proteína</span><div class="chain-bar"><i class="ok${same === 146 ? ' full' : ''}" style="width:${pct(same)}"></i><i class="wrong" style="width:${pct(wrong)}"></i>${pin}</div><b>${count}</b></div><div class="chain-key"><span><i></i>Igual</span>${r.effect === 'missense' ? '<span><i class="bad"></i>Pieza cambiada</span>' : ''}${wrong ? '<span><i class="wrong"></i>Piezas distintas</span>' : ''}${length < 146 ? '<span><i class="gone"></i>No se fabrica</span>' : ''}</div></div>`;
+    // El ribosoma recorre la cadena mientras se arma: tarda más cuanto más larga es, y se frena donde termina.
+    const time = n => ((n / 146) * 2.2).toFixed(2) + 's',
+      stopLabel = r.lengthUnknown ? '¿?' : length < 146 && length > 0 ? 'STOP' : '',
+      ribo = length
+        ? `<i class="ribo" style="--to:${pct(length)};--t:${time(length)}">${stopLabel ? `<span>${stopLabel}</span>` : ''}</i>`
+        : '';
+    return `<div class="chain-compare"><div class="chain-row"><span>Proteína normal</span><div class="chain-bar"><i class="ok full" style="width:100%"></i></div><b>146 piezas</b></div><div class="chain-row mine"><span>Tu proteína</span><div class="chain-bar"><i class="ok${same === 146 ? ' full' : ''}" style="width:${pct(same)};--t:${time(same)}"></i><i class="wrong" style="width:${pct(wrong)};--d:${time(same)};--t:${time(wrong)}"></i>${pin.replace('<i class="pin', `<i style="--d:${time(r.piece)}" class="pin`)}${ribo}</div><b>${count}</b></div><div class="chain-key"><span><i></i>Igual</span>${r.effect === 'missense' ? '<span><i class="bad"></i>Pieza cambiada</span>' : ''}${wrong ? '<span><i class="wrong"></i>Piezas distintas</span>' : ''}${length < 146 ? '<span><i class="gone"></i>No se fabrica</span>' : ''}</div></div>`;
   }
   const guesses = [
     [
@@ -1712,36 +1718,7 @@
       }
     return `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice"><rect width="320" height="180" fill="${base}"/><g fill="${inner}">${centers}</g><g fill="${spot}" opacity="${black ? 0.8 : 0.92}">${rings}</g>${black ? `<defs><linearGradient id="shine-${kind}" x1="0" y1="0" x2="1" y2="1"><stop offset=".3" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".16"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="320" height="180" fill="url(#shine-${kind})"/>` : ''}</svg>`;
   }
-  // Guepardo: manchas chicas, redondas y llenas. Guepardo rey: manchones grandes que se juntan y rayas en el lomo.
-  function cheetahSVG(king) {
-    let seed = king ? 7 : 3;
-    const rand = () => (seed = (seed * 9301 + 49297) % 233280) / 233280,
-      f = n => n.toFixed(1);
-    let spots = '';
-    if (king) {
-      for (const y of [16, 44, 72])
-        spots += `<path d="M-10 ${y} C 60 ${y - 10}, 120 ${y + 12}, 190 ${y} S 290 ${y - 8}, 340 ${y + 4}" stroke="#2a1a10" stroke-width="${y === 44 ? 20 : 14}" fill="none" stroke-linecap="round"/>`;
-      for (let y = 104; y < 200; y += 34)
-        for (let x = -10 + (y % 68 ? 24 : 0); x < 340; x += 58) {
-          const cx = x + rand() * 16,
-            cy = y + rand() * 10;
-          for (let k = 0; k < 3; k++)
-            spots += `<ellipse cx="${f(cx + (rand() - 0.5) * 26)}" cy="${f(cy + (rand() - 0.5) * 14)}" rx="${f(11 + rand() * 9)}" ry="${f(8 + rand() * 5)}"/>`;
-        }
-    } else
-      for (let row = 0, y = 6; y < 190; row++, y += 17)
-        for (let x = (row % 2) * 10 - 6; x < 330; x += 21)
-          spots += `<circle cx="${f(x + (rand() - 0.5) * 8)}" cy="${f(y + (rand() - 0.5) * 6)}" r="${f(4.2 + rand() * 2)}"/>`;
-    return `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice"><rect width="320" height="180" fill="#e3b768"/><g fill="#2a1a10">${spots}</g></svg>`;
-  }
-  all('[data-fur]').forEach(
-    el =>
-      (el.innerHTML = el.dataset.fur.startsWith('cheetah')
-        ? cheetahSVG(false)
-        : el.dataset.fur === 'king'
-          ? cheetahSVG(true)
-          : furSVG(el.dataset.fur)),
-  );
+  all('[data-fur]').forEach(el => (el.innerHTML = furSVG(el.dataset.fur)));
 
   // Gato siamés: cada parte del cuerpo se enfría distinto según el ambiente. La enzima del color solo funciona
   // donde la piel está por debajo de unos 36 °C (valores ilustrativos).
@@ -1795,6 +1772,254 @@
   }
   $('siamese-temp').oninput = renderSiamese;
   renderSiamese();
+
+  // ---- Animaciones cortas: arrancan solas la primera vez que se ven y se repiten con ↺ ----
+  // Cada una es una función draw(t) con t de 0 a 1. Con «reducir movimiento» se muestra el cuadro final.
+  const clamp01 = x => Math.max(0, Math.min(1, x)),
+    seg = (t, a, b) => clamp01((t - a) / (b - a)),
+    ease = k => (k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2),
+    lerp = (a, b, k) => a + (b - a) * k,
+    mixHex = (a, b, k) =>
+      '#' +
+      [1, 3, 5]
+        .map(i =>
+          Math.round(lerp(parseInt(a.substr(i, 2), 16), parseInt(b.substr(i, 2), 16), k))
+            .toString(16)
+            .padStart(2, '0'),
+        )
+        .join('');
+  function animation(box, duration, draw) {
+    let frame = null;
+    const play = () => {
+      cancelAnimationFrame(frame);
+      if (viewer.reduced.matches) return draw(1);
+      const start = performance.now(),
+        step = now => {
+          const t = Math.min(1, (now - start) / duration);
+          draw(t);
+          if (t < 1) frame = requestAnimationFrame(step);
+        };
+      frame = requestAnimationFrame(step);
+    };
+    const replay = document.createElement('button');
+    replay.className = 'replay';
+    replay.setAttribute('aria-label', 'Repetir la animación');
+    replay.textContent = '↺';
+    replay.onclick = play;
+    box.append(replay);
+    draw(viewer.reduced.matches || !('IntersectionObserver' in window) ? 1 : 0);
+    if ('IntersectionObserver' in window) {
+      const watch = new IntersectionObserver(
+        entries => {
+          if (entries.some(e => e.isIntersecting)) {
+            watch.disconnect();
+            play();
+          }
+        },
+        { threshold: 0.5 },
+      );
+      watch.observe(box);
+    }
+  }
+  const caption = (el, text) => el.textContent !== text && (el.textContent = text);
+
+  // Ojos celestes: zoom al ojo, el iris pasa de marrón a celeste y aparecen los parientes de un mismo antepasado.
+  {
+    const svg = $('eye-anim'),
+      fibers = Array.from({ length: 14 }, (_, i) => {
+        const a = (i / 14) * Math.PI * 2;
+        return `<line x1="${(174 + Math.cos(a) * 3.6).toFixed(2)}" y1="${(112 + Math.sin(a) * 3.6).toFixed(2)}" x2="${(174 + Math.cos(a) * 7.6).toFixed(2)}" y2="${(112 + Math.sin(a) * 7.6).toFixed(2)}"/>`;
+      }).join('');
+    const eye = x =>
+      `<ellipse cx="${x}" cy="112" rx="13" ry="9" fill="#fff"/><circle class="iris" cx="${x}" cy="112" r="8"/><g transform="translate(${x - 174} 0)" stroke="#fff" stroke-opacity=".25" stroke-width=".5">${fibers}</g><circle cx="${x}" cy="112" r="3.4" fill="#120e16"/><circle cx="${x - 2.5}" cy="109.5" r="1.4" fill="#fff"/>`;
+    const tree = [
+      [200, 34],
+      [110, 108],
+      [200, 108],
+      [290, 108],
+      ...Array.from({ length: 9 }, (_, i) => [40 + i * 40, 188]),
+    ];
+    const parent = i => (i === 0 ? -1 : i < 4 ? 0 : 1 + Math.floor((i - 4) / 3));
+    svg.innerHTML = `<g id="eye-face"><path d="M128 112c0-52 32-76 72-76s72 24 72 76c-8-30-30-44-72-44s-64 14-72 44Z" fill="#5a3a24"/><circle cx="200" cy="124" r="70" fill="#f1c7a5"/><path d="M134 104c4-40 30-56 66-56s62 16 66 56c-14-26-36-34-66-34s-52 8-66 34Z" fill="#6b452b"/><path d="M160 96q14-8 28 0M212 96q14-8 28 0" stroke="#5a3a24" stroke-width="3" fill="none" stroke-linecap="round"/>${eye(174)}${eye(226)}<path d="M200 118v18h-6" stroke="#d49c78" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M182 154q18 12 36 0" stroke="#b5654a" stroke-width="3" fill="none" stroke-linecap="round"/></g><g id="eye-letter"><rect x="16" y="190" width="132" height="38" rx="12" fill="#0e0b24d9"/><text x="28" y="214" class="anim-mono">HERC2</text><rect x="80" y="197" width="24" height="24" rx="6" fill="#ff7a66"/><text x="92" y="214" text-anchor="middle" class="anim-tile">A</text><text x="108" y="214" class="anim-mono">→</text><rect x="118" y="197" width="24" height="24" rx="6" fill="#b693ff"/><text x="130" y="214" text-anchor="middle" class="anim-tile">G</text></g><g id="eye-tree">${tree
+      .map((p, i) =>
+        parent(i) < 0
+          ? ''
+          : `<line class="tree-line" x1="${tree[parent(i)][0]}" y1="${tree[parent(i)][1]}" x2="${p[0]}" y2="${p[1]}"/>`,
+      )
+      .join(
+        '',
+      )}${tree.map((p, i) => `<g class="tree-node" transform="translate(${p[0]} ${p[1]})">${i === 0 ? '<circle r="19" fill="none" stroke="#ffd447" stroke-width="2.5"/>' : ''}<circle r="14" fill="#f1c7a5"/><circle cx="-5" cy="-2" r="2.6" fill="#3f86c9"/><circle cx="5" cy="-2" r="2.6" fill="#3f86c9"/></g>`).join('')}<text x="232" y="38" class="anim-small">un antepasado</text></g><defs><radialGradient id="iris-color"><stop offset=".35"/><stop offset="1"/></radialGradient></defs>`;
+    svg.querySelectorAll('.iris').forEach(c => c.setAttribute('fill', 'url(#iris-color)'));
+    const face = $('eye-face'),
+      letter = $('eye-letter'),
+      treeLines = [...svg.querySelectorAll('.tree-line')],
+      treeNodes = [...svg.querySelectorAll('.tree-node')],
+      stops = svg.querySelectorAll('#iris-color stop'),
+      label = svg.querySelector('.anim-small'),
+      text = $('eye-caption');
+    treeLines.forEach(l => {
+      const n = Math.hypot(
+        l.x2.baseVal.value - l.x1.baseVal.value,
+        l.y2.baseVal.value - l.y1.baseVal.value,
+      );
+      l.style.strokeDasharray = n;
+      l.dataset.n = n;
+    });
+    animation(svg.parentElement, 10000, t => {
+      const zoomIn = ease(seg(t, 0.06, 0.3)),
+        zoomOut = ease(seg(t, 0.58, 0.72)),
+        z = zoomIn * (1 - zoomOut),
+        scale = lerp(1, 9, z),
+        fx = lerp(200, 174, z),
+        fy = lerp(124, 112, z),
+        blue = ease(seg(t, 0.38, 0.55));
+      face.setAttribute(
+        'transform',
+        `translate(200 124) scale(${scale.toFixed(3)}) translate(${-fx} ${-fy})`,
+      );
+      face.style.opacity = (seg(t, 0, 0.06) * (1 - seg(t, 0.68, 0.76))).toFixed(3);
+      stops[0].setAttribute('stop-color', mixHex('#c9822f', '#bfe6ff', blue));
+      stops[1].setAttribute('stop-color', mixHex('#5a2f12', '#3f86c9', blue));
+      letter.style.opacity = (seg(t, 0.32, 0.38) * (1 - seg(t, 0.62, 0.68))).toFixed(3);
+      treeLines.forEach((l, i) => {
+        const k = seg(t, 0.76 + i * 0.012, 0.84 + i * 0.012);
+        l.style.strokeDashoffset = (l.dataset.n * (1 - k)).toFixed(1);
+      });
+      treeNodes.forEach(
+        (n, i) => (n.style.opacity = seg(t, 0.74 + i * 0.016, 0.8 + i * 0.016).toFixed(3)),
+      );
+      label.style.opacity = seg(t, 0.76, 0.82).toFixed(3);
+      caption(
+        text,
+        t < 0.32
+          ? 'Mirá sus ojos de cerca…'
+          : t < 0.6
+            ? 'En el gen HERC2, una A cambió por una G: el interruptor baja y el iris fabrica menos pigmento. Se ve celeste.'
+            : 'Casi todas las personas de ojos celestes heredaron esa letra de un mismo antepasado: son parientes lejanas.',
+      );
+    });
+  }
+
+  // Guepardo rey: con una letra de más en Taqpep, las manchas chicas se juntan en rayas y manchones.
+  {
+    const svg = $('king-anim');
+    let seed = 3;
+    const rand = () => (seed = (seed * 9301 + 49297) % 233280) / 233280,
+      spots = [];
+    for (let row = 0, y = 6; y < 190; row++, y += 17)
+      for (let x = (row % 2) * 10 - 6; x < 330; x += 21) {
+        const cx = x + (rand() - 0.5) * 8,
+          cy = y + (rand() - 0.5) * 6,
+          r = 4.2 + rand() * 2;
+        let to;
+        if (cy < 92) {
+          const line = [16, 44, 72].reduce((a, b) => (Math.abs(b - cy) < Math.abs(a - cy) ? b : a));
+          to = [cx, line + 5 * Math.sin(cx / 38 + line), 15, line === 44 ? 10 : 7];
+        } else {
+          const row = Math.round((cy - 112) / 34),
+            shift = row % 2 ? 26 : 0,
+            gy = 112 + row * 34,
+            gx = 24 + shift + Math.round((cx - 24 - shift) / 56) * 56;
+          to = [lerp(cx, gx, 0.72), lerp(cy, gy, 0.72), 10 + rand() * 3, 8 + rand() * 2];
+        }
+        spots.push({ from: [cx, cy, r, r], to });
+      }
+    svg.innerHTML = `<rect width="320" height="180" fill="#e3b768"/><g fill="#2a1a10">${spots.map(() => '<ellipse/>').join('')}</g><g id="king-badge"><rect x="252" y="8" width="60" height="20" rx="10" fill="#ffd447"/><text x="282" y="22" text-anchor="middle" class="anim-badge">+1 letra</text></g>`;
+    const shapes = svg.querySelectorAll('ellipse'),
+      badge = $('king-badge'),
+      label = $('king-label'),
+      text = $('king-caption');
+    animation(svg.parentElement, 6500, t => {
+      const k = ease(seg(t, 0.3, 0.88)),
+        drop = ease(seg(t, 0.12, 0.26));
+      spots.forEach((s, i) => {
+        const [cx, cy, rx, ry] = s.from.map((v, j) => lerp(v, s.to[j], k));
+        const e = shapes[i];
+        e.setAttribute('cx', cx.toFixed(1));
+        e.setAttribute('cy', cy.toFixed(1));
+        e.setAttribute('rx', rx.toFixed(1));
+        e.setAttribute('ry', ry.toFixed(1));
+      });
+      badge.setAttribute('transform', `translate(0 ${lerp(-50, 0, drop).toFixed(1)})`);
+      caption(label, t < 0.6 ? 'Guepardo' : 'Guepardo rey');
+      caption(
+        text,
+        t < 0.12
+          ? 'Un guepardo común: manchas chicas y redondas.'
+          : t < 0.6
+            ? 'Aparece una letra de más en el gen Taqpep…'
+            : '…y las manchas se juntan en rayas y manchones grandes: es un guepardo rey.',
+      );
+    });
+  }
+
+  // Cuello de botella: muchos guepardos distintos, quedan unos pocos y la población vuelve a crecer, pero casi igual.
+  {
+    const svg = $('bottleneck-anim'),
+      colors = [
+        '#ff7a66',
+        '#4fd8ff',
+        '#b693ff',
+        '#7ee08a',
+        '#ff5c9d',
+        '#5f8bff',
+        '#ffd447',
+        '#ffb020',
+      ],
+      survivors = [14, 27, 40, 52];
+    let seed = 9;
+    const rand = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+    const cats = Array.from({ length: 60 }, (_, i) => ({
+      x: 28 + (i % 12) * 31.5 + (rand() - 0.5) * 10,
+      y: 26 + Math.floor(i / 12) * 34 + (rand() - 0.5) * 8,
+      color: colors[Math.floor(rand() * colors.length)],
+    }));
+    survivors.forEach((i, n) => (cats[i].color = n % 2 ? '#ffd447' : '#ffb020'));
+    cats.forEach(c => {
+      const near = survivors.reduce((a, b) =>
+        Math.hypot(cats[a].x - c.x, cats[a].y - c.y) < Math.hypot(cats[b].x - c.x, cats[b].y - c.y)
+          ? a
+          : b,
+      );
+      c.child = cats[near].color;
+      c.delay = Math.hypot(cats[near].x - c.x, cats[near].y - c.y) / 420;
+    });
+    svg.innerHTML = cats
+      .map(
+        (c, i) =>
+          `<g class="cat-dot${survivors.includes(i) ? ' survivor' : ''}" transform="translate(${c.x.toFixed(1)} ${c.y.toFixed(1)})"><circle class="ring" r="15"/><path d="M-9 -3 L-8 -13 L-2 -8 Z M9 -3 L8 -13 L2 -8 Z"/><circle r="10"/></g>`,
+      )
+      .join('');
+    const dots = [...svg.querySelectorAll('.cat-dot')],
+      text = $('bottleneck-caption');
+    animation(svg.parentElement, 8500, t => {
+      dots.forEach((d, i) => {
+        const c = cats[i],
+          lone = survivors.includes(i);
+        const gone = lone ? 0 : ease(seg(t, 0.22 + (i % 7) * 0.012, 0.36 + (i % 7) * 0.012)),
+          back = lone ? 0 : ease(seg(t, 0.5 + c.delay * 0.4, 0.62 + c.delay * 0.4)),
+          shown = back > 0 ? back : 1 - gone,
+          color = back > 0 ? c.child : c.color;
+        d.setAttribute('fill', color);
+        d.style.opacity = shown.toFixed(3);
+        d.querySelector('.ring').style.opacity = lone
+          ? (seg(t, 0.3, 0.38) * (1 - seg(t, 0.5, 0.6))).toFixed(2)
+          : 0;
+        d.setAttribute(
+          'transform',
+          `translate(${c.x.toFixed(1)} ${c.y.toFixed(1)}) scale(${lerp(0.4, 1, shown).toFixed(3)})`,
+        );
+      });
+      caption(
+        text,
+        t < 0.22
+          ? 'Hace más de 10.000 años había muchos guepardos, con variantes genéticas muy distintas.'
+          : t < 0.48
+            ? 'Casi todos desaparecieron: quedaron muy pocos.'
+            : 'Volvieron a ser muchos, pero todos descienden de esos pocos: hoy son casi iguales entre sí.',
+      );
+    });
+  }
 
   // Ojos celestes: una pregunta rápida para el público.
   const EYE_ANSWERS = {

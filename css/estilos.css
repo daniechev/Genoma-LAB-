@@ -3420,3 +3420,155 @@ svg.world .countries path {
 .step .poster-big + p {
   margin-top: 12px;
 }
+
+/* Animaciones cortas: marco, botón para repetir y textos */
+.anim {
+  position: relative;
+  margin: 20px 0 6px;
+}
+.anim svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 22px;
+}
+.eye-anim svg {
+  max-width: 560px;
+  background: radial-gradient(70% 80% at 50% 50%, #2a2360, #120e30);
+}
+.fur-anim svg {
+  box-shadow: 0 20px 50px #0008;
+  outline: 2px solid #ffd44755;
+  outline-offset: 4px;
+}
+.bottleneck svg {
+  background: radial-gradient(70% 80% at 50% 50%, #ffffff0d, transparent);
+}
+.replay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #0e0b24cc;
+  border: 1px solid var(--hair);
+  font-size: 20px;
+  line-height: 1;
+}
+.anim-caption {
+  margin-top: 10px;
+  min-height: 3em;
+  font-size: 17px;
+  font-weight: 600;
+}
+.anim-note {
+  font-size: 13px;
+  color: var(--muted);
+}
+.anim-label {
+  position: absolute;
+  right: 14px;
+  bottom: calc(3em + 26px);
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #0e0b24d9;
+  color: var(--accent);
+  font-weight: 800;
+}
+.anim-mono {
+  font: 700 13px var(--mono);
+  fill: #f7f5ff;
+}
+.anim-tile {
+  font: 800 15px var(--mono);
+  fill: #1a1335;
+}
+.anim-badge {
+  font: 800 10px var(--mono);
+  fill: #1a1335;
+}
+.anim-small {
+  font-size: 13px;
+  fill: #ffd447;
+  font-weight: 700;
+}
+.tree-line {
+  stroke: #ffd44799;
+  stroke-width: 2;
+}
+.cat-dot .ring {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+/* Ribosoma: «Tu proteína» se arma de izquierda a derecha y se frena donde termina. */
+.chain-row.mine .chain-bar {
+  position: relative;
+  overflow: visible;
+}
+.chain-row.mine .chain-bar i.ok,
+.chain-row.mine .chain-bar i.wrong {
+  animation: chain-build var(--t, 1s) linear var(--d, 0s) both;
+}
+.chain-row.mine .chain-bar i.pin {
+  animation: pin-pop 0.3s ease var(--d, 0s) both;
+}
+.chain-bar .ribo {
+  position: absolute;
+  top: 50%;
+  left: var(--to);
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border-radius: 50% 50% 45% 45%;
+  background: #fff;
+  box-shadow: 0 0 14px #fff9;
+  animation: ribo-move var(--t) linear both;
+}
+.ribo span {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  padding: 1px 8px;
+  border-radius: 8px;
+  background: var(--red);
+  color: var(--ink);
+  font: 800 12px var(--mono);
+  white-space: nowrap;
+  animation: pin-pop 0.3s ease var(--t) both;
+}
+@keyframes chain-build {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes ribo-move {
+  from {
+    left: 0;
+  }
+  to {
+    left: var(--to);
+  }
+}
+@keyframes pin-pop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.3);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chain-row.mine .chain-bar i,
+  .ribo,
+  .ribo span {
+    animation: none !important;
+  }
+  .chain-bar .ribo {
+    display: none;
+  }
+}
