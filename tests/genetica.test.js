@@ -189,12 +189,9 @@ test('los cambios de otras especies son de una letra y coinciden con su notació
   const names = G.names;
   for (const c of G.SPECIES) {
     const r = sub(c.position, c.base);
-    assert.equal(r.effect, 'missense', c.id);
-    assert.equal(
-      `${names[G.EXPECTED[r.piece]]}${r.piece}${names[G.table[r.mutatedCodon]]}`,
-      c.notation,
-      c.id,
-    );
+    assert.equal(r.effect, c.effect || 'missense', c.id);
+    const after = G.table[r.mutatedCodon] === '*' ? 'Stop' : names[G.table[r.mutatedCodon]];
+    assert.equal(`${names[G.EXPECTED[r.piece]]}${r.piece}${after}`, c.notation, c.id);
     assert.equal(r.species.id, c.id);
   }
   assert.equal(sub(6, 'G').species, null);

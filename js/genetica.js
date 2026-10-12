@@ -69,6 +69,15 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     { id: 'mammoth12', name: 'Mamut lanudo', notation: 'Thr12Ala', position: 36, base: 'G' },
     { id: 'mammoth86', name: 'Mamut lanudo', notation: 'Ala86Ser', position: 258, base: 'T' },
     { id: 'mammoth101', name: 'Mamut lanudo', notation: 'Glu101Gln', position: 303, base: 'C' },
+    // El leopardo negro tiene un STOP (TGC → TGA) en otro gen, el ASIP; acá se imita en la cisteína 93.
+    {
+      id: 'leopard',
+      name: 'Leopardo',
+      notation: 'Cys93Stop',
+      position: 281,
+      base: 'A',
+      effect: 'nonsense',
+    },
   ];
   function findSpecies(position, type, base) {
     return type === 'sub'

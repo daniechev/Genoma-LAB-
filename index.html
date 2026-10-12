@@ -107,17 +107,23 @@
   <p class="disclaimer">Una simulación educativa con una secuencia pública. No es un diagnóstico.</p>
 </section>
 <section id="tab-naturaleza" class="tab-page nature" hidden>
-  <div class="poster-hero"><p class="eyebrow">MÁS ALLÁ DEL LABORATORIO</p><h1>La hemoglobina <em>en la naturaleza</em></h1><p>Las mismas letras que cambiás en el simulador también cambiaron en personas y animales reales. A veces enferman… y a veces salvan vidas.</p></div>
+  <div class="poster-hero"><p class="eyebrow">MÁS ALLÁ DEL LABORATORIO</p><h1>Una letra <em>en la naturaleza</em></h1><p>Las mismas letras que cambiás en el simulador también cambiaron en personas y animales reales. Elegí una historia.</p></div>
 
-  <article class="poster-card nature-block">
-    <span class="lesson-number">01</span><h2>Una mutación que protege</h2>
-    <p class="poster-big">La anemia falciforme es una enfermedad grave. Entonces, ¿por qué la mutación es tan común en algunas regiones? Porque tener <b>una sola copia</b> protege contra la <b>malaria</b>.</p>
+  <div class="chapters" role="tablist" aria-label="Historias">
+    <button class="chapter active" role="tab" id="ch-malaria" aria-selected="true" aria-controls="chapter-malaria" data-chapter="malaria"><span class="chapter-icon malaria" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="17" cy="24" r="11" fill="currentColor"/><circle cx="17" cy="24" r="4" fill="#0b0820" opacity=".45"/><path d="M30 31c4-9 9-12 14-12-2 8-7 13-14 12Z" fill="currentColor" opacity=".75"/></svg></span><b>Una mutación que protege</b><span>Anemia falciforme y malaria</span></button>
+    <button class="chapter" role="tab" id="ch-felinos" aria-selected="false" aria-controls="chapter-felinos" data-chapter="felinos" tabindex="-1"><span class="chapter-icon felinos" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M10 12l6 6h16l6-6 2 16c0 9-7 14-16 14S8 37 8 28Z" fill="currentColor"/><g fill="#0b0820" opacity=".55"><circle cx="18" cy="27" r="2.6"/><circle cx="30" cy="27" r="2.6"/><path d="M21 34h6l-3 3Z"/></g></svg></span><b>Jaguar y leopardo</b><span>Parecidos, pero no iguales</span></button>
+    <button class="chapter" role="tab" id="ch-animales" aria-selected="false" aria-controls="chapter-animales" data-chapter="animales" tabindex="-1"><span class="chapter-icon animales" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M4 40 18 16l8 12 6-8 12 20Z" fill="currentColor"/><path d="m18 16 4 7-4-2-3 3Z" fill="#fff" opacity=".85"/></svg></span><b>Animales récord</b><span>Llama, mamut y más</span></button>
+  </div>
+
+  <article class="poster-card nature-block chapter-page" id="chapter-malaria" role="tabpanel" aria-labelledby="ch-malaria">
+    <h2>Una mutación que protege</h2>
+    <p class="poster-big">La anemia falciforme es grave. ¿Por qué es tan común en algunas regiones? Porque tener <b>una sola copia</b> protege contra la <b>malaria</b>.</p>
     <div class="genotypes">
       <div class="genotype aa"><span class="cells" aria-hidden="true"><i></i><i></i></span><b>Ninguna copia</b><span>Sin anemia, pero sin protección contra la malaria.</span></div>
       <div class="genotype as"><span class="cells" aria-hidden="true"><i></i><i class="s"></i></span><b>Una copia · portador</b><span>Casi sin síntomas y muy protegido: el riesgo de malaria grave baja cerca de un 90 %.</span></div>
       <div class="genotype ss"><span class="cells" aria-hidden="true"><i class="s"></i><i class="s"></i></span><b>Dos copias</b><span>Anemia falciforme: los glóbulos rojos se deforman y se traban.</span></div>
     </div>
-    <p class="muted nature-note">Cada persona tiene dos copias del gen HBB: una de su mamá y otra de su papá.</p>
+    <p class="muted nature-note">Cada persona tiene dos copias del gen: una de su mamá y otra de su papá.</p>
 
     <h3 class="nature-sub">¿Dónde pasa?</h3>
     <div class="map-controls" role="group" aria-label="Capa del mapa">
@@ -146,9 +152,41 @@
     <details><summary>Las reglas del juego</summary><p>Con malaria, de cada 100 personas llegan a tener hijos: 85 sin la mutación, 100 portadores y 20 con anemia falciforme. Sin malaria, los que no tienen la mutación también llegan 100. Son valores ilustrativos, no medidos.</p><p>En cada generación, las copias del gen de los sobrevivientes se mezclan al azar para formar la generación siguiente (equilibrio de Hardy-Weinberg). Con malaria, la mutación crece hasta un equilibrio: los portadores ganan, pero las personas con dos copias se enferman. Por eso no desaparece ni llega a todos. Este fenómeno se llama <b>selección balanceada</b>.</p><p>En la vida real, en muchos países de África entre el 10 % y el 40 % de las personas son portadoras (OMS, región africana).</p></details>
   </article>
 
-  <article class="poster-card nature-block">
-    <span class="lesson-number">02</span><h2>Animales con hemoglobinas especiales</h2>
-    <p class="poster-big">Cada especie ajustó su hemoglobina a su ambiente. Tocá cada tarjeta para descubrir cómo.</p>
+  <article class="poster-card nature-block chapter-page" id="chapter-felinos" role="tabpanel" aria-labelledby="ch-felinos" hidden>
+    <h2>Jaguar y leopardo: ¿gemelos?</h2>
+    <p class="poster-big">Se parecen tanto que mucha gente los confunde. Son <b>primos</b>: los dos son grandes felinos del grupo de las panteras. Pero viven en <b>continentes distintos</b>.</p>
+    <figure class="map-figure cats-figure"><svg id="cats-map" class="world" role="img" aria-label="Mapa: el jaguar vive en América, del norte de México al norte de Argentina; el leopardo, en África y el sur de Asia."></svg>
+      <figcaption><span class="map-key"><i class="jaguar"></i>Jaguar · América</span><span class="map-key"><i class="leopard"></i>Leopardo · África y Asia</span></figcaption>
+    </figure>
+    <p class="nature-note">¿Cómo llegaron tan lejos? Sus antepasados vivían en Asia. Hace más de un millón de años, algunos cruzaron a América por un puente de tierra que unía Siberia con Alaska. Separados durante tantas generaciones, cada grupo cambió a su manera.</p>
+
+    <div class="faceoff">
+      <div class="cat jaguar"><div class="fur" data-fur="jaguar" aria-hidden="true"></div><h3>Jaguar</h3><p class="latin">Panthera onca</p></div>
+      <span class="versus" aria-hidden="true">vs</span>
+      <div class="cat leopard"><div class="fur" data-fur="leopard" aria-hidden="true"></div><h3>Leopardo</h3><p class="latin">Panthera pardus</p></div>
+    </div>
+    <dl class="compare">
+      <div><dt>Manchas</dt><dd class="jaguar">Rosetas <b>grandes</b>, con <b>puntos adentro</b></dd><dd class="leopard">Rosetas <b>chicas</b>, <b>sin puntos</b> adentro</dd></div>
+      <div><dt>Cuerpo</dt><dd class="jaguar">Más robusto y pesado, cabeza grande y cola corta</dd><dd class="leopard">Más liviano y estilizado, cola larga</dd></div>
+      <div><dt>Superpoder</dt><dd class="jaguar">La mordida más fuerte de los felinos para su tamaño: atraviesa caparazones de tortuga</dd><dd class="leopard">Trepa árboles con la presa en la boca, para que no se la roben leones ni hienas</dd></div>
+      <div><dt>Le gusta</dt><dd class="jaguar">El agua: nada muy bien y caza yacarés en los ríos</dd><dd class="leopard">Casi cualquier ambiente: selvas, sabanas, montañas y desiertos</dd></div>
+    </dl>
+    <p class="tip"><b>Truco para no confundirlos:</b> si ves puntitos dentro de las manchas, es un jaguar.</p>
+
+    <h3 class="nature-sub">La pantera negra: el mismo color, dos recetas distintas</h3>
+    <p>La «pantera negra» no es una especie: es un jaguar o un leopardo con una mutación que oscurece su pelo. ¡Las manchas siguen ahí! Se ven cuando les da el sol.</p>
+    <div class="black-cats">
+      <div class="black-cat"><div class="fur" data-fur="jaguar-black" aria-hidden="true"></div><h4>Jaguar negro</h4><p class="gene">Gen <i>MC1R</i> · le faltan <b>15 letras</b></p><p>Como 15 es múltiplo de 3, se pierden <b>5 piezas justas</b> y el resto de la receta se lee bien. El interruptor del pigmento negro queda trabado en «encendido».</p><p class="inherit"><b>Dominante:</b> alcanza con una copia. Como una luz que quedó prendida: con una sola, el cuarto ya se ilumina.</p></div>
+      <div class="black-cat"><div class="fur" data-fur="leopard-black" aria-hidden="true"></div><h4>Leopardo negro</h4><p class="gene">Gen <i>ASIP</i> · cambia <b>1 letra</b></p><p><b>TG<span class="hl">C</span> → TG<span class="hl">A</span></b>: aparece un STOP. La proteína se corta en la pieza 111 y ya no puede frenar al pigmento negro.</p><p class="inherit"><b>Recesiva:</b> hacen falta dos copias, una de cada padre. Como un auto con dos frenos: si uno se rompe, el otro alcanza. Por eso dos leopardos manchados pueden tener un cachorro negro.</p></div>
+    </div>
+    <div class="try-leopard"><p>La hemoglobina humana también tiene una cisteína, en la pieza 93, escrita TG<b>T</b>. Si cambiás la última letra por <b>A</b>, queda TGA: <b>el mismo STOP</b> que el del leopardo.</p><button class="primary species-try" data-try="leopard">Probá el STOP del leopardo <span aria-hidden="true">→</span></button></div>
+    <p class="muted map-source">Distribución: esquema aproximado. Fuentes: Eizirik y col. (2003), <i>Current Biology</i>; Schneider y col. (2012), <i>PLoS ONE</i>.</p>
+  </article>
+
+  <article class="poster-card nature-block chapter-page" id="chapter-animales" role="tabpanel" aria-labelledby="ch-animales" hidden>
+    <h2>Animales con hemoglobinas especiales</h2>
+    <p class="poster-big">Cada especie ajustó su hemoglobina a su ambiente. Tocá un animal en el mapa.</p>
+    <figure class="map-figure"><svg id="animals-map" class="world" role="group" aria-label="Mapa con los animales"></svg></figure>
     <div class="species-grid">
       <article class="species" data-species="llama"><div class="species-icon mountain"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 40 18 16l8 12 6-8 12 20Z" fill="currentColor"/><path d="m18 16 4 7-4-2-3 3Z" fill="#fff" opacity=".85"/></svg></div><h3>Llama</h3><p class="species-place">Los Andes, a unos 4.000 m de altura</p><p class="species-question">¿Cómo respira donde el aire tiene poco oxígeno?</p><button class="ghost species-open" aria-expanded="false">Descubrí cómo</button>
         <div class="species-answer" hidden><p>Su hemoglobina <b>agarra el oxígeno con más fuerza</b>, como una mano que aprieta para no soltar lo poco que consigue. Uno de los cambios clave está en la cadena beta, la misma de este proyecto: en la pieza 2 tiene asparagina en lugar de histidina.</p><p class="species-change">Pieza 2: His → Asn · en el gen humano, <b>C</b>AT → <b>A</b>AT: ¡una sola letra!</p><button class="primary species-try" data-try="llama">Probalo en el simulador <span aria-hidden="true">→</span></button><p class="species-source">Piccinini y col. (1990), hemoglobina de guanaco, llama y alpaca.</p></div></article>

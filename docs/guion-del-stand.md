@@ -34,6 +34,10 @@ Una guía para que cualquiera del grupo pueda presentar igual de bien. Los tiemp
 
 Si tienen más tiempo, la pestaña **Naturaleza** cuenta por qué esta mutación es tan común: protege contra la malaria.
 
+Si el visitante es chico o le gustan los animales, abrí **Naturaleza → Jaguar y leopardo**:
+
+> «¿Jaguar o leopardo? Mirá las manchas: si tienen puntitos adentro, es un jaguar. Y la pantera negra no es una especie: al leopardo le cambió **una sola letra** y apareció un STOP. ¿Lo probamos en la hemoglobina?»
+
 ## Analogías que funcionan
 
 | Idea | Analogía |
@@ -47,6 +51,8 @@ Si tienen más tiempo, la pestaña **Naturaleza** cuenta por qué esta mutación
 | STOP antes de tiempo | Un punto final en la mitad de la receta: lo que sigue no se lee |
 | Quitar o agregar una letra | «LUZ SOL MAR PAN» sin la S queda «LUZ OLM ARP AN»: todo lo que sigue pierde sentido |
 | Portadores y malaria | Como un seguro: una copia protege contra la malaria, dos copias enferman |
+| Mutación dominante (jaguar negro) | Una luz que quedó prendida: con una sola, el cuarto ya se ilumina |
+| Mutación recesiva (leopardo negro) | Un auto con dos frenos: si uno se rompe, el otro alcanza |
 
 ## Preguntas que suele hacer el jurado
 

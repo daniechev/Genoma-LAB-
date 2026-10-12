@@ -45,6 +45,8 @@
     },
   };
   const speciesNotes = {
+    leopard:
+      '<b>¡El mismo STOP que el del leopardo negro!</b> La pieza 93 es una cisteína, escrita TGT. Con la A, queda TGA y la lectura se corta. Al leopardo le pasó algo parecido en otro gen, el ASIP: su codón TGC se volvió TGA, la proteína quedó cortada y su pelo se volvió negro.',
     llama:
       '<b>¡Así es en la llama!</b> Con esta letra, la pieza 2 pasa de histidina a asparagina, como en la hemoglobina de las llamas, alpacas y guanacos. Ese cambio ayuda a que su hemoglobina agarre más fuerte el oxígeno en la altura de los Andes.',
     mammoth12:
@@ -463,7 +465,7 @@
     const guess = lastGuess,
       heading = resultHeading(r);
     const length = r.lengthUnknown ? `${r.mature.length}+` : `${r.mature.length}`;
-    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza">Conocé más animales →</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza">Conocé más animales →</button></p>` : ''}<button class="secondary save-card" id="save-card"><span aria-hidden="true">★</span> Guardar mi descubrimiento</button><details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
+    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza:malaria">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza:${r.species.id === 'leopard' ? 'felinos' : 'animales'}">${r.species.id === 'leopard' ? 'Jaguar y leopardo →' : 'Conocé más animales →'}</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza:animales">Conocé más animales →</button></p>` : ''}<button class="secondary save-card" id="save-card"><span aria-hidden="true">★</span> Guardar mi descubrimiento</button><details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
       r.mature
         ? r.mature
             .split('')
@@ -475,7 +477,9 @@
       b =>
         (b.onclick = () => {
           stopTour();
-          showTab(b.dataset.goto);
+          const [tab, chapter] = b.dataset.goto.split(':');
+          showTab(tab);
+          if (chapter) showChapter(chapter);
         }),
     );
     $('save-card').onclick = openCard;
@@ -578,6 +582,7 @@
   }
   function cardBadge(r) {
     if (r.realCase) return `¡Es un caso real: ${r.realCase.name}! · ${r.realCase.notation}`;
+    if (r.species?.id === 'leopard') return '¡El mismo STOP que el del leopardo negro! · TGA';
     if (r.species)
       return `¡Como en ${r.species.id === 'llama' ? 'la' : 'el'} ${r.species.name.toLowerCase()}! · ${r.species.notation}`;
     if (r.effect === 'start-loss') return 'Como el pez de hielo: sin cadena beta';
@@ -1319,6 +1324,156 @@
   );
   $('map-malaria').onchange = renderMap;
 
+  // Capítulos de Naturaleza: se ve una historia por vez para que la página no quede cargada.
+  function showChapter(name) {
+    all('.chapter').forEach(b => {
+      const on = b.dataset.chapter === name;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', String(on));
+      b.tabIndex = on ? 0 : -1;
+    });
+    all('.chapter-page').forEach(p => (p.hidden = p.id !== `chapter-${name}`));
+  }
+  all('.chapter').forEach(b => {
+    b.onclick = () => showChapter(b.dataset.chapter);
+    b.onkeydown = e => {
+      const tabs = all('.chapter'),
+        step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+      if (!step) return;
+      const next = tabs[(tabs.indexOf(b) + step + tabs.length) % tabs.length];
+      showChapter(next.dataset.chapter);
+      next.focus();
+    };
+  });
+
+  // Misma proyección que el mapa (Natural Earth): pasa de longitud y latitud a un punto del dibujo.
+  function project(lon, lat) {
+    const l = (lon * Math.PI) / 180,
+      p = (lat * Math.PI) / 180,
+      p2 = p * p,
+      p4 = p2 * p2,
+      x = l * (0.8707 - 0.131979 * p2 + p4 * (-0.013791 + p4 * (0.003971 * p2 - 0.001529 * p4))),
+      y = p * (1.007226 + p2 * (0.015085 + p4 * (-0.044475 + 0.028874 * p2 - 0.005916 * p4)));
+    return [WORLD_MAP.width / 2 + 175.5 * x, 270.3 - 175.5 * y];
+  }
+  const shape = points =>
+    'M' +
+    points
+      .map(([lon, lat]) =>
+        project(lon, lat)
+          .map(n => n.toFixed(1))
+          .join(','),
+      )
+      .join('L') +
+    'Z';
+  const land = () => WORLD_MAP.countries.map(c => `<path d="${c.d}"/>`).join('');
+
+  // Dónde viven el jaguar y el leopardo (esquema aproximado; se recorta con la forma de los continentes).
+  // prettier-ignore
+  const CAT_RANGES = {
+    jaguar: [
+      [[-109, 29], [-105, 24], [-104, 19], [-97, 16], [-92, 15], [-90, 21.5], [-87, 21], [-87, 16], [-83, 10], [-79, 9], [-75, 11], [-71, 12], [-63, 11], [-60, 8.5], [-52, 5], [-50, 0], [-44, -2.5], [-38, -8], [-39, -15], [-41, -21], [-48, -26], [-54, -28], [-58, -30], [-62, -29], [-65, -24], [-66, -18], [-70, -13], [-75, -10], [-78, -4], [-79, 0], [-78, 4], [-77, 8], [-80, 8], [-85, 11], [-90, 13], [-95, 16], [-99, 20], [-106, 27]],
+    ],
+    leopard: [
+      [[-17, 13], [-12, 9], [-5, 5], [3, 6], [9, 4], [9, -1], [12, -6], [13, -12], [12, -18], [15, -27], [18, -34], [25, -34.5], [30, -31], [33, -26], [36, -20], [40, -14], [40, -5], [42, 0], [48, 4], [51, 11], [44, 11], [42, 13], [38, 15], [34, 13], [24, 12], [16, 13], [4, 13], [-5, 15], [-12, 15]],
+      [[61, 28], [66, 30], [70, 33], [74, 35], [80, 31], [88, 28], [95, 29], [100, 31], [106, 32], [112, 33], [119, 31], [121, 25], [114, 22], [108, 21], [106, 17], [109, 12], [104, 9], [103, 2], [100, 4], [98, 9], [97, 16], [94, 19], [91, 22], [87, 22], [82, 17], [80, 13], [80, 10], [78, 8], [76, 9], [73, 16], [72, 21], [69, 23], [64, 25]],
+      [[79.7, 9.8], [81.9, 8.5], [81.7, 6.3], [80.2, 5.9], [79.8, 7.5]],
+      [[105.2, -6.2], [110, -6.6], [114.5, -7.6], [114.5, -8.7], [108, -7.8], [105.3, -6.9]],
+      [[44, 38], [46, 41], [49, 41], [54, 38], [60, 37], [63, 35], [62, 30], [58, 27], [54, 28], [50, 30], [47, 32], [45, 35]],
+      [[43, 13], [45, 15], [52, 17], [55, 18], [54, 16.5], [48, 14], [44, 12.6]],
+      [[127, 42], [131, 42.5], [134, 44], [135, 47], [131, 47], [128, 44]],
+    ],
+  };
+  function renderCatsMap() {
+    const svg = $('cats-map'),
+      label = (text, lon, lat, cls) => {
+        const [x, y] = project(lon, lat);
+        return `<text class="map-label ${cls}" x="${x.toFixed(0)}" y="${y.toFixed(0)}">${text}</text>`;
+      };
+    svg.setAttribute('viewBox', '150 120 720 270');
+    svg.innerHTML = `<defs><clipPath id="land-clip">${land()}</clipPath></defs><g class="countries">${land()}</g>${[
+      'jaguar',
+      'leopard',
+    ]
+      .map(
+        cat =>
+          `<g class="range ${cat}" clip-path="url(#land-clip)"><path d="${CAT_RANGES[cat].map(shape).join('')}"/></g>`,
+      )
+      .join(
+        '',
+      )}${label('Jaguar', -72, -6, 'jaguar')}${label('Leopardo', 22, -5, 'leopard')}${label('Leopardo', 92, 24, 'leopard')}`;
+  }
+
+  // Animales récord sobre el mapa: tocar uno abre su tarjeta.
+  const ANIMAL_PINS = [
+    { id: 'llama', name: 'Llama', lon: -68, lat: -17, cls: 'mountain' },
+    { id: 'goose', name: 'Ánsar indio', lon: 86, lat: 29, cls: 'sky' },
+    { id: 'mammoth', name: 'Mamut lanudo', lon: 125, lat: 66, cls: 'ice' },
+    { id: 'icefish', name: 'Pez de hielo', lon: -58, lat: -58, cls: 'water' },
+  ];
+  function openSpecies(id) {
+    const card = document.querySelector(`.species[data-species="${id}"]`),
+      button = card.querySelector('.species-open');
+    if (button.getAttribute('aria-expanded') !== 'true') button.click();
+    card.scrollIntoView({ behavior: viewer.reduced.matches ? 'auto' : 'smooth', block: 'center' });
+  }
+  function renderAnimalsMap() {
+    const svg = $('animals-map');
+    svg.setAttribute('viewBox', `0 0 ${WORLD_MAP.width} ${WORLD_MAP.height}`);
+    svg.innerHTML = `<g class="countries">${land()}</g>${ANIMAL_PINS.map(a => {
+      const [x, y] = project(a.lon, a.lat);
+      return `<g class="pin ${a.cls}" role="button" tabindex="0" data-pin="${a.id}" aria-label="${a.name}" transform="translate(${x.toFixed(0)} ${y.toFixed(0)})"><rect class="hit" x="-70" y="-42" width="140" height="58" rx="12"/><circle class="pulse" r="12"/><circle r="9"/><text y="-18">${a.name}</text></g>`;
+    }).join('')}`;
+    svg.querySelectorAll('.pin').forEach(pin => {
+      pin.onclick = () => openSpecies(pin.dataset.pin);
+      pin.onkeydown = e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openSpecies(pin.dataset.pin);
+        }
+      };
+    });
+  }
+
+  // Pelaje dibujado: rosetas grandes con puntos (jaguar) o chicas sin puntos (leopardo).
+  function furSVG(kind) {
+    const jaguar = kind.startsWith('jaguar'),
+      black = kind.endsWith('black'),
+      base = black ? '#17121c' : jaguar ? '#dca04c' : '#e6b464',
+      inner = black ? '#120e16' : jaguar ? '#b97a34' : '#cf9447',
+      spot = black ? '#050307' : '#2a1a10',
+      gap = jaguar ? 62 : 36,
+      r0 = gap * 0.3;
+    let seed = jaguar ? 11 : 5;
+    const rand = () => (seed = (seed * 9301 + 49297) % 233280) / 233280,
+      f = n => n.toFixed(1);
+    let centers = '',
+      rings = '';
+    for (let row = 0, y = 4; y < 200; row++, y += gap * 0.82)
+      for (let x = (row % 2) * (gap / 2) - 8; x < 340; x += gap) {
+        const cx = x + (rand() - 0.5) * gap * 0.16,
+          cy = y + (rand() - 0.5) * gap * 0.16,
+          r = r0 * (0.85 + rand() * 0.3),
+          blobs = jaguar ? 6 + Math.floor(rand() * 2) : 5,
+          turn = rand() * Math.PI;
+        // El centro de cada roseta es un poco más oscuro que el resto del pelo.
+        centers += `<ellipse cx="${f(cx)}" cy="${f(cy)}" rx="${f(r * 0.95)}" ry="${f(r * 0.8)}"/>`;
+        for (let k = 0; k < blobs; k++) {
+          if (rand() < 0.12) continue;
+          const a = turn + (k / blobs) * Math.PI * 2,
+            bx = cx + Math.cos(a) * r,
+            by = cy + Math.sin(a) * r * 0.85;
+          rings += `<ellipse cx="${f(bx)}" cy="${f(by)}" rx="${f(r * (jaguar ? 0.42 : 0.5))}" ry="${f(r * 0.2)}" transform="rotate(${((a * 180) / Math.PI + 90).toFixed(0)} ${f(bx)} ${f(by)})"/>`;
+        }
+        // Solo el jaguar tiene puntos dentro de las rosetas.
+        if (jaguar)
+          for (let k = 0, n = 1 + Math.floor(rand() * 3); k < n; k++)
+            rings += `<circle cx="${f(cx + (rand() - 0.5) * r * 0.7)}" cy="${f(cy + (rand() - 0.5) * r * 0.6)}" r="${f(r * 0.13)}"/>`;
+      }
+    return `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice"><rect width="320" height="180" fill="${base}"/><g fill="${inner}">${centers}</g><g fill="${spot}" opacity="${black ? 0.8 : 0.92}">${rings}</g>${black ? `<defs><linearGradient id="shine-${kind}" x1="0" y1="0" x2="1" y2="1"><stop offset=".3" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".16"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="320" height="180" fill="url(#shine-${kind})"/>` : ''}</svg>`;
+  }
+  all('[data-fur]').forEach(el => (el.innerHTML = furSVG(el.dataset.fur)));
+
   // Jugá a la evolución: frecuencia de la mutación (q) en un pueblo, generación a generación.
   // Hardy-Weinberg con selección: q' = (p·q·wAS + q²·wSS) / (p²·wAA + 2·p·q·wAS + q²·wSS). Valores ilustrativos.
   const evo = { q0: 0.02, q: 0.02, gen: 0, history: [], timer: null };
@@ -1446,6 +1601,8 @@
   renderStats();
   render();
   renderMap();
+  renderCatsMap();
+  renderAnimalsMap();
   renderEvolution();
   if (location.hash === '#jurado') startTour();
 

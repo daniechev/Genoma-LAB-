@@ -53,12 +53,13 @@ Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la 
 
 ### Naturaleza
 
-La pestaña **Naturaleza** muestra cómo cambió la hemoglobina fuera del laboratorio:
+La pestaña **Naturaleza** cuenta tres historias, una por vez, para que la página no quede cargada:
 
 - **Una mutación que protege:** por qué la anemia falciforme es común donde había malaria. Tiene un mapa con capas (HbS, HbC, talasemias y HbE, con la malaria superpuesta) y el juego **Jugá a la evolución**: un pueblo de 100 personas donde se ve, generación a generación, cómo la malaria hace crecer a los portadores hasta un equilibrio (selección balanceada). Los valores del juego son ilustrativos.
-- **Animales con hemoglobinas especiales:** la llama, el ánsar indio, el mamut lanudo y el pez de hielo. Los cambios de la llama y del mamut son de una sola letra en el gen humano y se pueden probar en el simulador, que los reconoce.
+- **Jaguar y leopardo:** dos primos que viven en continentes distintos. Un mapa muestra dónde vive cada uno, el pelaje dibujado deja ver la diferencia de las rosetas y una tabla compara cuerpo, caza y ambiente. Termina con la **pantera negra**: en el jaguar se deben a 15 letras que faltan en el gen *MC1R* (dominante) y en el leopardo a una sola letra que crea un STOP en el gen *ASIP* (recesiva). El botón *Probá el STOP del leopardo* hace el mismo cambio (TGT → TGA) en la cisteína 93 de la hemoglobina, y el simulador lo reconoce.
+- **Animales récord:** un mapa con la llama, el ánsar indio, el mamut lanudo y el pez de hielo; al tocar cada uno se abre su tarjeta. Los cambios de la llama y del mamut son de una sola letra en el gen humano y se pueden probar en el simulador.
 
-Fuentes: Piel y col. 2010 (*Nature Communications*), Taylor y col. 2012 (*Lancet Infectious Diseases*), Weatherall y Clegg 2001 (*Bull. OMS*), OMS región africana 2010, Piccinini y col. 1990, Jessen y col. 1991 (*PNAS*), Campbell y col. 2010 (*Nature Genetics*) y Cocca y col. 1995 (*PNAS*). El mapa usa Natural Earth (dominio público) y es un esquema simplificado por país.
+Fuentes: Piel y col. 2010 (*Nature Communications*), Taylor y col. 2012 (*Lancet Infectious Diseases*), Weatherall y Clegg 2001 (*Bull. OMS*), OMS región africana 2010, Piccinini y col. 1990, Jessen y col. 1991 (*PNAS*), Campbell y col. 2010 (*Nature Genetics*) Cocca y col. 1995 (*PNAS*), Eizirik y col. 2003 (*Current Biology*) y Schneider y col. 2012 (*PLoS ONE*). El mapa usa Natural Earth (dominio público) y es un esquema simplificado por país.
 
 ## Estructura
 
