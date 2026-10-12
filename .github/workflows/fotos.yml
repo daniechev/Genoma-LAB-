@@ -9,6 +9,7 @@ on:
       - herramientas/fotos/buscar.json
       - herramientas/fotos/elegidas.json
       - herramientas/fotos/fotos.py
+      - .github/workflows/fotos.yml
 
 permissions:
   contents: write
