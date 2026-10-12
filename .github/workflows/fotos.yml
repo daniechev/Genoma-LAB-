@@ -1,0 +1,39 @@
+# Busca y baja fotos libres de Wikimedia Commons (el entorno de desarrollo no tiene acceso).
+# Se activa al cambiar la lista de búsqueda o la de fotos elegidas, y guarda el resultado en la misma rama.
+name: Fotos de Wikimedia Commons
+
+on:
+  push:
+    branches: ['claude/**']
+    paths:
+      - herramientas/fotos/buscar.json
+      - herramientas/fotos/elegidas.json
+      - herramientas/fotos/fotos.py
+
+permissions:
+  contents: write
+
+jobs:
+  fotos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow
+      - name: Buscar candidatas
+        if: ${{ !hashFiles('herramientas/fotos/elegidas.json') }}
+        run: python herramientas/fotos/fotos.py buscar
+      - name: Bajar las elegidas
+        if: ${{ hashFiles('herramientas/fotos/elegidas.json') }}
+        run: python herramientas/fotos/fotos.py bajar
+      - name: Guardar en la rama
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add herramientas/fotos img/fotos 2>/dev/null || true
+          git commit -m "Fotos de Wikimedia Commons (automático)" || echo "Sin cambios"
+          git push
