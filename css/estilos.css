@@ -3473,10 +3473,6 @@ svg.world .countries path {
   fill: #ffd447;
   font-weight: 700;
 }
-.tree-line {
-  stroke: #ffd44799;
-  stroke-width: 2;
-}
 .cat-dot .ring {
   fill: none;
   stroke: #fff;
@@ -3728,4 +3724,30 @@ svg.world .countries path {
   .siamese {
     grid-template-columns: 1fr;
   }
+}
+
+/* Árbol del antepasado (ojos celestes) */
+#eye-tree {
+  user-select: none;
+  pointer-events: none;
+}
+.tree-line {
+  fill: none;
+  stroke: url(#tree-ink);
+  stroke-linecap: round;
+}
+.tree-halo {
+  fill: #ffd4472e;
+  stroke: #ffd447;
+  stroke-width: 2.4;
+}
+.tree-label {
+  font-size: 15px;
+  font-weight: 800;
+  fill: #ffd447;
+}
+.tree-sub {
+  font-size: 11px;
+  font-weight: 600;
+  fill: #c2bdea;
 }

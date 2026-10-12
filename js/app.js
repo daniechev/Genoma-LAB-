@@ -1754,58 +1754,71 @@
   }
   const caption = (el, text) => el.textContent !== text && (el.textContent = text);
 
-  // Ojos celestes: zoom a un ojo marrón, el iris pasa a celeste y aparecen los parientes de un mismo antepasado.
+  // Ojos celestes: zoom a un ojo marrón, el iris pasa a celeste y aparece el árbol de un mismo antepasado.
   {
-    const tree = [
-      [200, 34],
-      [110, 108],
-      [200, 108],
-      [290, 108],
-      ...Array.from({ length: 9 }, (_, i) => [40 + i * 40, 188]),
-    ];
-    const parent = i => (i === 0 ? -1 : i < 4 ? 0 : 1 + Math.floor((i - 4) / 3)),
-      svg = $('eye-tree');
-    svg.innerHTML = `${tree
-      .map((p, i) =>
-        parent(i) < 0
-          ? ''
-          : `<line class="tree-line" x1="${tree[parent(i)][0]}" y1="${tree[parent(i)][1]}" x2="${p[0]}" y2="${p[1]}"/>`,
-      )
-      .join(
-        '',
-      )}${tree.map((p, i) => `<g class="tree-node" transform="translate(${p[0]} ${p[1]})">${i === 0 ? '<circle r="19" fill="none" stroke="#ffd447" stroke-width="2.5"/>' : ''}<circle r="14" fill="#f1c7a5"/><circle cx="-5" cy="-2" r="2.6" fill="#3f86c9"/><circle cx="5" cy="-2" r="2.6" fill="#3f86c9"/></g>`).join('')}<text x="232" y="38" class="anim-small">un antepasado</text>`;
+    // Árbol: un antepasado → 3 → 9 → 27 personas. Cada generación se abre en tres, como una familia que crece.
+    const levels = [
+        { y: 44, n: 1, size: 1.25 },
+        { y: 102, n: 3, size: 0.95 },
+        { y: 154, n: 9, size: 0.7 },
+        { y: 200, n: 27, size: 0.42 },
+      ],
+      tree = levels.flatMap((level, depth) =>
+        Array.from({ length: level.n }, (_, i) => ({
+          depth,
+          x: level.n === 1 ? 200 : 26 + ((i + 0.5) * 348) / level.n,
+          y: level.y,
+          size: level.size,
+          parent: depth
+            ? levels.slice(0, depth - 1).reduce((sum, l) => sum + l.n, 0) + Math.floor(i / 3)
+            : -1,
+        })),
+      );
+    const person = (t, i) =>
+      `<g class="tree-node" transform="translate(${t.x.toFixed(1)} ${t.y}) scale(${t.size})">${i === 0 ? '<circle class="tree-halo" r="20"/>' : ''}<path d="M-13 15c0-8 6-12 13-12s13 4 13 12Z" fill="#c9b8ff"/><circle cy="-6" r="9" fill="#f1c7a5"/>${t.size > 0.6 ? '<circle cx="-3.4" cy="-6.5" r="1.7" fill="#3f86c9"/><circle cx="3.4" cy="-6.5" r="1.7" fill="#3f86c9"/>' : ''}</g>`;
+    const branch = t => {
+      const p = tree[t.parent],
+        y1 = p.y + 15 * p.size,
+        y2 = t.y - 16 * t.size,
+        mid = ((y1 + y2) / 2).toFixed(1);
+      return `<path class="tree-line" style="stroke-width:${(2.6 * t.size + 0.4).toFixed(2)}" d="M${p.x.toFixed(1)} ${y1.toFixed(1)}C${p.x.toFixed(1)} ${mid} ${t.x.toFixed(1)} ${mid} ${t.x.toFixed(1)} ${y2.toFixed(1)}"/>`;
+    };
+    const svg = $('eye-tree'),
+      children = tree.filter(t => t.parent >= 0);
+    svg.innerHTML = `<defs><linearGradient id="tree-ink" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd447"/><stop offset="1" stop-color="#4fd8ff"/></linearGradient><radialGradient id="tree-shade"><stop offset="0" stop-color="#0e0b24" stop-opacity=".5"/><stop offset="1" stop-color="#0e0b24" stop-opacity=".9"/></radialGradient></defs><rect width="400" height="240" fill="url(#tree-shade)"/>${children.map(branch).join('')}${tree.map(person).join('')}<text x="238" y="40" class="tree-label">un antepasado</text><text x="238" y="55" class="tree-sub">hace 6.000–10.000 años</text><text x="200" y="232" text-anchor="middle" class="tree-sub">hoy: millones de personas con la misma letra</text>`;
     const [brown, blue] = svg.parentElement.querySelectorAll('.eye-photo'),
       letter = $('eye-letter'),
       lines = [...svg.querySelectorAll('.tree-line')],
       nodes = [...svg.querySelectorAll('.tree-node')],
-      label = svg.querySelector('.anim-small'),
+      labels = [...svg.querySelectorAll('text')],
       text = $('eye-caption');
-    lines.forEach(l => {
-      const n = Math.hypot(
-        l.x2.baseVal.value - l.x1.baseVal.value,
-        l.y2.baseVal.value - l.y1.baseVal.value,
-      );
-      l.style.strokeDasharray = n;
-      l.dataset.n = n;
+    // Cada generación aparece un poco después que la anterior.
+    lines.forEach((l, i) => {
+      l.dataset.n = l.getTotalLength();
+      l.dataset.start = 0.74 + (children[i].depth - 1) * 0.05;
+      l.style.strokeDasharray = l.dataset.n;
     });
+    nodes.forEach((n, i) => (n.dataset.start = 0.72 + tree[i].depth * 0.05));
     animation(svg.closest('.anim'), 10000, t => {
       const zoom = lerp(1, 1.7, ease(seg(t, 0.04, 0.3)) * (1 - ease(seg(t, 0.6, 0.72)))),
         toBlue = ease(seg(t, 0.38, 0.55)),
-        tree = seg(t, 0.7, 0.78);
+        shade = seg(t, 0.68, 0.76);
       for (const photo of [brown, blue]) photo.style.transform = `scale(${zoom.toFixed(3)})`;
       blue.style.opacity = toBlue.toFixed(3);
-      brown.style.opacity = (1 - tree).toFixed(3);
-      blue.style.filter = `brightness(${lerp(1, 0.25, tree).toFixed(2)})`;
+      brown.style.opacity = (1 - shade).toFixed(3);
       letter.style.opacity = (seg(t, 0.32, 0.38) * (1 - seg(t, 0.62, 0.68))).toFixed(3);
-      svg.style.opacity = tree.toFixed(3);
-      lines.forEach((l, i) => {
-        const k = seg(t, 0.76 + i * 0.012, 0.84 + i * 0.012);
+      svg.style.opacity = shade.toFixed(3);
+      lines.forEach(l => {
+        const k = ease(seg(t, +l.dataset.start, +l.dataset.start + 0.06));
         l.style.strokeDashoffset = (l.dataset.n * (1 - k)).toFixed(1);
       });
-      nodes.forEach(
-        (n, i) => (n.style.opacity = seg(t, 0.74 + i * 0.016, 0.8 + i * 0.016).toFixed(3)),
+      nodes.forEach(n => {
+        const k = seg(t, +n.dataset.start, +n.dataset.start + 0.04);
+        n.style.opacity = k.toFixed(3);
+      });
+      labels.forEach(
+        (l, i) => (l.style.opacity = seg(t, i < 2 ? 0.74 : 0.92, i < 2 ? 0.78 : 0.96).toFixed(3)),
       );
-      label.style.opacity = seg(t, 0.76, 0.82).toFixed(3);
       caption(
         text,
         t < 0.32
