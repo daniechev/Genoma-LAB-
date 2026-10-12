@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Una historia guiada en seis escenas: cambiá una letra del ADN de la hemoglobina y descubrí qué pasa.">
+<meta name="theme-color" content="#0e0b24"><title>Una letra · Historia guiada</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230e0b24'/%3E%3Cpath d='M9 5c0 11 14 11 14 22M23 5C23 16 9 16 9 27M10 8h12M11 24h10M13 13h6M13 19h6' stroke='%235ef2b0' fill='none' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="css/historia.css">
+</head>
+<body>
+<svg class="svg-defs" width="0" height="0" aria-hidden="true"><defs><radialGradient id="rbc" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#ff8a8a"/><stop offset=".55" stop-color="#e2384a"/><stop offset="1" stop-color="#a5172b"/></radialGradient></defs></svg>
+<header class="story-top">
+  <a class="story-brand" href="index.html" aria-label="Ir al inicio de la app">Una letra</a>
+  <ol class="progress" id="progress" aria-label="Escenas"></ol>
+  <a class="story-skip" href="index.html#simulador">Ir al simulador</a>
+</header>
+
+<main class="scenes" id="scenes">
+  <section class="scene" data-scene="1" aria-labelledby="t1">
+    <div class="scene-text">
+      <p class="kicker">1 · Tu sangre</p>
+      <h1 id="t1">Cada vez que respirás, tu sangre lleva oxígeno a todo el cuerpo.</h1>
+      <p>Lo transporta una proteína que está dentro de los glóbulos rojos: la <b>hemoglobina</b>.</p>
+    </div>
+    <div class="scene-art blood" id="blood" aria-hidden="true"></div>
+  </section>
+
+  <section class="scene" data-scene="2" aria-labelledby="t2" hidden>
+    <div class="scene-text">
+      <p class="kicker">2 · La receta</p>
+      <h1 id="t2">Su receta está escrita con solo cuatro letras.</h1>
+      <p>Es un tramo de ADN de <b>444 letras</b>. La célula lo lee de a tres: cada grupo, el <b>codón</b>, le dice qué pieza poner.</p>
+      <p class="muted" id="dna-hint">Así empieza la receta de la hemoglobina.</p>
+    </div>
+    <div class="scene-art" aria-hidden="true"><div class="dna" id="dna"></div></div>
+  </section>
+
+  <section class="scene" data-scene="3" aria-labelledby="t3" hidden>
+    <div class="scene-text">
+      <p class="kicker">3 · Cambiala vos</p>
+      <h1 id="t3">Tocá la <span class="letter-a">A</span> y cambiala por una <span class="letter-t">T</span>.</h1>
+      <p id="change-text">Es el codón 7: <b>GAG</b>. Le dice a la célula que ponga un <b>glutamato</b> en la pieza 6.</p>
+    </div>
+    <div class="scene-art change">
+      <div class="codon-big" role="group" aria-label="Codón 7">
+        <span class="tile g">G</span><button class="tile a pulse" id="tap-a" aria-label="Cambiar la letra A" aria-expanded="false">A</button><span class="tile g">G</span>
+      </div>
+      <p class="piece" id="piece">pieza 6 · <b>Glu</b> glutamato</p>
+      <div class="choices" id="choices" hidden><span>Cambiala por</span><button class="tile t" data-base="T">T</button><button class="tile c" data-base="C">C</button><button class="tile g" data-base="G">G</button></div>
+      <div class="cell-swap" id="cell-swap" aria-hidden="true">
+        <svg viewBox="0 0 200 120">
+          <g class="round"><ellipse cx="100" cy="60" rx="52" ry="46" fill="url(#rbc)"/><ellipse cx="100" cy="60" rx="24" ry="20" fill="#9b1426" opacity=".45"/></g>
+          <g class="sickle"><path d="M28 86C34 40 92 12 160 26c10 2 16 10 6 12-48-6-92 14-116 52-8 12-24 10-22-4Z" fill="url(#rbc)"/></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" data-scene="4" aria-labelledby="t4" hidden>
+    <div class="scene-text">
+      <p class="kicker">4 · ¿Por qué sigue existiendo?</p>
+      <h1 id="t4">Esa misma letra protege contra la malaria.</h1>
+      <p>Cada persona tiene dos copias del gen, una de su mamá y otra de su papá.</p>
+      <ul class="copies">
+        <li><b>Ninguna copia</b> sin anemia, pero sin protección.</li>
+        <li class="best"><b>Una copia</b> casi sin síntomas y muy protegido contra la malaria.</li>
+        <li><b>Dos copias</b> anemia falciforme.</li>
+      </ul>
+      <p class="muted">Por eso, donde había malaria, la letra se volvió común.</p>
+    </div>
+    <figure class="scene-art map-art">
+      <svg id="map" class="map" role="img" aria-label="Mapa de África y el sur de Asia: las zonas con malaria coinciden con las zonas donde la anemia falciforme es frecuente."></svg>
+      <figcaption class="legend"><span class="key malaria">había malaria</span><span class="key hbs">la letra es común</span></figcaption>
+    </figure>
+  </section>
+
+  <section class="scene" data-scene="5" aria-labelledby="t5" hidden>
+    <div class="scene-text">
+      <p class="kicker">5 · No solo en las personas</p>
+      <h1 id="t5">Una letra también cambió animales y colores de ojos.</h1>
+      <p>Los mismos tipos de cambio aparecen en toda la naturaleza. Tocá una foto para ver su historia.</p>
+    </div>
+    <div class="scene-art photos">
+      <a class="photo-card" href="index.html#naturaleza:felinos:3"><img src="img/fotos/leopardo-negro.webp" alt="Leopardo negro caminando entre hojas secas"><b>Leopardo negro</b><span>Una letra creó un STOP y apagó el freno del pigmento negro.</span></a>
+      <a class="photo-card" href="index.html#naturaleza:personas:1"><img src="img/fotos/ojo-celeste.webp" alt="Ojo celeste de cerca"><b>Ojos celestes</b><span>Una letra heredada de un antepasado de hace 6.000 a 10.000 años.</span></a>
+    </div>
+  </section>
+
+  <section class="scene" data-scene="6" aria-labelledby="t6" hidden>
+    <div class="scene-text">
+      <p class="kicker">6 · Ahora vos</p>
+      <h1 id="t6">¿Qué pasa si cambiás otra letra?</h1>
+      <p>Una sola letra puede no cambiar nada, cambiar una pieza o cortar toda la proteína. Depende de <b>dónde</b> cae y de <b>qué tipo</b> de cambio es.</p>
+      <div class="final-actions"><a class="primary" href="index.html#simulador">Abrir el simulador <span aria-hidden="true">→</span></a><a class="ghost" href="index.html#naturaleza">Más historias</a><button class="text-button" id="restart">Volver a empezar</button></div>
+    </div>
+    <div class="scene-art outcomes" aria-hidden="true">
+      <div class="outcome"><span>No cambia nada</span><i class="bar"></i></div>
+      <div class="outcome"><span>Cambia una pieza</span><i class="bar one"></i></div>
+      <div class="outcome"><span>Se corta</span><i class="bar cut"></i></div>
+    </div>
+  </section>
+</main>
+
+<nav class="story-controls" aria-label="Avanzar en la historia">
+  <button class="round" id="back" aria-label="Escena anterior">←</button>
+  <button class="primary" id="next">Seguir <span aria-hidden="true">→</span></button>
+</nav>
+
+<script src="js/datos-mapa.js"></script>
+<script src="js/historia.js"></script>
+</body>
+</html>

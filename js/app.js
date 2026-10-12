@@ -2131,6 +2131,10 @@
   renderAnimalsMap();
   renderEvolution();
   if (location.hash === '#jurado') startTour();
+  // Enlaces desde la historia guiada: index.html#simulador o index.html#naturaleza:felinos:3.
+  const startAt = decodeURIComponent(location.hash.slice(1));
+  if (startAt === 'simulador') goTo('lab');
+  else if (startAt.startsWith('naturaleza')) goTo(startAt);
 
   // ---- Sin internet: guarda una copia de la app en el dispositivo (solo funciona publicada en la web) ----
   if (

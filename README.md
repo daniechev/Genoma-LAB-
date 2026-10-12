@@ -61,6 +61,10 @@ Hay animaciones cortas solo donde explican algo: el ribosoma del resultado, los 
 
 Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la metionina inicial, como en la literatura científica.
 
+### Historia guiada (prototipo)
+
+`historia.html` cuenta el proyecto en seis escenas que se recorren con *Seguir*, las flechas del teclado o deslizando el dedo: la sangre lleva oxígeno, la receta de cuatro letras, **el visitante cambia él mismo la A del codón 7 por una T** (sin ese cambio no se puede seguir), el mapa de la malaria, la pantera negra y los ojos celestes, y al final el simulador libre. Con `historia.html?stand` avanza sola si nadie toca la pantalla, hace el cambio de letra por su cuenta y vuelve a empezar. Los enlaces a la app usan `index.html#simulador` y `index.html#naturaleza:felinos:3`.
+
 ### Inicio
 
 La app tiene tres pestañas: **Inicio**, **Simulador** y **Naturaleza**. En el Inicio están el título, el recorrido guiado y **Ir directo a**, con cuatro atajos (el simulador, los casos reales, tu nombre en proteína y las historias de la naturaleza). Debajo, plegados, **El proyecto** (el póster para el jurado: pregunta, hipótesis, método, resultados y conclusión) y **Cómo funciona** (cuatro ideas, notas para docentes y créditos de las fotos). **Resultados del stand** queda en el pie de página: es una herramienta para quienes atienden el stand.

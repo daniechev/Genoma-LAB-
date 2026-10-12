@@ -1,0 +1,228 @@
+// Historia guiada: seis escenas que se recorren con «Seguir», las flechas del teclado o deslizando el dedo.
+// En el modo stand (historia.html?stand) avanza sola si nadie toca la pantalla, y vuelve a empezar al final.
+(() => {
+  const $ = id => document.getElementById(id),
+    scenes = [...document.querySelectorAll('.scene')],
+    reduced = matchMedia('(prefers-reduced-motion: reduce)'),
+    stand = new URLSearchParams(location.search).has('stand');
+  let current = 0,
+    changed = false,
+    timers = [];
+
+  const later = (ms, fn) => timers.push(setTimeout(fn, reduced.matches ? 0 : ms));
+
+  // ---- Escena 1: glóbulos rojos que pasan ----
+  $('blood').innerHTML = Array.from({ length: 14 }, (_, i) => {
+    const size = 54 + ((i * 37) % 60);
+    return `<svg class="rbc" style="--y:${(i * 53) % 92}%;--s:${size}px;--d:${9 + ((i * 7) % 8)}s;--delay:-${(i * 1.7) % 12}s" viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="46" ry="40" fill="url(#rbc)"/><ellipse cx="50" cy="50" rx="20" ry="16" fill="#9b1426" opacity=".45"/></svg>`;
+  }).join('');
+
+  // ---- Escena 2: la receta se separa de a tres y aparecen las piezas ----
+  // Primeros 9 codones de HBB (los mismos de js/genetica.js). El codón 7 es el de la anemia falciforme.
+  const CODONS = [
+    ['ATG', 'Met'],
+    ['GTG', 'Val'],
+    ['CAT', 'His'],
+    ['CTG', 'Leu'],
+    ['ACT', 'Thr'],
+    ['CCT', 'Pro'],
+    ['GAG', 'Glu'],
+    ['GAG', 'Glu'],
+    ['AAG', 'Lys'],
+  ];
+  $('dna').innerHTML = CODONS.map(
+    ([codon, piece], i) =>
+      `<div class="codon${i === 6 ? ' seven' : ''}" style="--i:${i}"><div class="letters">${[
+        ...codon,
+      ]
+        .map((b, j) => `<span class="base ${b.toLowerCase()}" style="--j:${i * 3 + j}">${b}</span>`)
+        .join('')}</div><b class="aa">${piece}</b>${i === 6 ? '<small>codón 7</small>' : ''}</div>`,
+  ).join('');
+  function playDNA() {
+    const dna = $('dna');
+    dna.className = 'dna';
+    $('dna-hint').textContent = 'Así empieza la receta de la hemoglobina.';
+    later(1600, () => dna.classList.add('split'));
+    later(2600, () => dna.classList.add('read'));
+    later(4400, () => {
+      dna.classList.add('focus');
+      $('dna-hint').textContent =
+        'El codón 7 dice GAG: «poné un glutamato». Ahora lo vas a cambiar vos.';
+    });
+  }
+
+  // ---- Escena 3: el visitante cambia la letra ----
+  const RESULTS = {
+    T: {
+      codon: 'GTG',
+      piece: '<b>Val</b> valina',
+      text: 'Fue <b>una letra de 444</b>, y la pieza 6 pasó de glutamato a <b>valina</b>. Esa hemoglobina se pega formando fibras y el glóbulo rojo se deforma: es la <b>anemia falciforme</b>.',
+      sickle: true,
+    },
+    C: {
+      codon: 'GCG',
+      piece: '<b>Ala</b> alanina',
+      text: 'Cambió la pieza 6: ahora es <b>alanina</b>. Pero ese no es el cambio de la enfermedad. Probá con la <b>T</b>.',
+    },
+    G: {
+      codon: 'GGG',
+      piece: '<b>Gly</b> glicina',
+      text: 'Cambió la pieza 6: ahora es <b>glicina</b>. Pero ese no es el cambio de la enfermedad. Probá con la <b>T</b>.',
+    },
+  };
+  function resetChange() {
+    changed = false;
+    const a = $('tap-a');
+    a.textContent = 'A';
+    a.className = 'tile a pulse';
+    a.setAttribute('aria-expanded', 'false');
+    $('choices').hidden = true;
+    $('piece').innerHTML = 'pieza 6 · <b>Glu</b> glutamato';
+    $('change-text').innerHTML =
+      'Es el codón 7: <b>GAG</b>. Le dice a la célula que ponga un <b>glutamato</b> en la pieza 6.';
+    $('cell-swap').classList.remove('sick');
+    $('t3').innerHTML =
+      'Tocá la <span class="letter-a">A</span> y cambiala por una <span class="letter-t">T</span>.';
+  }
+  $('tap-a').onclick = () => {
+    const open = $('choices').hidden;
+    $('choices').hidden = !open;
+    $('tap-a').setAttribute('aria-expanded', String(open));
+    $('tap-a').classList.remove('pulse');
+  };
+  function choose(base) {
+    const r = RESULTS[base],
+      a = $('tap-a');
+    a.textContent = base;
+    a.className = `tile ${base.toLowerCase()} changed`;
+    $('choices').hidden = true;
+    $('piece').innerHTML = `pieza 6 · ${r.piece}`;
+    $('change-text').innerHTML = r.text;
+    $('cell-swap').classList.toggle('sick', !!r.sickle);
+    changed = !!r.sickle;
+    if (!changed) a.classList.add('pulse');
+    else $('t3').textContent = '¡Cambiaste una sola letra!';
+    updateControls();
+  }
+  document.querySelectorAll('[data-base]').forEach(b => (b.onclick = () => choose(b.dataset.base)));
+
+  // ---- Escena 4: mapa de la malaria y la letra ----
+  // Mismos países que el mapa de Naturaleza en js/app.js (códigos ISO 3166 numéricos).
+  const HBS = new Set(
+      '686 270 624 324 694 430 384 466 854 288 768 204 562 566 120 148 140 729 728 226 266 178 180 024 800 404 834 646 108 894 454 508 682 512 887 356'.split(
+        ' ',
+      ),
+    ),
+    MALARIA = new Set([
+      ...HBS,
+      ...'231 706 232 450 716 516 072 478 262 586 050 104 764 418 116 704 458 360 608 144 598 626 380 300 196 792 364 368 760 422 400 818 788 012 504 724 620'.split(
+        ' ',
+      ),
+    ]);
+  const map = $('map');
+  map.setAttribute('viewBox', '400 100 380 300');
+  map.innerHTML = `<defs><pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2.6" height="7" fill="#ff5d6c"/></pattern></defs>${WORLD_MAP.countries
+    .map(c => `<path class="land${HBS.has(c.id) ? ' hbs' : ''}" d="${c.d}"/>`)
+    .join('')}<g class="malaria">${WORLD_MAP.countries
+    .filter(c => MALARIA.has(c.id))
+    .map(c => `<path d="${c.d}"/>`)
+    .join('')}</g>`;
+  function playMap() {
+    map.classList.remove('show-malaria', 'show-hbs');
+    later(500, () => map.classList.add('show-malaria'));
+    later(2000, () => map.classList.add('show-hbs'));
+  }
+
+  // ---- Navegación ----
+  $('progress').innerHTML = scenes
+    .map((_, i) => `<li><button data-go="${i}" aria-label="Escena ${i + 1}"></button></li>`)
+    .join('');
+  document
+    .querySelectorAll('[data-go]')
+    .forEach(b => (b.onclick = () => show(Number(b.dataset.go))));
+
+  function updateControls() {
+    const last = current === scenes.length - 1,
+      blocked = current === 2 && !changed;
+    $('back').disabled = current === 0;
+    $('next').hidden = last;
+    $('next').disabled = blocked;
+    $('next').innerHTML = blocked
+      ? 'Cambiá la letra para seguir'
+      : 'Seguir <span aria-hidden="true">→</span>';
+    document.querySelectorAll('[data-go]').forEach((b, i) => {
+      b.classList.toggle('done', i < current);
+      b.classList.toggle('active', i === current);
+      if (i === current) b.setAttribute('aria-current', 'step');
+      else b.removeAttribute('aria-current');
+    });
+  }
+  function show(n) {
+    n = Math.max(0, Math.min(scenes.length - 1, n));
+    timers.forEach(clearTimeout);
+    timers = [];
+    current = n;
+    scenes.forEach((s, i) => (s.hidden = i !== n));
+    if (n === 1) playDNA();
+    if (n === 2 && !changed) resetChange();
+    if (n === 3) playMap();
+    history.replaceState(null, '', `#${n + 1}`);
+    updateControls();
+    scenes[n].querySelector('h1').focus({ preventScroll: true });
+    window.scrollTo({ top: 0 });
+  }
+  const next = () => !$('next').disabled && show(current + 1),
+    back = () => show(current - 1);
+  $('next').onclick = next;
+  $('back').onclick = back;
+  $('restart').onclick = () => {
+    changed = false;
+    show(0);
+  };
+  scenes.forEach(s => s.querySelector('h1').setAttribute('tabindex', '-1'));
+
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('button, a') && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault();
+      next();
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') back();
+  });
+  // Deslizar a la izquierda avanza; a la derecha, vuelve.
+  let startX = null,
+    startY = 0;
+  document.addEventListener('pointerdown', e => {
+    startX = e.clientX;
+    startY = e.clientY;
+  });
+  document.addEventListener('pointerup', e => {
+    if (startX === null) return;
+    const dx = e.clientX - startX,
+      dy = e.clientY - startY;
+    startX = null;
+    if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5) (dx < 0 ? next : back)();
+  });
+
+  // Modo stand: si nadie toca durante 12 segundos, sigue sola; en la escena 3 hace ella misma el cambio.
+  if (stand) {
+    let idle = 0;
+    ['pointerdown', 'keydown'].forEach(t => document.addEventListener(t, () => (idle = 0), true));
+    setInterval(() => {
+      idle += 1;
+      if (current === 2 && !changed && idle >= 4) {
+        $('tap-a').click();
+        setTimeout(() => choose('T'), 900);
+      } else if (idle >= 12) {
+        idle = 0;
+        if (current === scenes.length - 1) {
+          changed = false;
+          show(0);
+        } else next();
+      }
+    }, 1000);
+  }
+
+  const start = Number(location.hash.slice(1)) - 1;
+  show(start >= 0 && start < 3 ? start : 0);
+})();

@@ -1,11 +1,14 @@
 // Guarda una copia de la app en el celular la primera vez que se abre,
 // para que siga funcionando aunque se corte el wifi de la feria.
 // Si cambia algún archivo, la copia se actualiza sola en la visita siguiente.
-const CACHE = 'genomalab-v6';
+const CACHE = 'genomalab-v7';
 const ARCHIVOS = [
   './',
   'index.html',
   'cartel.html',
+  'historia.html',
+  'css/historia.css',
+  'js/historia.js',
   'manifest.webmanifest',
   'css/estilos.css',
   'js/datos-modelos.js',

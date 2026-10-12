@@ -28,7 +28,7 @@ test('la copia sin internet incluye todos los archivos que usa la página', () =
   );
   const manifest = JSON.parse(fs.readFileSync(path.join(root, 'manifest.webmanifest'), 'utf8'));
   const used = [
-    ...['index.html', 'cartel.html'].flatMap(page =>
+    ...['index.html', 'cartel.html', 'historia.html'].flatMap(page =>
       [...fs.readFileSync(path.join(root, page), 'utf8').matchAll(/(?:src|href)="([^"#:]+)"/g)].map(
         m => m[1],
       ),
@@ -39,6 +39,6 @@ test('la copia sin internet incluye todos los archivos que usa la página', () =
   for (const file of saved.filter(f => f !== './'))
     assert.ok(fs.existsSync(path.join(root, file)), `${file} está en sw.js pero no existe`);
   const pages = fs.readFileSync(path.join(root, '.github', 'workflows', 'pages.yml'), 'utf8');
-  for (const file of ['sw.js', 'manifest.webmanifest'])
+  for (const file of ['sw.js', 'manifest.webmanifest', 'historia.html'])
     assert.match(pages, new RegExp(file.replace('.', '\\.')), `pages.yml debe publicar ${file}`);
 });
