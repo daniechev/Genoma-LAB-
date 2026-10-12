@@ -18,10 +18,10 @@ Descargá el repositorio y abrí `index.html` en el navegador. No hace falta ins
 
 ### Publicarla en internet (GitHub Pages)
 
-El QR apunta a **https://daniechev.github.io/Genoma-LAB-/**. Para que esa dirección funcione hay que hacer dos cosas una sola vez:
+El QR apunta a **https://daniechev.github.io/Genoma-LAB-/**. Para que esa dirección funcione, la cuenta dueña del proyecto tiene que hacer esto una sola vez:
 
-1. En GitHub, ir a **Settings → Pages** y en **Source** elegir **GitHub Actions**.
-2. Llevar los cambios a la rama `main`. Cada vez que `main` cambia, el workflow `Publicar en GitHub Pages` corre las pruebas y, si pasan, publica la página.
+1. En GitHub, ir a **Settings → Pages**.
+2. En **Source**, elegir **GitHub Actions**. Desde ahí, cada vez que cambia la rama principal (`nuevo-main`), el workflow `Publicar en GitHub Pages` corre las pruebas y, si pasan, publica la página. También sirve **Deploy from a branch** con `nuevo-main` y la carpeta **/ (root)**, pero así se publica sin pasar por las pruebas.
 
 Si la dirección cambia, hay que generar un QR nuevo y reemplazar `img/qr-sitio.svg`.
 

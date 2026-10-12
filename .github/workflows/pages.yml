@@ -1,11 +1,11 @@
-# Publica la página en GitHub Pages cada vez que se actualiza main,
+# Publica la página en GitHub Pages cada vez que se actualiza nuevo-main,
 # solo si pasan las pruebas automáticas.
 # Dirección: https://daniechev.github.io/Genoma-LAB-/
 name: Publicar en GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [nuevo-main]
   workflow_dispatch:
 
 permissions:
