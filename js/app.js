@@ -1784,7 +1784,7 @@
   }
   const caption = (el, text) => el.textContent !== text && (el.textContent = text);
 
-  // Ojos celestes: zoom a un ojo marrón, el iris pasa a celeste y aparece el árbol de un mismo antepasado.
+  // Ojos azules: zoom a un ojo marrón, el iris pasa a azul y aparece el árbol de un mismo antepasado.
   {
     // Árbol: un antepasado → 3 → 9 → 27 personas. Cada generación se abre en tres, como una familia que crece.
     const levels = [
@@ -1854,8 +1854,8 @@
         t < 0.32
           ? 'Mirá este ojo de cerca…'
           : t < 0.6
-            ? 'En el gen HERC2, una A cambió por una G: el interruptor baja y el iris fabrica menos pigmento. Se ve celeste.'
-            : 'Casi todas las personas de ojos celestes heredaron esa letra de un mismo antepasado: son parientes lejanas.',
+            ? 'En el gen HERC2, una A cambió por una G: el interruptor baja y el iris fabrica menos pigmento. Se ve azul.'
+            : 'Casi todas las personas de ojos azules heredaron esa letra de un mismo antepasado: son parientes lejanas.',
       );
     });
   }
@@ -1953,13 +1953,13 @@
     });
   }
 
-  // Ojos celestes: una pregunta rápida para el público.
+  // Ojos azules: una pregunta rápida para el público.
   const EYE_ANSWERS = {
-    blue: 'Entonces seguramente tenés esta letra en tus dos copias del gen. La heredaste de aquel antepasado de hace miles de años: ¡todas las personas de ojos celestes que pasan por el stand son parientes lejanas!',
+    blue: 'Entonces seguramente tenés esta letra en tus dos copias del gen. La heredaste de aquel antepasado de hace miles de años: ¡todas las personas de ojos azules que pasan por el stand son parientes lejanas!',
     green:
-      'Los ojos verdes tienen poco pigmento, pero un poco más que los celestes. Suelen combinar esta letra con cambios en otros genes.',
+      'Los ojos verdes tienen poco pigmento, pero un poco más que los azules. Suelen combinar esta letra con cambios en otros genes.',
     brown:
-      'Tu interruptor probablemente está en la versión original, que fabrica mucho pigmento. Es la más común del mundo: la de los ojos celestes apareció mucho después.',
+      'Tu interruptor probablemente está en la versión original, que fabrica mucho pigmento. Es la más común del mundo: la de los ojos azules apareció mucho después.',
   };
   all('[data-eyes]').forEach(
     b =>

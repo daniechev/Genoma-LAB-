@@ -61,7 +61,7 @@ Al ver el resultado, la barra *Tu proteína* se arma de izquierda a derecha mien
 
 ### Animaciones
 
-Hay animaciones cortas solo donde explican algo: el ribosoma del resultado, los **ojos celestes** (zoom al ojo, el iris pasa de marrón a celeste con la letra A → G y aparece el árbol de parientes), el **guepardo rey** (las manchas se juntan en rayas) y el **cuello de botella** de los guepardos (muchas variantes, quedan unos pocos y vuelven a crecer casi iguales). Arrancan solas la primera vez que se ven, se repiten con ↺ y, si el dispositivo pide reducir el movimiento, muestran directamente el cuadro final.
+Hay animaciones cortas solo donde explican algo: el ribosoma del resultado, los **ojos azules** (zoom al ojo, el iris pasa de marrón a azul con la letra A → G y aparece el árbol de parientes), el **guepardo rey** (las manchas se juntan en rayas) y el **cuello de botella** de los guepardos (muchas variantes, quedan unos pocos y vuelven a crecer casi iguales). Arrancan solas la primera vez que se ven, se repiten con ↺ y, si el dispositivo pide reducir el movimiento, muestran directamente el cuadro final.
 
 Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la metionina inicial, como en la literatura científica.
 
@@ -73,7 +73,7 @@ Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la 
 2. **La receta:** las cuatro letras, la lectura de a tres (codones), las piezas, el collar de 146 piezas y el codón 7.
 3. **Cambiala vos:** el visitante cambia la A del codón 7 por una T (sin ese cambio no se puede seguir). Después: la valina, las fibras y el glóbulo en forma de hoz.
 4. **¿Por qué no desapareció?:** dónde es común la letra, la malaria, las dos copias y la selección natural.
-5. **No solo en la sangre:** el leopardo negro y los ojos celestes, con enlaces a sus historias completas.
+5. **No solo en la sangre:** el leopardo negro y los ojos azules, con enlaces a sus historias completas.
 6. **Ahora vos:** los tres resultados posibles y el simulador libre.
 
 Entre escenas, las *View Transitions* del navegador conectan los dibujos: se entra en el glóbulo y aparece el ADN, el codón 7 crece hasta el codón grande, y la T que cambió el visitante viaja al mapa, a la foto del leopardo y a la barra final. Donde el navegador no las tiene, o con movimiento reducido, la escena cambia directo. El fondo toma un color distinto en cada escena.
@@ -86,14 +86,14 @@ Con `index.html?stand` avanza sola si nadie toca la pantalla, hace el cambio de 
 
 ### Naturaleza
 
-La pestaña **Naturaleza** tiene seis historias, elegidas porque muestran bien «una letra que cambia»: malaria, pantera negra, guepardo rey, gato siamés, llama y ojos celestes. Arriba hay un índice para ir directo a cada una; al final de cada historia, *Siguiente* lleva a la próxima.
+La pestaña **Naturaleza** tiene seis historias, elegidas porque muestran bien «una letra que cambia»: malaria, pantera negra, guepardo rey, gato siamés, llama y ojos azules. Arriba hay un índice para ir directo a cada una; al final de cada historia, *Siguiente* lleva a la próxima.
 
 Hay otras historias escritas que quedaron ocultas para que la página no esté cargada (el mapa y las diferencias del jaguar y el leopardo, el ánsar indio, el mamut, el pez de hielo, los pelirrojos y los tibetanos). Siguen en `laboratorio.html` con el atributo `data-oculto`: para volver a mostrar una, se borra ese atributo. Los enlaces que llevan a una historia oculta se esconden solos.
 
 - **Una mutación que protege:** por qué la anemia falciforme es común donde había malaria. Tiene un mapa con capas (HbS, HbC, talasemias y HbE, con la malaria superpuesta) y el juego **Jugá a la evolución**: un pueblo de 100 personas donde se ve, generación a generación, cómo la malaria hace crecer a los portadores hasta un equilibrio (selección balanceada). Los valores del juego son ilustrativos.
 - **Felinos:** en cinco pasos. Primero el **jaguar y el leopardo**, dos primos que viven en continentes distintos. Un mapa muestra dónde vive cada uno, el pelaje dibujado deja ver la diferencia de las rosetas y una tabla compara cuerpo, caza y ambiente. Termina con la **pantera negra**: en el jaguar se deben a 15 letras que faltan en el gen *MC1R* (dominante) y en el leopardo a una sola letra que crea un STOP en el gen *ASIP* (recesiva). El botón *Probá el STOP del leopardo* hace el mismo cambio (TGT → TGA) en la cisteína 93 de la hemoglobina, y el simulador lo reconoce. Sigue el **guepardo rey**, con rayas en vez de manchas por una letra de más en el gen *Taqpep* (recesiva); el botón *Probá la letra del guepardo rey* agrega una A después de la letra 417 de HBB, la lectura se corre y no aparece el STOP. Ahí también está el dato de que todos los guepardos son casi gemelos (14 de 14 injertos de piel aceptados). Cierra el **gato siamés**, con un dibujo que se oscurece según la temperatura que elija el visitante (tirosinasa que solo funciona con frío).
 - **Animales récord:** un mapa con la llama, el ánsar indio, el mamut lanudo y el pez de hielo; al tocar cada uno se abre su tarjeta. Los cambios de la llama y del mamut son de una sola letra en el gen humano y se pueden probar en el simulador.
-- **En las personas:** **ojos celestes** (una letra en el interruptor *HERC2*, heredada de un antepasado común; con una pregunta para el público), **pelirrojos** (*MC1R*, el mismo gen del jaguar negro, pero apagado en vez de prendido) y **tibetanos** (una variante de *EPAS1* heredada de los denisovanos, que evita fabricar hemoglobina de más en la altura).
+- **En las personas:** **ojos azules** (una letra en el interruptor *HERC2*, heredada de un antepasado común; con una pregunta para el público), **pelirrojos** (*MC1R*, el mismo gen del jaguar negro, pero apagado en vez de prendido) y **tibetanos** (una variante de *EPAS1* heredada de los denisovanos, que evita fabricar hemoglobina de más en la altura).
 
 Fuentes: Piel y col. 2010 (*Nature Communications*), Taylor y col. 2012 (*Lancet Infectious Diseases*), Weatherall y Clegg 2001 (*Bull. OMS*), OMS región africana 2010, Piccinini y col. 1990, Jessen y col. 1991 (*PNAS*), Campbell y col. 2010 (*Nature Genetics*) Cocca y col. 1995 (*PNAS*), Eizirik y col. 2003 (*Current Biology*), Schneider y col. 2012 (*PLoS ONE*), Kaelin y col. 2012 (*Science*), O'Brien y col. 1985 (*Science*), Menotti-Raymond y O'Brien 1993, Lyons y col. 2005, Schmidt-Küntzel y col. 2005, Eiberg y col. 2008 (*Human Genetics*), Valverde y col. 1995 (*Nature Genetics*) y Huerta-Sánchez y col. 2014 (*Nature*). El mapa usa Natural Earth (dominio público) y es un esquema simplificado por país.
 

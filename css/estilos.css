@@ -3721,7 +3721,7 @@ svg.world .countries path {
   }
 }
 
-/* Árbol del antepasado (ojos celestes) */
+/* Árbol del antepasado (ojos azules) */
 #eye-tree {
   user-select: none;
   pointer-events: none;
@@ -4118,7 +4118,7 @@ body::after {
   }
 }
 
-/* Ojos celestes: en pantalla ancha, el texto a la izquierda y la animación a la derecha. */
+/* Ojos azules: en pantalla ancha, el texto a la izquierda y la animación a la derecha. */
 @media (min-width: 901px) {
   #chapter-personas .step[data-step='1'] {
     display: grid;

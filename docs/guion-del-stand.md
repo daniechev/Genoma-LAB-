@@ -44,9 +44,9 @@ Si el visitante es chico o le gustan los animales, abrí **Naturaleza → Panter
 
 > «Este guepardo con rayas parecía otra especie, pero tiene **una letra de más**. Y el siamés: mové la temperatura y mirá cómo se oscurecen las partes frías.»
 
-Para las familias, **Naturaleza → Ojos celestes** engancha enseguida:
+Para las familias, **Naturaleza → Ojos azules** engancha enseguida:
 
-> «¿Tenés ojos celestes? Entonces seguramente tenés esta letra cambiada, la misma que heredaron casi todas las personas de ojos celestes de un antepasado de hace miles de años: **son todos parientes lejanos**.»
+> «¿Tenés ojos azules? Entonces seguramente tenés esta letra cambiada, la misma que heredaron casi todas las personas de ojos azules de un antepasado de hace miles de años: **son todos parientes lejanos**.»
 
 Con chicos, el botón **Tu nombre** del simulador escribe su nombre con piezas de proteína (¡y explica por qué la J o la O no existen!).
 
@@ -67,7 +67,7 @@ Con chicos, el botón **Tu nombre** del simulador escribe su nombre con piezas d
 | Mutación recesiva (leopardo negro) | Un auto con dos frenos: si uno se rompe, el otro alcanza |
 | Guepardos casi gemelos | Aceptan la piel de otro guepardo como si fuera la de su gemelo |
 | Gato siamés | Una pintura que solo se seca con frío: las puntas del cuerpo se oscurecen |
-| Ojos celestes (*HERC2*) | Bajar la perilla de una luz: no cambia la receta, cambia cuánto se fabrica |
+| Ojos azules (*HERC2*) | Bajar la perilla de una luz: no cambia la receta, cambia cuánto se fabrica |
 | Pelirrojos y jaguar negro (*MC1R*) | El mismo interruptor: en el jaguar quedó trabado prendido; en los pelirrojos, apagado |
 
 ## Preguntas que suele hacer el jurado
