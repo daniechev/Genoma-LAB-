@@ -60,7 +60,8 @@
       text: 'Cambió la pieza 6: ahora es <b>glicina</b>. Pero ese no es el cambio de la enfermedad. Probá con la <b>T</b>.',
     },
   };
-  const START_TEXT = 'El codón 7, <b>GAG</b>, pone un <b>glutamato</b> en la pieza 6.';
+  const START_TEXT =
+    'El codón 7, <b>GAG</b>, pone un <b>glutamato</b> en la pieza 6: el aminoácido que se lleva bien con el agua.';
   function resetChange() {
     changed = false;
     const a = $('tap-a');
