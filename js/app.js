@@ -1448,4 +1448,19 @@
   renderMap();
   renderEvolution();
   if (location.hash === '#jurado') startTour();
+
+  // ---- Sin internet: guarda una copia de la app en el dispositivo (solo funciona publicada en la web) ----
+  if (
+    'serviceWorker' in navigator &&
+    (location.protocol === 'https:' || location.hostname === 'localhost')
+  ) {
+    const firstTime = !navigator.serviceWorker.controller;
+    navigator.serviceWorker
+      .register('sw.js')
+      .then(registration => navigator.serviceWorker.ready.then(() => registration))
+      .then(() => {
+        if (firstTime) notify('Listo: la app ya funciona aunque no tengas internet.');
+      })
+      .catch(() => {});
+  }
 })();

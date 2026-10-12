@@ -13,6 +13,7 @@ Descargá el repositorio y abrí `index.html` en el navegador. No hace falta ins
 - **Modo stand:** en **Resultados del stand**, activá *Modo stand* (o abrí `index.html?stand`). Si nadie toca la pantalla durante 90 segundos, la app vuelve al simulador y muestra el recorrido guiado en bucle, sin sumar al contador. Un toque lo corta. Queda guardado en ese navegador.
 - **Cartel con QR:** `cartel.html` es un cartel A4 para imprimir con un código QR que abre la app en el celular de los visitantes.
 - **Tarjeta del descubrimiento:** después de cada resultado, *Guardar mi descubrimiento* arma una imagen con el cambio y su efecto, para descargarla, compartirla o sacarle una foto.
+- **Sin internet:** publicada en GitHub Pages, la app se guarda en el celular la primera vez que se abre (aparece el aviso *«Listo: la app ya funciona aunque no tengas internet»*). Después funciona aunque se corte el wifi, y se puede agregar a la pantalla de inicio como una app. Si se cambia un archivo, la copia se renueva sola en la visita siguiente; si se agrega un archivo nuevo, hay que sumarlo a la lista `ARCHIVOS` de `sw.js` (una prueba avisa si falta).
 - **Guion:** [`docs/guion-del-stand.md`](docs/guion-del-stand.md) tiene una explicación de un minuto con analogías y respuestas a las preguntas que suele hacer el jurado.
 
 ### Publicarla en internet (GitHub Pages)
@@ -64,6 +65,8 @@ Fuentes: Piel y col. 2010 (*Nature Communications*), Taylor y col. 2012 (*Lancet
 ```
 index.html              estructura de la página
 cartel.html             cartel A4 para imprimir, con el código QR
+sw.js                   copia de la app para usarla sin internet
+manifest.webmanifest    nombre e ícono para instalarla en el celular
 css/estilos.css         estilos
 js/datos-modelos.js     coordenadas 3D de la hemoglobina (PDB y AlphaFold)
 js/datos-mapa.js        mapa del mundo simplificado (Natural Earth)
@@ -71,7 +74,7 @@ js/genetica.js          ADN, código genético, casos reales y clasificación de
 js/visor-3d.js          visor 3D dibujado en canvas
 js/helice.js            hélice de ADN animada de la portada
 js/app.js               interfaz, póster, recorrido guiado, naturaleza, misiones, tarjeta, modo stand y contador
-img/qr-sitio.svg        código QR de la dirección pública
+img/                    código QR de la dirección pública e íconos de la app
 docs/                   guion para presentar en el stand
 tests/                  pruebas automáticas
 .github/workflows/      pruebas en cada cambio y publicación en GitHub Pages
@@ -94,7 +97,7 @@ Con [Node.js](https://nodejs.org) 18 o más reciente:
 node --test
 ```
 
-Las pruebas verifican los 64 codones contra el código genético estándar, la traducción del gen completo, cada tipo de mutación, los tres casos reales, el reparto de las 1.332 sustituciones que muestra el póster y que el póster diga cuántas pruebas hay. Conviene correrlas después de tocar `js/genetica.js`.
+Las pruebas verifican los 64 codones contra el código genético estándar, la traducción del gen completo, cada tipo de mutación, los tres casos reales, el reparto de las 1.332 sustituciones que muestra el póster que el póster diga cuántas pruebas hay y que la copia sin internet incluya todos los archivos. Conviene correrlas después de tocar `js/genetica.js`.
 
 El código se ordena con [Prettier](https://prettier.io):
 
