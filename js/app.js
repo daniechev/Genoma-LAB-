@@ -1050,11 +1050,6 @@
       }),
   );
   all('[data-return-lab]').forEach(b => (b.onclick = () => showTab('lab')));
-  document.querySelector('.brand').onclick = e => {
-    e.preventDefault();
-    stopTour();
-    showTab('proyecto');
-  };
   $('challenge').checked = challenge;
   $('challenge').onchange = e => {
     challenge = e.target.checked;
@@ -1397,10 +1392,7 @@
     restart();
   };
   $('tour-try').onclick = () => restart();
-  $('tour-project').onclick = () => {
-    stopTour();
-    showTab('proyecto');
-  };
+  $('tour-project').onclick = () => (location.href = 'index.html');
   // Teclado y control remoto de presentaciones: flechas o AvPág/RePág para avanzar, espacio para pausar, Esc para salir.
   document.addEventListener('keydown', e => {
     if (
@@ -2129,11 +2121,10 @@
   renderAnimalsMap();
   renderEvolution();
   if (location.hash === '#jurado') startTour();
-  // Enlaces desde la historia guiada: laboratorio.html#simulador, #proyecto o #naturaleza:felinos:3.
+  // Enlaces desde la historia guiada: laboratorio.html#simulador o #naturaleza:felinos:3.
   // Sin enlace, la app abre en el simulador.
   const startAt = decodeURIComponent(location.hash.slice(1));
-  if (startAt === 'proyecto') goTo('proyecto');
-  else if (startAt.startsWith('naturaleza')) goTo(startAt);
+  if (startAt.startsWith('naturaleza')) goTo(startAt);
   else if (startAt !== 'jurado') goTo('lab');
 
   // ---- Sin internet: guarda una copia de la app en el dispositivo (solo funciona publicada en la web) ----

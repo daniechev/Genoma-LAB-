@@ -4,7 +4,7 @@ Sitio interactivo para una feria de ciencias, en tres partes:
 
 1. **Introducción** (`index.html`): el título y la pregunta, con una hélice de ADN girando.
 2. **Historia guiada** (`index.html`): seis escenas en las que el visitante descubre qué es la hemoglobina, cómo se lee su receta y **cambia él mismo** una letra del ADN para ver aparecer la anemia falciforme.
-3. **Simulador** (`laboratorio.html`): cambiar cualquier letra del gen *HBB*, predecir qué le pasa a la proteína y verla en 3D. Ahí también están las historias de **Naturaleza** y el **Proyecto** para el jurado.
+3. **Simulador** (`laboratorio.html`): cambiar cualquier letra del gen *HBB*, predecir qué le pasa a la proteína y verla en 3D. Ahí también están las historias de **Naturaleza**.
 
 ## Cómo usarlo
 
@@ -31,9 +31,9 @@ Si la dirección cambia, hay que generar un QR nuevo y reemplazar `img/qr-sitio.
 
 ### Para el jurado
 
-En la introducción, *Para el jurado: el proyecto completo* abre la pestaña **Proyecto** de `laboratorio.html` (también `laboratorio.html#proyecto`): un póster con la pregunta, la hipótesis, el método, los resultados y la conclusión. Los resultados de las 1.332 sustituciones se calculan en el momento con el mismo motor del simulador.
+El sitio no tiene una sección aparte para el jurado: la introducción, la historia y el simulador cuentan el proyecto. El póster (pregunta, hipótesis, método, resultados y conclusión) y *Cómo funciona* siguen escritos en `laboratorio.html`, ocultos, por si se quieren volver a mostrar.
 
-El botón **Ver el recorrido guiado** muestra los tres casos reales solo, paso a paso, en unos dos minutos. Se puede pausar, avanzar o volver con los botones, con las flechas del teclado o con un control remoto de presentaciones (AvPág/RePág); Esc lo cierra. Para que arranque directamente, abrí `laboratorio.html#jurado`. El recorrido no suma al contador del stand, salvo que el jurado haga su propia predicción.
+El recorrido guiado muestra los tres casos reales solo, paso a paso, en unos dos minutos. Se puede pausar, avanzar o volver con los botones, con las flechas del teclado o con un control remoto de presentaciones (AvPág/RePág); Esc lo cierra. Se abre con `laboratorio.html#jurado`. El recorrido no suma al contador del stand, salvo que el jurado haga su propia predicción.
 
 ### El simulador
 
@@ -78,11 +78,11 @@ Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la 
 
 Entre escenas, las *View Transitions* del navegador conectan los dibujos: se entra en el glóbulo y aparece el ADN, el codón 7 crece hasta el codón grande, y la T que cambió el visitante viaja al mapa, a la foto del leopardo y a la barra final. Donde el navegador no las tiene, o con movimiento reducido, la escena cambia directo. El fondo toma un color distinto en cada escena.
 
-Con `index.html?stand` avanza sola si nadie toca la pantalla, hace el cambio de letra por su cuenta y vuelve a empezar. Al final, *Abrir el simulador* lleva a `laboratorio.html`. Los enlaces a la app usan `laboratorio.html#simulador`, `#proyecto` y `#naturaleza:felinos:3`.
+Con `index.html?stand` avanza sola si nadie toca la pantalla, hace el cambio de letra por su cuenta y vuelve a empezar. Al final, *Abrir el simulador* lleva a `laboratorio.html`. Los enlaces a la app usan `laboratorio.html#simulador` y `#naturaleza:felinos:3`.
 
 ### Laboratorio
 
-`laboratorio.html` abre en el **Simulador**. Sus pestañas son **Historia** (vuelve a `index.html`), **Simulador**, **Naturaleza** y **Proyecto** (el póster para el jurado, con *Cómo funciona* plegado debajo: cuatro ideas, notas para docentes y créditos de las fotos). **Resultados del stand** queda en el pie de página: es una herramienta para quienes atienden el stand.
+`laboratorio.html` abre en el **Simulador**. Sus pestañas son **Historia** (vuelve a `index.html`), **Simulador** y **Naturaleza**. **Resultados del stand** queda en el pie de página: es una herramienta para quienes atienden el stand.
 
 ### Naturaleza
 
@@ -99,7 +99,7 @@ Fuentes: Piel y col. 2010 (*Nature Communications*), Taylor y col. 2012 (*Lancet
 
 ### Fotos
 
-Las fotos de animales y de los ojos son de [Wikimedia Commons](https://commons.wikimedia.org), con licencias libres; los créditos están en **Proyecto → Cómo funciona → Créditos de las fotos** y en `img/fotos/creditos.json`. Se bajan con GitHub Actions (workflow *Fotos de Wikimedia Commons*): sin `herramientas/fotos/elegidas.json`, busca candidatas según `buscar.json` y arma hojas de contacto numeradas; con ese archivo, baja las elegidas achicadas a `img/fotos/` y escribe los créditos. Si se agrega una foto, hay que sumarla a `ARCHIVOS` en `sw.js`.
+Las fotos de animales y de los ojos son de [Wikimedia Commons](https://commons.wikimedia.org), con licencias libres; los créditos están al final de **Naturaleza** (*Créditos de las fotos*), al pie de la escena 5 de la historia y en `img/fotos/creditos.json`. Se bajan con GitHub Actions (workflow *Fotos de Wikimedia Commons*): sin `herramientas/fotos/elegidas.json`, busca candidatas según `buscar.json` y arma hojas de contacto numeradas; con ese archivo, baja las elegidas achicadas a `img/fotos/` y escribe los créditos. Si se agrega una foto, hay que sumarla a `ARCHIVOS` en `sw.js`.
 
 ## Estructura
 

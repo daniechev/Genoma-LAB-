@@ -2925,7 +2925,7 @@ svg.world .countries path {
     margin: 0;
     width: auto;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 0;
     padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
     border-radius: 0;
@@ -4137,4 +4137,13 @@ body::after {
   #chapter-personas .step[data-step='1'] > .step-next {
     justify-self: start;
   }
+}
+
+/* Créditos de las fotos, al final de Naturaleza. */
+.photo-credits {
+  margin-top: 40px;
+  border-top: 1px solid var(--hair);
+  padding-top: 8px;
+  font-size: 15px;
+  color: var(--muted);
 }

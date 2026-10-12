@@ -972,16 +972,6 @@ body[data-scene='0'] .story-controls {
   width: 100%;
   height: min(72vh, 620px);
 }
-.intro-jury {
-  margin-top: 26px !important;
-}
-.intro-jury a {
-  color: var(--muted);
-  text-underline-offset: 4px;
-}
-.intro-jury a:hover {
-  color: var(--mint);
-}
 @media (max-width: 820px) {
   .intro-helix {
     height: 200px;
@@ -994,4 +984,9 @@ body[data-scene='0'] .story-controls {
   .scene.intro {
     grid-template-columns: 1fr;
   }
+}
+
+.photo-credit {
+  font-size: 13px !important;
+  opacity: 0.8;
 }
