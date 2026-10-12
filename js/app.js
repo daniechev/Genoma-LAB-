@@ -600,8 +600,6 @@
       const open = species.querySelector('.species-open');
       if (open.getAttribute('aria-expanded') !== 'true') open.click();
       species.scrollIntoView({ block: 'start', behavior: 'instant' });
-      species.classList.add('flash');
-      setTimeout(() => species.classList.remove('flash'), 1200);
       return;
     }
     $(`chapter-${chapter}`).scrollIntoView({ block: 'start', behavior: 'instant' });

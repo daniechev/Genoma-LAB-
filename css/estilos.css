@@ -3807,10 +3807,6 @@ svg.world .countries path {
 .story-links button.active::before {
   background: var(--mint);
 }
-.species.flash {
-  outline: 2px solid var(--mint);
-  outline-offset: 4px;
-}
 @media (max-width: 900px) {
   .chapters {
     grid-template-columns: 1fr 1fr;
@@ -3887,4 +3883,113 @@ svg.world .countries path {
   .shortcut b {
     font-size: 16px;
   }
+}
+
+/* Estilo limpio en toda la página: menos cajas, brillos y colores; se separa con aire y líneas finas. */
+body::before {
+  background:
+    radial-gradient(40vmax 30vmax at 15% 0%, #5b2fd138, transparent 70%),
+    radial-gradient(34vmax 28vmax at 90% 20%, #1fd6a014, transparent 70%);
+  animation: none;
+}
+body::after {
+  display: none;
+}
+.primary {
+  box-shadow: none;
+  border-radius: 12px;
+}
+.primary:hover:not(:disabled) {
+  transform: none;
+}
+.ghost,
+.secondary,
+.round-button {
+  background: none;
+  border: 1px solid #ffffff33;
+}
+.ghost,
+.secondary {
+  border-radius: 12px;
+}
+.ghost:hover:not(:disabled),
+.secondary:hover:not(:disabled),
+.round-button:hover:not(:disabled),
+.quick button:hover,
+.challenge:hover {
+  border-color: var(--mint);
+  filter: none;
+}
+.quick button,
+.challenge {
+  background: none;
+  border-color: #ffffff26;
+}
+.quick .shortcut-icon {
+  background: none !important;
+  color: var(--muted) !important;
+  width: auto;
+}
+.challenge:has(input:checked) {
+  border-color: var(--mint);
+}
+
+/* Pasos de cada historia: una línea fina y el nombre, sin círculos numerados. */
+.step-dot {
+  border-top-width: 2px;
+  font-weight: 500;
+}
+.step-dot b {
+  display: none;
+}
+.step-dot.done {
+  border-top-color: #ffffff40;
+}
+.step-dot.active {
+  color: var(--mint);
+  border-top-color: var(--mint);
+  font-weight: 600;
+}
+
+/* Tarjetas sin caja: la foto y el texto alcanzan. */
+.species,
+.species.open {
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--hair);
+  border-radius: 0;
+  padding: 22px 0 0;
+  box-shadow: none;
+}
+.species:hover {
+  transform: none;
+  box-shadow: none;
+}
+.species-photo {
+  border-radius: 10px;
+}
+.cat.jaguar .fur,
+.cat.leopard .fur {
+  outline: 0;
+}
+.altitude > div {
+  background: none;
+  border: 0;
+  border-left: 1px solid var(--hair);
+  border-radius: 0;
+  padding: 0 0 0 18px;
+}
+.poster-conclusion {
+  border-left: 0;
+  border-top: 1px solid var(--hair);
+  background: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+.zoom-buttons button {
+  background: #0b0820b3;
+  border: 1px solid #ffffff33;
+}
+.altitude {
+  margin-bottom: 20px;
 }
