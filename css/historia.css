@@ -599,27 +599,33 @@ body {
   transition: --tint 1.2s ease;
 }
 body[data-scene='2'] {
-  --tint: #8b5cf6;
+  --tint: #b693ff;
 }
 body[data-scene='3'] {
-  --tint: #ff7a66;
+  --tint: #8b5cf6;
 }
 body[data-scene='4'] {
-  --tint: #2fd68f;
+  --tint: #ff7a66;
 }
 body[data-scene='5'] {
-  --tint: #ffb347;
+  --tint: #2fd68f;
 }
 body[data-scene='6'] {
-  --tint: #4fd8ff;
+  --tint: #ffb347;
 }
 body[data-scene='7'] {
-  --tint: #ffd447;
+  --tint: #4fd8ff;
 }
 body[data-scene='8'] {
-  --tint: #3fb7ff;
+  --tint: #ffd447;
 }
 body[data-scene='9'] {
+  --tint: #3fb7ff;
+}
+body[data-scene='10'] {
+  --tint: #ff6fd0;
+}
+body[data-scene='11'] {
   --tint: #5ef2b0;
 }
 .glow {
@@ -693,6 +699,7 @@ body[data-scene='9'] {
   view-transition-name: controls;
 }
 #hero-cell,
+.zoom,
 .dna {
   view-transition-name: focus;
 }
@@ -1138,4 +1145,196 @@ body[data-scene='0'] .story-controls {
   .letter-tag {
     font-size: 13px;
   }
+}
+
+/* Escena 2: zoom de la célula al nucleosoma. La capa que pasa crece y se desvanece, como si la cámara entrara. */
+.zoom {
+  display: grid;
+}
+.z-layer {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: auto;
+  max-height: 64vh;
+  opacity: 0;
+  transform: scale(0.55);
+  transition:
+    opacity 0.6s ease,
+    transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.z-layer.on {
+  opacity: 1;
+  transform: none;
+}
+.z-layer.gone {
+  transform: scale(2.4);
+}
+.z-layer text {
+  font-family: inherit;
+}
+.z-layer .ring {
+  animation: nucleus 2.4s ease-in-out infinite;
+  transform-origin: 200px 140px;
+}
+@keyframes nucleus {
+  50% {
+    stroke: var(--accent);
+    stroke-width: 5;
+  }
+}
+.hbb-band {
+  animation: nucleus 2.4s ease-in-out infinite;
+}
+
+/* Escena 10: CRISPR. La guía se alinea, la Cas9 corta y el visitante repara la letra. */
+.crispr {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+}
+.cas9 {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 14px 22px;
+  border-radius: 40px 40px 60px 60px;
+  background: #ff6fd022;
+  border: 2px solid #ff6fd0;
+  transform: translateX(-30%);
+  transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.cas9 b {
+  color: #ff9fe0;
+  font-size: 20px;
+}
+.guide {
+  font: 700 15px var(--mono);
+  color: var(--muted);
+}
+.guide i {
+  font-style: normal;
+  color: var(--mint);
+}
+.scene.past-1 .cas9 {
+  transform: none;
+}
+.seq {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  transition: opacity 0.6s ease;
+}
+.codon-s {
+  display: flex;
+  gap: 3px;
+  padding: 4px;
+  border-radius: 10px;
+}
+.codon-s.target {
+  position: relative;
+  transition: box-shadow 0.5s ease;
+}
+.scene.past-1 .codon-s.target {
+  box-shadow: 0 0 0 2px #ff6fd0;
+}
+.s {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 48px;
+  border-radius: 8px;
+  color: var(--ink);
+  font: 800 22px var(--mono);
+  font-style: normal;
+}
+.s.a {
+  background: var(--A);
+}
+.s.t {
+  background: var(--T);
+}
+.s.c {
+  background: var(--C);
+}
+.s.g {
+  background: var(--G);
+}
+button.s.pulse {
+  animation: ring 2s ease-out infinite;
+}
+.cut {
+  flex: none;
+  width: 4px;
+  margin: -12px -3.5px;
+  border-radius: 2px;
+  background: #ff6fd0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.scene.past-1 .cut {
+  opacity: 1;
+}
+.crispr.fixed .cut {
+  opacity: 0;
+}
+.scene:not(.past-2) #fix-t {
+  pointer-events: none;
+  animation: none;
+}
+.hbf {
+  display: grid;
+  gap: 10px;
+  width: min(100%, 460px);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.hbf.on {
+  opacity: 1;
+}
+.hb-row {
+  display: grid;
+  padding: 10px 16px;
+  border-left: 4px solid var(--red);
+  background: #ffffff0a;
+  border-radius: 0 10px 10px 0;
+}
+.hb-row.baby {
+  border-left-color: var(--mint);
+}
+.hb-row span {
+  font-size: 15px;
+  color: var(--muted);
+}
+@media (max-width: 820px) {
+  .s {
+    width: 24px;
+    height: 32px;
+    font-size: 15px;
+    border-radius: 6px;
+  }
+  .seq {
+    gap: 4px;
+  }
+  .codon-s {
+    gap: 2px;
+    padding: 3px;
+  }
+  .guide {
+    font-size: 13px;
+  }
+  .z-layer {
+    max-height: 30vh;
+  }
+}
+/* Pasos 4 y 5: la pantalla no es la realidad; al final solo queda el tratamiento real. */
+.scene.past-3 .seq,
+.scene.past-3 #fix-piece {
+  opacity: 0.35;
+}
+.scene.past-4 .cas9,
+.scene.past-4 .seq,
+.scene.past-4 #fix-piece {
+  display: none;
 }

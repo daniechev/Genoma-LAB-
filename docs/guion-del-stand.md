@@ -14,7 +14,7 @@ Una guía para que cualquiera del grupo pueda presentar igual de bien. Los tiemp
 
 > «¿Sabías que cambiar **una sola letra** de tu ADN puede causar una enfermedad? ¿Querés probar?»
 
-**Con la historia de la pantalla:** invitá a la persona a tocar **Empezar** y acompañala. La pantalla cuenta lo mismo que la explicación de abajo; en la escena 3, dejá que ella misma cambie la letra. Al final, el botón **Abrir el simulador** la lleva a probar otras letras.
+**Con la historia de la pantalla:** invitá a la persona a tocar **Empezar** y acompañala. La pantalla cuenta lo mismo que la explicación de abajo; en la escena 4, dejá que ella misma cambie la letra, y en la 10 que la repare con CRISPR. Al final, el botón **Abrir el simulador** la lleva a probar otras letras.
 
 ## La explicación de un minuto
 
