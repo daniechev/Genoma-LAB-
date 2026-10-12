@@ -1681,91 +1681,22 @@
     });
   }
 
-  // Pelaje dibujado: rosetas grandes con puntos (jaguar) o chicas sin puntos (leopardo).
-  function furSVG(kind) {
-    const jaguar = kind.startsWith('jaguar'),
-      black = kind.endsWith('black'),
-      base = black ? '#17121c' : jaguar ? '#dca04c' : '#e6b464',
-      inner = black ? '#120e16' : jaguar ? '#b97a34' : '#cf9447',
-      spot = black ? '#050307' : '#2a1a10',
-      gap = jaguar ? 62 : 36,
-      r0 = gap * 0.3;
-    let seed = jaguar ? 11 : 5;
-    const rand = () => (seed = (seed * 9301 + 49297) % 233280) / 233280,
-      f = n => n.toFixed(1);
-    let centers = '',
-      rings = '';
-    for (let row = 0, y = 4; y < 200; row++, y += gap * 0.82)
-      for (let x = (row % 2) * (gap / 2) - 8; x < 340; x += gap) {
-        const cx = x + (rand() - 0.5) * gap * 0.16,
-          cy = y + (rand() - 0.5) * gap * 0.16,
-          r = r0 * (0.85 + rand() * 0.3),
-          blobs = jaguar ? 6 + Math.floor(rand() * 2) : 5,
-          turn = rand() * Math.PI;
-        // El centro de cada roseta es un poco más oscuro que el resto del pelo.
-        centers += `<ellipse cx="${f(cx)}" cy="${f(cy)}" rx="${f(r * 0.95)}" ry="${f(r * 0.8)}"/>`;
-        for (let k = 0; k < blobs; k++) {
-          if (rand() < 0.12) continue;
-          const a = turn + (k / blobs) * Math.PI * 2,
-            bx = cx + Math.cos(a) * r,
-            by = cy + Math.sin(a) * r * 0.85;
-          rings += `<ellipse cx="${f(bx)}" cy="${f(by)}" rx="${f(r * (jaguar ? 0.42 : 0.5))}" ry="${f(r * 0.2)}" transform="rotate(${((a * 180) / Math.PI + 90).toFixed(0)} ${f(bx)} ${f(by)})"/>`;
-        }
-        // Solo el jaguar tiene puntos dentro de las rosetas.
-        if (jaguar)
-          for (let k = 0, n = 1 + Math.floor(rand() * 3); k < n; k++)
-            rings += `<circle cx="${f(cx + (rand() - 0.5) * r * 0.7)}" cy="${f(cy + (rand() - 0.5) * r * 0.6)}" r="${f(r * 0.13)}"/>`;
-      }
-    return `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice"><rect width="320" height="180" fill="${base}"/><g fill="${inner}">${centers}</g><g fill="${spot}" opacity="${black ? 0.8 : 0.92}">${rings}</g>${black ? `<defs><linearGradient id="shine-${kind}" x1="0" y1="0" x2="1" y2="1"><stop offset=".3" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".16"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="320" height="180" fill="url(#shine-${kind})"/>` : ''}</svg>`;
-  }
-  all('[data-fur]').forEach(el => (el.innerHTML = furSVG(el.dataset.fur)));
-
   // Gato siamés: cada parte del cuerpo se enfría distinto según el ambiente. La enzima del color solo funciona
-  // donde la piel está por debajo de unos 36 °C (valores ilustrativos).
-  const SIAMESE_PARTS = [
-    [
-      'tail',
-      0.85,
-      '<path d="M250 132 C 300 128, 318 92, 304 58" stroke-width="16" fill="none" stroke-linecap="round"/>',
-    ],
-    [
-      'legs',
-      0.5,
-      '<rect x="96" y="140" width="20" height="44" rx="9"/><rect x="128" y="142" width="20" height="42" rx="9"/><rect x="206" y="140" width="20" height="44" rx="9"/><rect x="232" y="138" width="20" height="46" rx="9"/>',
-    ],
-    ['body', 0.12, '<ellipse cx="176" cy="126" rx="88" ry="38"/>'],
-    [
-      'paws',
-      0.9,
-      '<ellipse cx="106" cy="186" rx="13" ry="7"/><ellipse cx="138" cy="186" rx="13" ry="7"/><ellipse cx="216" cy="186" rx="13" ry="7"/><ellipse cx="242" cy="186" rx="13" ry="7"/>',
-    ],
-    ['ears', 0.95, '<path d="M54 66 L 58 26 L 82 54 Z"/><path d="M96 52 L 114 18 L 124 58 Z"/>'],
-    ['head', 0.3, '<circle cx="88" cy="84" r="38"/>'],
-    ['mask', 0.55, '<ellipse cx="82" cy="96" rx="24" ry="22"/>'],
-  ];
+  // donde la piel está por debajo de unos 36 °C (valores ilustrativos). Las etiquetas de la foto muestran cada parte.
+  const SIAMESE_PARTS = { ears: 0.95, face: 0.55, paws: 0.9, tail: 0.85, body: 0.12 };
   function renderSiamese() {
-    const ambient = Number($('siamese-temp').value),
-      mix = (a, b, t) =>
-        '#' +
-        [0, 2, 4]
-          .map(i =>
-            Math.round(parseInt(a.substr(i, 2), 16) * (1 - t) + parseInt(b.substr(i, 2), 16) * t)
-              .toString(16)
-              .padStart(2, '0'),
-          )
-          .join('');
-    $('siamese-cat').innerHTML =
-      SIAMESE_PARTS.map(([id, exposure, shape]) => {
-        const skin = 38.5 - exposure * (38.5 - ambient) * 0.55,
-          dark = Math.max(0, Math.min(1, (36 - skin) / 3)),
-          color = mix('efe3cd', '3b2820', dark);
-        return `<g class="cat-${id}" fill="${color}" stroke="${color}">${shape}</g>`;
-      }).join('') +
-      '<g fill="#5fb8ff"><ellipse cx="72" cy="80" rx="6" ry="7"/><ellipse cx="100" cy="80" rx="6" ry="7"/></g><path d="M82 96 l6 5 6 -5" stroke="#1a1335" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+    const ambient = Number($('siamese-temp').value);
+    all('.temp-tag').forEach(tag => {
+      const skin = 38.5 - SIAMESE_PARTS[tag.dataset.part] * (38.5 - ambient) * 0.55,
+        cold = skin < 36;
+      tag.classList.toggle('cold', cold);
+      tag.querySelector('span').textContent =
+        `${skin.toFixed(0)} °C · ${cold ? 'oscuro' : 'claro'}`;
+    });
     $('siamese-temp-label').textContent = `${ambient} °C`;
     $('siamese-text').textContent =
       ambient >= 32
-        ? 'Con mucho calor, ninguna parte se enfría lo suficiente: la enzima casi no funciona y el gato queda claro, como un gatito recién nacido.'
+        ? 'Con mucho calor, ninguna parte se enfría lo suficiente: la enzima casi no funciona y el pelo nuevo sale claro, como en un gatito recién nacido.'
         : ambient <= 10
           ? 'Con frío, se enfrían más partes del cuerpo: la enzima funciona en más lugares y el pelaje se oscurece más.'
           : 'Las orejas, la cara, las patas y la cola están más frías que el resto: ahí la enzima funciona y el pelo sale oscuro. El cuerpo, más calentito, queda claro.';
@@ -1823,15 +1754,8 @@
   }
   const caption = (el, text) => el.textContent !== text && (el.textContent = text);
 
-  // Ojos celestes: zoom al ojo, el iris pasa de marrón a celeste y aparecen los parientes de un mismo antepasado.
+  // Ojos celestes: zoom a un ojo marrón, el iris pasa a celeste y aparecen los parientes de un mismo antepasado.
   {
-    const svg = $('eye-anim'),
-      fibers = Array.from({ length: 14 }, (_, i) => {
-        const a = (i / 14) * Math.PI * 2;
-        return `<line x1="${(174 + Math.cos(a) * 3.6).toFixed(2)}" y1="${(112 + Math.sin(a) * 3.6).toFixed(2)}" x2="${(174 + Math.cos(a) * 7.6).toFixed(2)}" y2="${(112 + Math.sin(a) * 7.6).toFixed(2)}"/>`;
-      }).join('');
-    const eye = x =>
-      `<ellipse cx="${x}" cy="112" rx="13" ry="9" fill="#fff"/><circle class="iris" cx="${x}" cy="112" r="8"/><g transform="translate(${x - 174} 0)" stroke="#fff" stroke-opacity=".25" stroke-width=".5">${fibers}</g><circle cx="${x}" cy="112" r="3.4" fill="#120e16"/><circle cx="${x - 2.5}" cy="109.5" r="1.4" fill="#fff"/>`;
     const tree = [
       [200, 34],
       [110, 108],
@@ -1839,8 +1763,9 @@
       [290, 108],
       ...Array.from({ length: 9 }, (_, i) => [40 + i * 40, 188]),
     ];
-    const parent = i => (i === 0 ? -1 : i < 4 ? 0 : 1 + Math.floor((i - 4) / 3));
-    svg.innerHTML = `<g id="eye-face"><path d="M128 112c0-52 32-76 72-76s72 24 72 76c-8-30-30-44-72-44s-64 14-72 44Z" fill="#5a3a24"/><circle cx="200" cy="124" r="70" fill="#f1c7a5"/><path d="M134 104c4-40 30-56 66-56s62 16 66 56c-14-26-36-34-66-34s-52 8-66 34Z" fill="#6b452b"/><path d="M160 96q14-8 28 0M212 96q14-8 28 0" stroke="#5a3a24" stroke-width="3" fill="none" stroke-linecap="round"/>${eye(174)}${eye(226)}<path d="M200 118v18h-6" stroke="#d49c78" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M182 154q18 12 36 0" stroke="#b5654a" stroke-width="3" fill="none" stroke-linecap="round"/></g><g id="eye-letter"><rect x="16" y="190" width="132" height="38" rx="12" fill="#0e0b24d9"/><text x="28" y="214" class="anim-mono">HERC2</text><rect x="80" y="197" width="24" height="24" rx="6" fill="#ff7a66"/><text x="92" y="214" text-anchor="middle" class="anim-tile">A</text><text x="108" y="214" class="anim-mono">→</text><rect x="118" y="197" width="24" height="24" rx="6" fill="#b693ff"/><text x="130" y="214" text-anchor="middle" class="anim-tile">G</text></g><g id="eye-tree">${tree
+    const parent = i => (i === 0 ? -1 : i < 4 ? 0 : 1 + Math.floor((i - 4) / 3)),
+      svg = $('eye-tree');
+    svg.innerHTML = `${tree
       .map((p, i) =>
         parent(i) < 0
           ? ''
@@ -1848,16 +1773,14 @@
       )
       .join(
         '',
-      )}${tree.map((p, i) => `<g class="tree-node" transform="translate(${p[0]} ${p[1]})">${i === 0 ? '<circle r="19" fill="none" stroke="#ffd447" stroke-width="2.5"/>' : ''}<circle r="14" fill="#f1c7a5"/><circle cx="-5" cy="-2" r="2.6" fill="#3f86c9"/><circle cx="5" cy="-2" r="2.6" fill="#3f86c9"/></g>`).join('')}<text x="232" y="38" class="anim-small">un antepasado</text></g><defs><radialGradient id="iris-color"><stop offset=".35"/><stop offset="1"/></radialGradient></defs>`;
-    svg.querySelectorAll('.iris').forEach(c => c.setAttribute('fill', 'url(#iris-color)'));
-    const face = $('eye-face'),
+      )}${tree.map((p, i) => `<g class="tree-node" transform="translate(${p[0]} ${p[1]})">${i === 0 ? '<circle r="19" fill="none" stroke="#ffd447" stroke-width="2.5"/>' : ''}<circle r="14" fill="#f1c7a5"/><circle cx="-5" cy="-2" r="2.6" fill="#3f86c9"/><circle cx="5" cy="-2" r="2.6" fill="#3f86c9"/></g>`).join('')}<text x="232" y="38" class="anim-small">un antepasado</text>`;
+    const [brown, blue] = svg.parentElement.querySelectorAll('.eye-photo'),
       letter = $('eye-letter'),
-      treeLines = [...svg.querySelectorAll('.tree-line')],
-      treeNodes = [...svg.querySelectorAll('.tree-node')],
-      stops = svg.querySelectorAll('#iris-color stop'),
+      lines = [...svg.querySelectorAll('.tree-line')],
+      nodes = [...svg.querySelectorAll('.tree-node')],
       label = svg.querySelector('.anim-small'),
       text = $('eye-caption');
-    treeLines.forEach(l => {
+    lines.forEach(l => {
       const n = Math.hypot(
         l.x2.baseVal.value - l.x1.baseVal.value,
         l.y2.baseVal.value - l.y1.baseVal.value,
@@ -1865,34 +1788,28 @@
       l.style.strokeDasharray = n;
       l.dataset.n = n;
     });
-    animation(svg.parentElement, 10000, t => {
-      const zoomIn = ease(seg(t, 0.06, 0.3)),
-        zoomOut = ease(seg(t, 0.58, 0.72)),
-        z = zoomIn * (1 - zoomOut),
-        scale = lerp(1, 9, z),
-        fx = lerp(200, 174, z),
-        fy = lerp(124, 112, z),
-        blue = ease(seg(t, 0.38, 0.55));
-      face.setAttribute(
-        'transform',
-        `translate(200 124) scale(${scale.toFixed(3)}) translate(${-fx} ${-fy})`,
-      );
-      face.style.opacity = (seg(t, 0, 0.06) * (1 - seg(t, 0.68, 0.76))).toFixed(3);
-      stops[0].setAttribute('stop-color', mixHex('#c9822f', '#bfe6ff', blue));
-      stops[1].setAttribute('stop-color', mixHex('#5a2f12', '#3f86c9', blue));
+    animation(svg.closest('.anim'), 10000, t => {
+      const zoom = lerp(1, 1.7, ease(seg(t, 0.04, 0.3)) * (1 - ease(seg(t, 0.6, 0.72)))),
+        toBlue = ease(seg(t, 0.38, 0.55)),
+        tree = seg(t, 0.7, 0.78);
+      for (const photo of [brown, blue]) photo.style.transform = `scale(${zoom.toFixed(3)})`;
+      blue.style.opacity = toBlue.toFixed(3);
+      brown.style.opacity = (1 - tree).toFixed(3);
+      blue.style.filter = `brightness(${lerp(1, 0.25, tree).toFixed(2)})`;
       letter.style.opacity = (seg(t, 0.32, 0.38) * (1 - seg(t, 0.62, 0.68))).toFixed(3);
-      treeLines.forEach((l, i) => {
+      svg.style.opacity = tree.toFixed(3);
+      lines.forEach((l, i) => {
         const k = seg(t, 0.76 + i * 0.012, 0.84 + i * 0.012);
         l.style.strokeDashoffset = (l.dataset.n * (1 - k)).toFixed(1);
       });
-      treeNodes.forEach(
+      nodes.forEach(
         (n, i) => (n.style.opacity = seg(t, 0.74 + i * 0.016, 0.8 + i * 0.016).toFixed(3)),
       );
       label.style.opacity = seg(t, 0.76, 0.82).toFixed(3);
       caption(
         text,
         t < 0.32
-          ? 'Mirá sus ojos de cerca…'
+          ? 'Mirá este ojo de cerca…'
           : t < 0.6
             ? 'En el gen HERC2, una A cambió por una G: el interruptor baja y el iris fabrica menos pigmento. Se ve celeste.'
             : 'Casi todas las personas de ojos celestes heredaron esa letra de un mismo antepasado: son parientes lejanas.',
@@ -1900,53 +1817,25 @@
     });
   }
 
-  // Guepardo rey: con una letra de más en Taqpep, las manchas chicas se juntan en rayas y manchones.
+  // Guepardo rey: la «letra de más» viaja de un guepardo al otro y aparece el pelaje con rayas.
   {
-    const svg = $('king-anim');
-    let seed = 3;
-    const rand = () => (seed = (seed * 9301 + 49297) % 233280) / 233280,
-      spots = [];
-    for (let row = 0, y = 6; y < 190; row++, y += 17)
-      for (let x = (row % 2) * 10 - 6; x < 330; x += 21) {
-        const cx = x + (rand() - 0.5) * 8,
-          cy = y + (rand() - 0.5) * 6,
-          r = 4.2 + rand() * 2;
-        let to;
-        if (cy < 92) {
-          const line = [16, 44, 72].reduce((a, b) => (Math.abs(b - cy) < Math.abs(a - cy) ? b : a));
-          to = [cx, line + 5 * Math.sin(cx / 38 + line), 15, line === 44 ? 10 : 7];
-        } else {
-          const row = Math.round((cy - 112) / 34),
-            shift = row % 2 ? 26 : 0,
-            gy = 112 + row * 34,
-            gx = 24 + shift + Math.round((cx - 24 - shift) / 56) * 56;
-          to = [lerp(cx, gx, 0.72), lerp(cy, gy, 0.72), 10 + rand() * 3, 8 + rand() * 2];
-        }
-        spots.push({ from: [cx, cy, r, r], to });
-      }
-    svg.innerHTML = `<rect width="320" height="180" fill="#e3b768"/><g fill="#2a1a10">${spots.map(() => '<ellipse/>').join('')}</g><g id="king-badge"><rect x="252" y="8" width="60" height="20" rx="10" fill="#ffd447"/><text x="282" y="22" text-anchor="middle" class="anim-badge">+1 letra</text></g>`;
-    const shapes = svg.querySelectorAll('ellipse'),
-      badge = $('king-badge'),
-      label = $('king-label'),
+    const box = document.querySelector('.king-anim'),
+      plus = $('king-plus'),
+      mystery = $('king-mystery'),
+      king = box.querySelector('.king-card.king img'),
       text = $('king-caption');
-    animation(svg.parentElement, 6500, t => {
-      const k = ease(seg(t, 0.3, 0.88)),
-        drop = ease(seg(t, 0.12, 0.26));
-      spots.forEach((s, i) => {
-        const [cx, cy, rx, ry] = s.from.map((v, j) => lerp(v, s.to[j], k));
-        const e = shapes[i];
-        e.setAttribute('cx', cx.toFixed(1));
-        e.setAttribute('cy', cy.toFixed(1));
-        e.setAttribute('rx', rx.toFixed(1));
-        e.setAttribute('ry', ry.toFixed(1));
-      });
-      badge.setAttribute('transform', `translate(0 ${lerp(-50, 0, drop).toFixed(1)})`);
-      caption(label, t < 0.6 ? 'Guepardo' : 'Guepardo rey');
+    animation(box, 6000, t => {
+      const move = ease(seg(t, 0.15, 0.4)),
+        show = ease(seg(t, 0.42, 0.75));
+      plus.style.transform = `translate(-50%, -50%) scale(${lerp(0.6, 1, seg(t, 0.05, 0.15)).toFixed(2)}) translateX(${lerp(-150, 0, move).toFixed(0)}%)`;
+      plus.style.opacity = seg(t, 0.05, 0.15).toFixed(2);
+      king.style.filter = `blur(${lerp(16, 0, show).toFixed(1)}px) grayscale(${(1 - show).toFixed(2)}) brightness(${lerp(0.45, 1, show).toFixed(2)})`;
+      mystery.style.opacity = (1 - show).toFixed(2);
       caption(
         text,
-        t < 0.12
+        t < 0.15
           ? 'Un guepardo común: manchas chicas y redondas.'
-          : t < 0.6
+          : t < 0.5
             ? 'Aparece una letra de más en el gen Taqpep…'
             : '…y las manchas se juntan en rayas y manchones grandes: es un guepardo rey.',
       );

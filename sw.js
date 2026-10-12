@@ -1,7 +1,7 @@
 // Guarda una copia de la app en el celular la primera vez que se abre,
 // para que siga funcionando aunque se corte el wifi de la feria.
 // Si cambia algún archivo, la copia se actualiza sola en la visita siguiente.
-const CACHE = 'genomalab-v1';
+const CACHE = 'genomalab-v2';
 const ARCHIVOS = [
   './',
   'index.html',
@@ -18,6 +18,19 @@ const ARCHIVOS = [
   'img/icono.svg',
   'img/icono-192.png',
   'img/icono-512.png',
+  'img/fotos/ansar.webp',
+  'img/fotos/guepardo-rey.webp',
+  'img/fotos/guepardo.webp',
+  'img/fotos/jaguar-negro.webp',
+  'img/fotos/jaguar.webp',
+  'img/fotos/leopardo-negro.webp',
+  'img/fotos/leopardo.webp',
+  'img/fotos/llama.webp',
+  'img/fotos/mamut.webp',
+  'img/fotos/ojo-celeste.webp',
+  'img/fotos/ojo-marron.webp',
+  'img/fotos/pez-hielo.webp',
+  'img/fotos/siames.webp',
 ];
 
 self.addEventListener('install', event => {

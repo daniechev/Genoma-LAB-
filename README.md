@@ -72,6 +72,10 @@ La pestaña **Naturaleza** cuenta tres historias, una por vez, para que la pági
 
 Fuentes: Piel y col. 2010 (*Nature Communications*), Taylor y col. 2012 (*Lancet Infectious Diseases*), Weatherall y Clegg 2001 (*Bull. OMS*), OMS región africana 2010, Piccinini y col. 1990, Jessen y col. 1991 (*PNAS*), Campbell y col. 2010 (*Nature Genetics*) Cocca y col. 1995 (*PNAS*), Eizirik y col. 2003 (*Current Biology*), Schneider y col. 2012 (*PLoS ONE*), Kaelin y col. 2012 (*Science*), O'Brien y col. 1985 (*Science*), Menotti-Raymond y O'Brien 1993, Lyons y col. 2005, Schmidt-Küntzel y col. 2005, Eiberg y col. 2008 (*Human Genetics*), Valverde y col. 1995 (*Nature Genetics*) y Huerta-Sánchez y col. 2014 (*Nature*). El mapa usa Natural Earth (dominio público) y es un esquema simplificado por país.
 
+### Fotos
+
+Las fotos de animales y de los ojos son de [Wikimedia Commons](https://commons.wikimedia.org), con licencias libres; los créditos están en **Cómo funciona → Créditos de las fotos** y en `img/fotos/creditos.json`. Se bajan con GitHub Actions (workflow *Fotos de Wikimedia Commons*): sin `herramientas/fotos/elegidas.json`, busca candidatas según `buscar.json` y arma hojas de contacto numeradas; con ese archivo, baja las elegidas achicadas a `img/fotos/` y escribe los créditos. Si se agrega una foto, hay que sumarla a `ARCHIVOS` en `sw.js`.
+
 ## Estructura
 
 ```

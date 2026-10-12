@@ -4,3 +4,5 @@ js/datos-mapa.js
 # El HTML y los textos se editan a mano.
 *.html
 *.md
+herramientas/fotos/candidatas/
+img/fotos/creditos.json
