@@ -63,7 +63,18 @@ Los codones se cuentan desde el ATG inicial; las piezas de la proteína, sin la 
 
 ### Historia guiada (prototipo)
 
-`historia.html` cuenta el proyecto en seis escenas que se recorren con *Seguir*, las flechas del teclado o deslizando el dedo: la sangre lleva oxígeno, la receta de cuatro letras, **el visitante cambia él mismo la A del codón 7 por una T** (sin ese cambio no se puede seguir), el mapa de la malaria, la pantera negra y los ojos celestes, y al final el simulador libre. Con `historia.html?stand` avanza sola si nadie toca la pantalla, hace el cambio de letra por su cuenta y vuelve a empezar. Los enlaces a la app usan `index.html#simulador` y `index.html#naturaleza:felinos:3`.
+`historia.html` cuenta el proyecto en seis escenas, y cada escena en pasos cortos: *Seguir* (o las flechas del teclado, o deslizar el dedo) muestra el párrafo siguiente y cambia el dibujo; al terminar los pasos, pasa a la escena siguiente. La barra de arriba se llena con cada paso.
+
+1. **Tu sangre:** el oxígeno, los glóbulos rojos y la hemoglobina.
+2. **La receta:** las cuatro letras, la lectura de a tres (codones), las piezas, el collar de 146 piezas y el codón 7.
+3. **Cambiala vos:** el visitante cambia la A del codón 7 por una T (sin ese cambio no se puede seguir). Después: la valina, las fibras y el glóbulo en forma de hoz.
+4. **¿Por qué no desapareció?:** dónde es común la letra, la malaria, las dos copias y la selección natural.
+5. **No solo en la sangre:** el leopardo negro y los ojos celestes, con enlaces a sus historias completas.
+6. **Ahora vos:** los tres resultados posibles y el simulador libre.
+
+Entre escenas, las *View Transitions* del navegador conectan los dibujos: se entra en el glóbulo y aparece el ADN, el codón 7 crece hasta el codón grande, y la T que cambió el visitante viaja al mapa, a la foto del leopardo y a la barra final. Donde el navegador no las tiene, o con movimiento reducido, la escena cambia directo. El fondo toma un color distinto en cada escena.
+
+Con `historia.html?stand` avanza sola si nadie toca la pantalla, hace el cambio de letra por su cuenta y vuelve a empezar. Los enlaces a la app usan `index.html#simulador` y `index.html#naturaleza:felinos:3`.
 
 ### Inicio
 

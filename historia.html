@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="css/historia.css">
 </head>
 <body>
+<div class="glow" aria-hidden="true"></div>
 <svg class="svg-defs" width="0" height="0" aria-hidden="true"><defs><radialGradient id="rbc" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#ff8a8a"/><stop offset=".55" stop-color="#e2384a"/><stop offset="1" stop-color="#a5172b"/></radialGradient></defs></svg>
 <header class="story-top">
   <a class="story-brand" href="index.html" aria-label="Ir al inicio de la app">Una letra</a>
@@ -20,8 +21,12 @@
   <section class="scene" data-scene="1" aria-labelledby="t1">
     <div class="scene-text">
       <p class="kicker">1 · Tu sangre</p>
-      <h1 id="t1">Cada vez que respirás, tu sangre lleva oxígeno a todo el cuerpo.</h1>
-      <p>Lo transporta una proteína que está dentro de los glóbulos rojos: la <b>hemoglobina</b>.</p>
+      <h1 id="t1">Tu sangre lleva oxígeno a todo el cuerpo.</h1>
+      <div class="beats" aria-live="polite">
+        <p class="beat">Cada vez que respirás, el oxígeno entra a los pulmones y de ahí pasa a la sangre.</p>
+        <p class="beat">Viaja adentro de los <b>glóbulos rojos</b>. Tenés unos 25 billones: más que estrellas hay en la Vía Láctea.</p>
+        <p class="beat">Cada glóbulo rojo carga unos 270 millones de moléculas de <b>hemoglobina</b>, la proteína que agarra el oxígeno en los pulmones y lo suelta donde hace falta.</p>
+      </div>
     </div>
     <div class="scene-art blood" id="blood" aria-hidden="true"></div>
   </section>
@@ -29,18 +34,28 @@
   <section class="scene" data-scene="2" aria-labelledby="t2" hidden>
     <div class="scene-text">
       <p class="kicker">2 · La receta</p>
-      <h1 id="t2">Su receta está escrita con solo cuatro letras.</h1>
-      <p>Es un tramo de ADN de <b>444 letras</b>. La célula lo lee de a tres: cada grupo, el <b>codón</b>, le dice qué pieza poner.</p>
-      <p class="muted" id="dna-hint">Así empieza la receta de la hemoglobina.</p>
+      <h1 id="t2">La receta de la hemoglobina está en tu ADN.</h1>
+      <div class="beats" aria-live="polite">
+        <p class="beat">El ADN es como un libro de recetas escrito con solo cuatro letras: <b>A</b>, <b>T</b>, <b>C</b> y <b>G</b>. Así empieza la receta de la hemoglobina.</p>
+        <p class="beat">La receta completa tiene <b>444 letras</b>. La célula no las lee de a una, sino <b>de a tres</b>. Cada grupo de tres se llama <b>codón</b>.</p>
+        <p class="beat">Cada codón es como una palabra que dice qué pieza poner. Las piezas se llaman <b>aminoácidos</b>: ATG pone metionina, GTG pone valina…</p>
+        <p class="beat">Pieza tras pieza se arma un collar de <b>146 piezas</b>. El collar se pliega solo y queda la hemoglobina.</p>
+        <div class="beat"><p>Mirá el <b>codón 7</b>: dice GAG, o sea, «poné un glutamato» en la pieza 6. Ahora lo vas a cambiar vos.</p><p class="muted">¿Por qué pieza 6 y no 7? La primera pieza, la metionina, se quita cuando la proteína está lista.</p></div>
+      </div>
     </div>
-    <div class="scene-art" aria-hidden="true"><div class="dna" id="dna"></div></div>
+    <div class="scene-art" aria-hidden="true"><div class="dna" id="dna"></div><p class="chain-note">… y así hasta <b>146 piezas</b></p></div>
   </section>
 
   <section class="scene" data-scene="3" aria-labelledby="t3" hidden>
     <div class="scene-text">
       <p class="kicker">3 · Cambiala vos</p>
       <h1 id="t3">Tocá la <span class="letter-a">A</span> y cambiala por una <span class="letter-t">T</span>.</h1>
-      <p id="change-text">Es el codón 7: <b>GAG</b>. Le dice a la célula que ponga un <b>glutamato</b> en la pieza 6.</p>
+      <div class="beats" aria-live="polite">
+        <p class="beat" id="change-text">El codón 7, <b>GAG</b>, pone un <b>glutamato</b> en la pieza 6.</p>
+        <p class="beat">Fue <b>una letra de 444</b>. Ahora el codón dice GTG, y la pieza 6 pasó de glutamato a <b>valina</b>.</p>
+        <p class="beat">El glutamato se lleva bien con el agua; la valina, no. Por eso, cuando la hemoglobina suelta el oxígeno, se pega a otras y forma <b>fibras largas</b>.</p>
+        <p class="beat">Las fibras estiran el glóbulo rojo en forma de <b>hoz</b>. Así se traba en los vasos chicos y se rompe antes de tiempo: es la <b>anemia falciforme</b>.</p>
+      </div>
     </div>
     <div class="scene-art change">
       <div class="codon-big" role="group" aria-label="Codón 7">
@@ -51,6 +66,7 @@
       <div class="cell-swap" id="cell-swap" aria-hidden="true">
         <svg viewBox="0 0 200 120">
           <g class="round"><ellipse cx="100" cy="60" rx="52" ry="46" fill="url(#rbc)"/><ellipse cx="100" cy="60" rx="24" ry="20" fill="#9b1426" opacity=".45"/></g>
+          <g class="fibers" stroke="#ffd447" stroke-width="3" stroke-linecap="round"><path d="M62 44 140 70"/><path d="M58 60 144 52"/><path d="M66 76 136 40"/><path d="M70 50 132 80"/><path d="M60 68 142 62"/></g>
           <g class="sickle"><path d="M28 86C34 40 92 12 160 26c10 2 16 10 6 12-48-6-92 14-116 52-8 12-24 10-22-4Z" fill="url(#rbc)"/></g>
         </svg>
       </div>
@@ -60,30 +76,38 @@
   <section class="scene" data-scene="4" aria-labelledby="t4" hidden>
     <div class="scene-text">
       <p class="kicker">4 · ¿Por qué sigue existiendo?</p>
-      <h1 id="t4">Esa misma letra protege contra la malaria.</h1>
-      <p>Cada persona tiene dos copias del gen, una de su mamá y otra de su papá.</p>
-      <ul class="copies">
-        <li><b>Ninguna copia</b> sin anemia, pero sin protección.</li>
-        <li class="best"><b>Una copia</b> casi sin síntomas y muy protegido contra la malaria.</li>
-        <li><b>Dos copias</b> anemia falciforme.</li>
-      </ul>
-      <p class="muted">Por eso, donde había malaria, la letra se volvió común.</p>
+      <h1 id="t4">Si enferma, ¿por qué no desapareció?</h1>
+      <div class="beats" aria-live="polite">
+        <p class="beat">Tu letra está acá. En gran parte de <b>África</b>, en Arabia y en la India, mucha gente la tiene.</p>
+        <p class="beat">Son justo los lugares donde hay <b>malaria</b>, una enfermedad que transmiten los mosquitos y que mata a cientos de miles de personas por año.</p>
+        <div class="beat"><p>Tenemos dos copias de cada gen, una de cada padre:</p>
+          <ul class="copies">
+            <li><b>Ninguna copia</b> sin anemia, pero sin protección.</li>
+            <li class="best"><b>Una copia</b> casi sin síntomas, y la malaria grave se vuelve mucho menos probable.</li>
+            <li><b>Dos copias</b> anemia falciforme.</li>
+          </ul></div>
+        <p class="beat">Donde hay malaria, quienes tienen una copia sobreviven más y le pasan la letra a sus hijos. Generación tras generación, la letra se volvió común: es la <b>selección natural</b>.</p>
+      </div>
     </div>
     <figure class="scene-art map-art">
-      <svg id="map" class="map" role="img" aria-label="Mapa de África y el sur de Asia: las zonas con malaria coinciden con las zonas donde la anemia falciforme es frecuente."></svg>
-      <figcaption class="legend"><span class="key malaria">había malaria</span><span class="key hbs">la letra es común</span></figcaption>
+      <div class="map-wrap"><svg id="map" class="map" role="img" aria-label="Mapa de África y el sur de Asia: las zonas con malaria coinciden con las zonas donde la anemia falciforme es frecuente."></svg><span class="map-letter" id="map-letter" aria-hidden="true">T</span></div>
+      <figcaption class="legend"><span class="key hbs">la letra es común</span><span class="key malaria">hay malaria</span></figcaption>
     </figure>
   </section>
 
   <section class="scene" data-scene="5" aria-labelledby="t5" hidden>
     <div class="scene-text">
-      <p class="kicker">5 · No solo en las personas</p>
-      <h1 id="t5">Una letra también cambió animales y colores de ojos.</h1>
-      <p>Los mismos tipos de cambio aparecen en toda la naturaleza. Tocá una foto para ver su historia.</p>
+      <p class="kicker">5 · No solo en la sangre</p>
+      <h1 id="t5">Una letra también cambia animales y personas.</h1>
+      <div class="beats" aria-live="polite">
+        <p class="beat">El <b>leopardo negro</b> no es otra especie: es un leopardo al que le cambió una letra. TG<b>C</b> pasó a TG<b>A</b>, que significa STOP, y se cortó la proteína que frenaba el pigmento negro. ¡Las manchas siguen ahí!</p>
+        <p class="beat">Casi todas las personas de <b>ojos celestes</b> comparten una misma letra cambiada, una A por una G, heredada de un antepasado que vivió hace 6.000 a 10.000 años. Son parientes lejanos.</p>
+      </div>
+      <p class="muted">Tocá una foto para ver la historia completa.</p>
     </div>
     <div class="scene-art photos">
-      <a class="photo-card" href="index.html#naturaleza:felinos:3"><img src="img/fotos/leopardo-negro.webp" alt="Leopardo negro caminando entre hojas secas"><b>Leopardo negro</b><span>Una letra creó un STOP y apagó el freno del pigmento negro.</span></a>
-      <a class="photo-card" href="index.html#naturaleza:personas:1"><img src="img/fotos/ojo-celeste.webp" alt="Ojo celeste de cerca"><b>Ojos celestes</b><span>Una letra heredada de un antepasado de hace 6.000 a 10.000 años.</span></a>
+      <a class="photo-card leopard" href="index.html#naturaleza:felinos:3"><img src="img/fotos/leopardo-negro.webp" alt="Leopardo negro caminando entre hojas secas"><span class="letter-tag" id="tag-leopard">TG<b>C</b> → TG<b>A</b> · STOP</span><b>Leopardo negro</b><span>Una letra apagó el freno del pigmento.</span></a>
+      <a class="photo-card eye" href="index.html#naturaleza:personas:1"><img src="img/fotos/ojo-celeste.webp" alt="Ojo celeste de cerca"><span class="letter-tag">A → G</span><b>Ojos celestes</b><span>Una letra heredada hace miles de años.</span></a>
     </div>
   </section>
 
@@ -91,19 +115,21 @@
     <div class="scene-text">
       <p class="kicker">6 · Ahora vos</p>
       <h1 id="t6">¿Qué pasa si cambiás otra letra?</h1>
-      <p>Una sola letra puede no cambiar nada, cambiar una pieza o cortar toda la proteína. Depende de <b>dónde</b> cae y de <b>qué tipo</b> de cambio es.</p>
+      <div class="beats">
+        <p class="beat">Depende de dónde cae. Puede <b>no cambiar nada</b>, porque hay codones distintos que dicen lo mismo; <b>cambiar una pieza</b>, como en la anemia falciforme; o <b>cortar la proteína</b>, si aparece un STOP.</p>
+      </div>
       <div class="final-actions"><a class="primary" href="index.html#simulador">Abrir el simulador <span aria-hidden="true">→</span></a><a class="ghost" href="index.html#naturaleza">Más historias</a><button class="text-button" id="restart">Volver a empezar</button></div>
     </div>
     <div class="scene-art outcomes" aria-hidden="true">
       <div class="outcome"><span>No cambia nada</span><i class="bar"></i></div>
-      <div class="outcome"><span>Cambia una pieza</span><i class="bar one"></i></div>
+      <div class="outcome"><span>Cambia una pieza</span><i class="bar one"><span class="notch" id="notch"></span></i></div>
       <div class="outcome"><span>Se corta</span><i class="bar cut"></i></div>
     </div>
   </section>
 </main>
 
 <nav class="story-controls" aria-label="Avanzar en la historia">
-  <button class="round" id="back" aria-label="Escena anterior">←</button>
+  <button class="round" id="back" aria-label="Paso anterior">←</button>
   <button class="primary" id="next">Seguir <span aria-hidden="true">→</span></button>
 </nav>
 

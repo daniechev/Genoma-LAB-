@@ -99,13 +99,11 @@ h1:focus {
   width: 100%;
   height: 20px;
   padding: 0;
-  background: linear-gradient(#ffffff26, #ffffff26) center / 100% 3px no-repeat;
-}
-.progress button.done {
-  background-image: linear-gradient(#5ef2b080, #5ef2b080);
-}
-.progress button.active {
-  background-image: linear-gradient(var(--mint), var(--mint));
+  /* La barra de cada escena se llena a medida que avanzan sus pasos. */
+  background:
+    linear-gradient(var(--mint), var(--mint)) left center / var(--fill, 0%) 3px no-repeat,
+    linear-gradient(#ffffff26, #ffffff26) center / 100% 3px no-repeat;
+  transition: background-size 0.4s ease;
 }
 
 /* Escenas */
@@ -115,10 +113,10 @@ h1:focus {
 }
 .scene {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
   align-items: center;
-  gap: clamp(24px, 5vw, 72px);
-  max-width: 1280px;
+  gap: clamp(24px, 4vw, 64px);
+  max-width: 1440px;
   width: 100%;
   margin: 0 auto;
   padding: 12px 0 24px;
@@ -139,7 +137,7 @@ h1:focus {
 }
 h1 {
   margin: 0 0 18px;
-  font-size: clamp(30px, 4vw, 52px);
+  font-size: clamp(28px, 3.4vw, 48px);
   line-height: 1.08;
   letter-spacing: -0.02em;
 }
@@ -162,7 +160,7 @@ h1 {
 /* Escena 1: glóbulos rojos que pasan flotando. */
 .blood {
   position: relative;
-  height: min(56vh, 460px);
+  height: min(68vh, 600px);
   overflow: hidden;
   mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
@@ -193,6 +191,7 @@ h1 {
 }
 .codon {
   display: grid;
+  align-content: start;
   justify-items: center;
   gap: 8px;
   transition: margin 0.6s ease;
@@ -207,10 +206,10 @@ h1 {
 .base {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 48px;
-  border-radius: 9px;
-  font: 800 20px var(--mono);
+  width: clamp(40px, 3.6vw, 56px);
+  height: clamp(48px, 4.4vw, 68px);
+  border-radius: 10px;
+  font: 800 clamp(20px, 1.9vw, 28px) var(--mono);
   color: var(--ink);
   animation: pop 0.35s ease both;
   animation-delay: calc(var(--j) * 45ms);
@@ -238,7 +237,7 @@ h1 {
   background: var(--G);
 }
 .aa {
-  font: 700 16px var(--mono);
+  font: 700 clamp(16px, 1.4vw, 20px) var(--mono);
   color: var(--mint);
   opacity: 0;
   transform: translateY(-6px);
@@ -283,10 +282,10 @@ h1 {
 .tile {
   display: grid;
   place-items: center;
-  width: clamp(72px, 9vw, 104px);
-  height: clamp(84px, 10.5vw, 120px);
-  border-radius: 18px;
-  font: 800 clamp(38px, 4.6vw, 56px) var(--mono);
+  width: clamp(76px, 10vw, 140px);
+  height: clamp(88px, 11.5vw, 160px);
+  border-radius: 20px;
+  font: 800 clamp(40px, 5.4vw, 76px) var(--mono);
   color: var(--ink);
 }
 button.tile {
@@ -314,7 +313,7 @@ button.tile:hover {
 }
 .piece {
   margin: 0;
-  font: 600 18px var(--mono);
+  font: 600 clamp(18px, 1.6vw, 22px) var(--mono);
   color: var(--muted);
 }
 .piece b {
@@ -334,7 +333,7 @@ button.tile:hover {
   border-radius: 14px;
 }
 .cell-swap {
-  width: min(320px, 70vw);
+  width: min(420px, 70vw);
 }
 .cell-swap svg {
   display: block;
@@ -406,7 +405,7 @@ button.tile:hover {
   stroke-width: 0.6;
   transition: fill 1s ease;
 }
-.map.show-hbs .land.hbs {
+.map .land.hbs {
   fill: var(--mint);
 }
 .map .malaria {
@@ -414,7 +413,7 @@ button.tile:hover {
   opacity: 0;
   transition: opacity 1s ease;
 }
-.map.show-malaria .malaria {
+.scene:not([data-beat='0']) .map .malaria {
   opacity: 0.75;
 }
 .legend {
@@ -477,19 +476,29 @@ button.tile:hover {
 .outcome span {
   display: block;
   margin-bottom: 8px;
-  font-size: 17px;
+  font-size: clamp(17px, 1.5vw, 21px);
   color: var(--muted);
 }
 .bar {
   display: block;
-  height: 18px;
-  border-radius: 9px;
+  position: relative;
+  height: 28px;
+  border-radius: 14px;
   background: var(--sky);
   animation: grow 1s ease both;
 }
 .bar.one {
-  background: linear-gradient(90deg, var(--sky) 38%, var(--accent) 38% 42%, var(--sky) 42%);
-  animation-delay: 0.3s;
+  /* No crece: la T llega volando a su lugar desde la escena anterior. */
+  animation: none;
+}
+.notch {
+  position: absolute;
+  left: 38%;
+  top: -6px;
+  bottom: -6px;
+  width: 5%;
+  border-radius: 6px;
+  background: var(--accent);
 }
 .bar.cut {
   width: 26%;
@@ -615,4 +624,324 @@ button.tile:hover {
   .rbc {
     left: var(--y);
   }
+}
+
+/* Color por escena: una luz suave detrás del dibujo que cambia de tono al pasar de escena. */
+@property --tint {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #e2384a;
+}
+body {
+  --tint: #e2384a;
+  transition: --tint 1.2s ease;
+}
+body[data-scene='2'] {
+  --tint: #8b5cf6;
+}
+body[data-scene='3'] {
+  --tint: #ff7a66;
+}
+body[data-scene='4'] {
+  --tint: #2fd68f;
+}
+body[data-scene='5'] {
+  --tint: #3fb7ff;
+}
+body[data-scene='6'] {
+  --tint: #5ef2b0;
+}
+.glow {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      55vmax 45vmax at 78% 45%,
+      color-mix(in srgb, var(--tint) 26%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(40vmax 30vmax at 5% 0%, #5b2fd12e, transparent 70%);
+  view-transition-name: glow;
+}
+.kicker {
+  color: color-mix(in srgb, var(--tint) 55%, white);
+}
+
+/* Escena 1: el glóbulo grande del centro. */
+.rbc.hero {
+  top: 50%;
+  left: 50%;
+  width: min(34vh, 280px);
+  height: min(34vh, 280px);
+  margin: calc(min(34vh, 280px) / -2) 0 0 calc(min(34vh, 280px) / -2);
+  animation: bob 5s ease-in-out infinite alternate;
+  filter: drop-shadow(0 20px 40px #e2384a55);
+}
+@keyframes bob {
+  to {
+    transform: translateY(-14px) rotate(8deg);
+  }
+}
+
+/* Escena 4: la T del visitante aterriza en el mapa. */
+.map-wrap {
+  position: relative;
+}
+.map-letter {
+  position: absolute;
+  left: 27%;
+  top: 46%;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 46px;
+  margin: -23px 0 0 -20px;
+  border-radius: 10px;
+  background: var(--T);
+  color: var(--ink);
+  font: 800 24px var(--mono);
+  box-shadow: 0 0 0 0 #ffd44780;
+  animation: ring 2s ease-out 0.8s infinite;
+}
+@keyframes ring {
+  to {
+    box-shadow: 0 0 0 26px #ffd44700;
+  }
+}
+
+/* Escena 5: el cambio de letra de cada foto. */
+.photo-card {
+  position: relative;
+}
+.letter-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #0b0820cc;
+  color: var(--text);
+  font: 700 15px var(--mono);
+}
+.letter-tag b {
+  color: var(--accent);
+}
+#tag-leopard {
+  background: var(--T);
+  color: var(--ink);
+}
+#tag-leopard b {
+  color: #b3261e;
+}
+
+/* Transiciones con hilo: lo que tiene el mismo nombre pasa de una escena a la otra. */
+.vt .scene {
+  animation: none;
+}
+.story-top {
+  view-transition-name: top;
+}
+.story-controls {
+  view-transition-name: controls;
+}
+#hero-cell,
+.dna {
+  view-transition-name: focus;
+}
+.dna.focus .seven .letters,
+.codon-big {
+  view-transition-name: codon;
+}
+.tile.thread,
+.map-letter,
+#tag-leopard,
+.notch {
+  view-transition-name: letter;
+}
+::view-transition-group(*) {
+  animation-duration: 0.55s;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+::view-transition-old(root) {
+  animation: vt-out 0.3s ease both;
+}
+::view-transition-new(root) {
+  animation: vt-in 0.4s ease 0.05s both;
+}
+[data-dir='back']::view-transition-old(root) {
+  animation-name: vt-out-back;
+}
+[data-dir='back']::view-transition-new(root) {
+  animation-name: vt-in-back;
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: translateX(-48px);
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateX(48px);
+  }
+}
+@keyframes vt-out-back {
+  to {
+    opacity: 0;
+    transform: translateX(48px);
+  }
+}
+@keyframes vt-in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-48px);
+  }
+}
+/* Del glóbulo al ADN: la cámara entra en el glóbulo. */
+::view-transition-old(focus) {
+  animation: zoom-in-out 0.55s ease both;
+}
+::view-transition-new(focus) {
+  animation: fade-in 0.4s ease 0.15s both;
+}
+@keyframes zoom-in-out {
+  to {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+::view-transition-old(glow),
+::view-transition-new(glow) {
+  /* Igual de corta que el resto: mientras dura una transición, los toques no llegan a la página. */
+  animation-duration: 0.55s;
+}
+
+@media (max-width: 820px) {
+  .scene {
+    grid-template-columns: 1fr;
+  }
+  .blood {
+    height: 230px;
+  }
+  .rbc.hero {
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+  }
+  .base {
+    width: 30px;
+    height: 38px;
+    font-size: 17px;
+  }
+  .tile {
+    width: 84px;
+    height: 96px;
+    font-size: 44px;
+  }
+  .cell-swap {
+    width: 220px;
+  }
+  .map-letter {
+    width: 30px;
+    height: 34px;
+    margin: -17px 0 0 -15px;
+    font-size: 18px;
+  }
+  .letter-tag {
+    font-size: 13px;
+  }
+}
+
+/* Pasos: un párrafo por vez, y el dibujo de la escena cambia con cada paso. */
+.beat {
+  display: none;
+}
+.beat.on {
+  display: block;
+  animation: beat-in 0.45s ease both;
+}
+@keyframes beat-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.scene-text .beat,
+.scene-text .beat p {
+  font-size: clamp(18px, 1.5vw, 21px);
+}
+.beats {
+  min-height: 7.5em;
+}
+
+/* Escena 1: primero pocos glóbulos, después muchos, al final el grande del centro. */
+.rbc {
+  transition: opacity 0.8s ease;
+}
+.scene[data-beat='0'] .rbc:nth-child(n + 6):not(.hero) {
+  opacity: 0;
+}
+.rbc.hero {
+  transition:
+    opacity 0.8s ease,
+    scale 0.8s ease;
+}
+.scene:not([data-beat='2']) .rbc.hero {
+  opacity: 0;
+  scale: 0.6;
+}
+
+/* Escena 2: las piezas se encadenan como un collar. */
+.dna.chain .aa {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #5ef2b022;
+  box-shadow: 0 0 0 1px #5ef2b055;
+}
+.chain-note {
+  margin: 22px 0 0;
+  text-align: center;
+  color: var(--muted);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.dna.chain + .chain-note {
+  opacity: 1;
+}
+.chain-note b {
+  color: var(--mint);
+}
+
+/* Escena 3: fibras dentro del glóbulo antes de deformarse. */
+.cell-swap .fibers {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.cell-swap.fibers .fibers {
+  opacity: 1;
+}
+
+/* Escena 4: la malaria aparece en el segundo paso. */
+.key {
+  transition: opacity 0.6s ease;
+}
+.scene[data-beat='0'] .key.malaria {
+  opacity: 0;
+}
+
+/* Escena 5: se destaca la foto de la que habla el paso. */
+.photo-card {
+  transition: opacity 0.5s ease;
+}
+.scene[data-beat='0'] .photo-card.eye,
+.scene[data-beat='1'] .photo-card.leopard {
+  opacity: 0.4;
 }
