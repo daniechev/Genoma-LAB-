@@ -4114,3 +4114,24 @@ body::after {
     align-self: center;
   }
 }
+
+/* Ojos celestes: en pantalla ancha, el texto a la izquierda y la animación a la derecha. */
+@media (min-width: 901px) {
+  #chapter-personas .step[data-step='1'] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 600px);
+    column-gap: 40px;
+    align-items: start;
+  }
+  #chapter-personas .step[data-step='1'] > * {
+    grid-column: 1;
+  }
+  #chapter-personas .step[data-step='1'] > .eye-anim {
+    grid-column: 2;
+    grid-row: 1 / span 8;
+    margin-top: 0;
+  }
+  #chapter-personas .step[data-step='1'] > .step-next {
+    justify-self: start;
+  }
+}
