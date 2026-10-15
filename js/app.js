@@ -176,6 +176,7 @@
 
   // Una sola pantalla: el ADN, el cambio y la proteína se ven a la vez.
   function clearResult() {
+    const had = current;
     current = null;
     revealed = false;
     viewer.result = null;
@@ -183,6 +184,11 @@
     $('focus-mutation').hidden = true;
     $('science-note').hidden = true;
     $('viewer-overlay').textContent = idle;
+    if (had) emit('limpio');
+  }
+  // Avisa a los otros módulos (fábrica, sangre, sonido…) qué pasó en el simulador.
+  function emit(name, detail) {
+    document.dispatchEvent(new CustomEvent(`genoma:${name}`, { detail }));
   }
   const labelWidth = () => $('codons').querySelector('.codon-labels')?.offsetWidth || 70;
   function measure() {
@@ -437,6 +443,22 @@
     ],
   ];
   let lastGuess = null;
+  // Lo que dicen las otras 16 especies sobre la pieza que cambió.
+  const listNames = names =>
+    names.length > 1 ? `${names.slice(0, -1).join(', ')} y ${names.at(-1)}` : names[0];
+  function evolutionNote(r) {
+    if (!['missense', 'synonymous'].includes(r.effect) || r.piece < 1 || r.piece > 146) return '';
+    const E = Evolution,
+      n = E.SPECIES.length,
+      same = E.conservation()[r.piece - 1],
+      also = r.effect === 'missense' ? E.sameChange(r.piece, r.mature[r.piece - 1]) : [];
+    const extra = also.length
+      ? ` La pieza nueva ya existe en la naturaleza: ${also.length > 3 ? `${also.slice(0, 3).join(', ')} y ${also.length - 3} más` : listNames(also)} ${also.length === 1 ? 'la tiene' : 'la tienen'} en ese mismo lugar.`
+      : r.effect === 'missense' && same === n
+        ? ' Ningún animal de la lista tiene otra pieza acá: puede ser un lugar importante.'
+        : '';
+    return `<p class="evo-note"><b>En la evolución:</b> la pieza ${r.piece} es igual a la nuestra en <b>${same} de ${n}</b> especies${same === n ? ' (nunca cambió)' : ''}.${extra}</p>`;
+  }
   function resultHeading(r) {
     if (r.effect === 'start-loss') return 'Falta la señal para empezar';
     if (r.effect === 'stop-loss') return 'Falta la señal para terminar';
@@ -465,7 +487,7 @@
     const guess = lastGuess,
       heading = resultHeading(r);
     const length = r.lengthUnknown ? `${r.mature.length}+` : `${r.mature.length}`;
-    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza:malaria">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza:${r.species.id === 'leopard' ? 'felinos' : 'animales'}">${r.species.id === 'leopard' ? 'Jaguar y leopardo →' : 'Conocé más animales →'}</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza:animales">Conocé más animales →</button></p>` : ''}<button class="secondary save-card" id="save-card"><span aria-hidden="true">★</span> Guardar mi descubrimiento</button><details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
+    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza:malaria:velcro">¿Por qué una sola pieza arruina todo? El velcro →</button> <button class="text-button" data-goto="naturaleza:malaria">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza:${r.species.id === 'leopard' ? 'felinos' : 'animales'}">${r.species.id === 'leopard' ? 'Jaguar y leopardo →' : 'Conocé más animales →'}</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza:animales">Conocé más animales →</button></p>` : ''}${evolutionNote(r)}<button class="secondary save-card" id="save-card"><span aria-hidden="true">★</span> Guardar mi descubrimiento</button><details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
       r.mature
         ? r.mature
             .split('')
@@ -477,9 +499,10 @@
       b =>
         (b.onclick = () => {
           stopTour();
-          const [tab, chapter] = b.dataset.goto.split(':');
+          const [tab, chapter, anchor] = b.dataset.goto.split(':');
           showTab(tab);
           if (chapter) showChapter(chapter);
+          if (anchor) $(anchor)?.scrollIntoView({ block: 'start' });
         }),
     );
     $('save-card').onclick = openCard;
@@ -524,6 +547,7 @@
                   ? 'La parte apagada ya no se fabrica.'
                   : 'En naranja, las piezas distintas. La parte apagada ya no se fabrica.';
     render();
+    emit('resultado', { result: r, guess, hit: guess ? guess === r.category : null });
   }
   function restart() {
     stopTour();
@@ -729,6 +753,7 @@
     if (!current || !revealed) return;
     const canvas = $('card-canvas');
     drawCard(canvas, current);
+    $('card-heading').textContent = 'Tu descubrimiento';
     canvas.setAttribute('aria-label', `Tarjeta: ${resultHeading(current)}. ${lead(current)}`);
     $('card-share').hidden = !navigator.canShare;
     $('card-dialog').querySelector('.card-photo').textContent = standMode
@@ -767,13 +792,25 @@
   };
 
   // ---- Pestañas y estadísticas del stand ----
+  let currentTab = 'proyecto';
   function showTab(tab) {
-    all('.tab-page').forEach(p => (p.hidden = p.id !== `tab-${tab}`));
+    const changed = tab !== currentTab;
+    currentTab = tab;
+    all('.tab-page').forEach(p => {
+      p.hidden = p.id !== `tab-${tab}`;
+      // Entrada de cine: la página nueva sube y se enfoca; se reinicia la animación cada vez.
+      if (!p.hidden && changed) {
+        p.classList.remove('entering');
+        void p.offsetWidth;
+        p.classList.add('entering');
+      }
+    });
     all('.nav').forEach(b => {
       b.classList.toggle('active', b.dataset.tab === tab);
       if (b.dataset.tab === tab) b.setAttribute('aria-current', 'page');
       else b.removeAttribute('aria-current');
     });
+    moveNavPill();
     if (tab === 'stats' || tab === 'proyecto') renderStats();
     if (tab === 'lab') {
       viewer.resize();
@@ -781,7 +818,21 @@
     }
     if (tab !== 'naturaleza') evoStop();
     window.scrollTo({ top: 0, behavior: 'instant' });
+    if (changed) {
+      Sound.ui('swoosh');
+      emit('pestaña', tab);
+    }
   }
+  // La píldora blanca de la barra se desliza hasta la pestaña elegida.
+  function moveNavPill() {
+    const nav = document.querySelector('.topbar nav'),
+      active = nav.querySelector('.nav.active');
+    nav.classList.toggle('has-pill', !!active);
+    if (!active) return;
+    nav.style.setProperty('--pill-x', `${active.offsetLeft}px`);
+    nav.style.setProperty('--pill-w', `${active.offsetWidth}px`);
+  }
+  new ResizeObserver(moveNavPill).observe(document.querySelector('.topbar nav'));
   function renderStats() {
     const total = stats.nada + stats.pieza + stats.corte + stats.desorden;
     $('stats-overview').innerHTML =
@@ -817,6 +868,11 @@
   }
   function updateLegend() {
     const confidence = viewer.model === 'af' && viewer.confidence;
+    if (viewer.evolution && !viewer.result) {
+      $('protein-legend').innerHTML =
+        '<span class="gradient-line" style="background:linear-gradient(90deg,#4a4296,#ff9a4d 85%,#ffd447 85%)"></span><span>Cambia en muchas especies</span><span>Igual en las 16</span>';
+      return;
+    }
     $('protein-legend').innerHTML = confidence
       ? '<span class="gradient-line" style="background:linear-gradient(90deg,#388de7 25%,#65cbf3 25%,#65cbf3 50%,#ffdb13 50%,#ffdb13 75%,#ff7d45 75%)"></span><span>pLDDT &gt;90</span><span>70–90</span><span>50–70</span><span>&lt;50</span>'
       : '<span class="gradient-line"></span><span>Inicio de la cadena</span><span>Final</span>';
@@ -907,6 +963,43 @@
     viewer.focus = null;
     viewer.zoom = 1;
   };
+  // Modo evolución del visor: dorado = pieza igual en las 16 especies; el punto amarillo es el hierro del hemo.
+  const study = Evolution.hemeStudy(MODELS.pdb);
+  viewer.evolutionHeme = (() => {
+    const chain = MODELS.pdb.chains[MODELS.pdb.beta],
+      his = chain[91];
+    return MODELS.pdb.hemes.reduce((best, fe) =>
+      Math.hypot(his.x - fe[0], his.y - fe[1], his.z - fe[2]) <
+      Math.hypot(his.x - best[0], his.y - best[1], his.z - best[2])
+        ? fe
+        : best,
+    );
+  })();
+  function setEvolutionView(on) {
+    $('evo-color').checked = on;
+    viewer.evolution = on ? study.conservation : null;
+    updateLegend();
+  }
+  $('evo-color').onchange = e => setEvolutionView(e.target.checked);
+  // Con un resultado a la vista, el visor vuelve a marcar la mutación: la leyenda lo acompaña.
+  document.addEventListener('genoma:resultado', updateLegend);
+  document.addEventListener('genoma:limpio', updateLegend);
+  all('[data-evo-view]').forEach(
+    b =>
+      (b.onclick = () => {
+        stopTour();
+        showTab('lab');
+        clearResult();
+        render();
+        setModel('pdb');
+        setEvolutionView(true);
+        document.querySelector('.viewer-more').open = true;
+        document.querySelector('.protein-panel').scrollIntoView({ block: 'center' });
+        notify(
+          'Dorado: piezas iguales en las 16 especies. El punto amarillo es el hierro del hemo.',
+        );
+      }),
+  );
   $('confidence').onchange = e => {
     viewer.confidence = e.target.checked;
     updateLegend();
@@ -1595,6 +1688,37 @@
       appear.observe(el);
     }
   }
+
+  // ---- Lo que usan los otros módulos (viaje, fábrica, sangre, mapa de calor, nombre, duelo…) ----
+  window.GenomaLab = {
+    viewer,
+    notify,
+    emit,
+    showTab: tab => {
+      stopTour();
+      showTab(tab);
+    },
+    showChapter,
+    startTour,
+    get tab() {
+      return currentTab;
+    },
+    get result() {
+      return revealed ? current : null;
+    },
+    get standMode() {
+      return standMode;
+    },
+    // Lleva una mutación al simulador y muestra el resultado (sin modo desafío).
+    tryMutation(m, { guess = false } = {}) {
+      stopTour();
+      showTab('lab');
+      clearResult();
+      position = m.position;
+      centerOn(position);
+      return apply(m, { guess });
+    },
+  };
 
   centerOn(position);
   renderSurvey();

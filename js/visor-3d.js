@@ -9,6 +9,9 @@ class ProteinViewer {
     this.all = false;
     this.confidence = false;
     this.result = null;
+    // Conservación en 16 especies (una por pieza) y el hierro del hemo de la cadena beta, para el modo evolución.
+    this.evolution = null;
+    this.evolutionHeme = null;
     this.rx = -0.25;
     this.ry = 0.35;
     this.zoom = 1;
@@ -111,6 +114,10 @@ class ProteinViewer {
   // Color de cada pieza: rojo si cambió, naranja si se desordenó, apagado si ya no se fabrica.
   color(res, confidence, isBeta) {
     if (!isBeta) return '#5a5f96';
+    if (this.evolution && !this.result) {
+      const v = this.evolution[res - 1] / 16;
+      return v === 1 ? '#ffd447' : this.mix([74, 66, 150], [255, 154, 77], v * 0.85);
+    }
     if (this.result) {
       const r = this.result;
       if (r.startLost || res > r.mature.length) return '#4a4780';
@@ -229,14 +236,26 @@ class ProteinViewer {
       ctx.stroke();
     }
     ctx.globalAlpha = 1;
-    if (all)
-      for (const heme of model.hemes) {
-        const p = project({ x: heme[0], y: heme[1], z: heme[2] });
-        ctx.fillStyle = '#dfbc72';
+    const hemes = all
+      ? model.hemes
+      : this.evolution && !this.result && this.model === 'pdb' && this.evolutionHeme
+        ? [this.evolutionHeme]
+        : [];
+    for (const heme of hemes) {
+      const p = project({ x: heme[0], y: heme[1], z: heme[2] }),
+        big = !all;
+      ctx.fillStyle = big ? '#fff3b0' : '#dfbc72';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, big ? 7 : 4.5, 0, Math.PI * 2);
+      ctx.fill();
+      if (big) {
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.arc(p.x, p.y, 12, 0, Math.PI * 2);
+        ctx.stroke();
       }
+    }
     if (marker) {
       const col = this.result.category === 'nada' ? '#ffffff' : '#ff5d6c';
       ctx.strokeStyle = col;

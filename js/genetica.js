@@ -156,13 +156,50 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
       lengthUnknown: !startLost && tr.stop === -1,
     };
   }
-  // Prueba todas las sustituciones posibles (444 letras × 3 letras nuevas) y cuenta cada efecto.
-  function substitutionSurvey() {
-    const counts = { missense: 0, synonymous: 0, nonsense: 0, 'start-loss': 0, 'stop-loss': 0 };
+  // Las 1.332 sustituciones posibles (444 letras × 3 letras nuevas), en orden: letra por letra, A-T-C-G.
+  // Se calcula una sola vez y se guarda: lo usan el póster, el mapa de calor y el duelo.
+  let map = null;
+  function substitutionMap() {
+    if (map) return map;
+    map = [];
     for (let p = 0; p < DNA.length; p++)
       for (const b of 'ATCG')
-        if (b !== DNA[p]) counts[simulate({ position: p, type: 'sub', base: b }).effect]++;
+        if (b !== DNA[p]) {
+          const r = simulate({ position: p, type: 'sub', base: b });
+          map.push({
+            position: p,
+            base: b,
+            effect: r.effect,
+            category: r.category,
+            codon: r.codon,
+            letter: p % 3,
+            from: table[r.originalCodon],
+            to: table[r.mutatedCodon],
+          });
+        }
+    return map;
+  }
+  // Cuenta cada efecto entre las 1.332 sustituciones.
+  function substitutionSurvey() {
+    const counts = { missense: 0, synonymous: 0, nonsense: 0, 'start-loss': 0, 'stop-loss': 0 };
+    for (const m of substitutionMap()) counts[m.effect]++;
     return counts;
+  }
+  // Lo mismo, separado según qué letra del codón cambia (1.ª, 2.ª o 3.ª).
+  function letterSurvey() {
+    const rows = [0, 1, 2].map(() => ({
+      total: 0,
+      missense: 0,
+      synonymous: 0,
+      nonsense: 0,
+      'start-loss': 0,
+      'stop-loss': 0,
+    }));
+    for (const m of substitutionMap()) {
+      rows[m.letter].total++;
+      rows[m.letter][m.effect]++;
+    }
+    return rows;
   }
   // Lee un archivo PDB y se queda con los carbonos alfa (un punto por aminoácido) y el hierro de los hemo.
   function parsePDB(text, alphaFold = false) {
@@ -225,7 +262,9 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     SPECIES,
     translate,
     simulate,
+    substitutionMap,
     substitutionSurvey,
+    letterSurvey,
     parsePDB,
   };
   if (typeof module !== 'undefined') module.exports = api;
