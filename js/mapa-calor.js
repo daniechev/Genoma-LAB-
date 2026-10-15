@@ -44,7 +44,9 @@
     const bands = Math.ceil(148 / cols);
     cols = Math.ceil(148 / bands);
     const cell = (width - labelW) / cols,
-      cellH = Math.max(7, Math.min(16, cell * 1.05)),
+      // data-stretch permite filas más altas (la presentación tiene lugar de sobra).
+      stretch = Number(box.dataset.stretch) || 1.05,
+      cellH = Math.max(7, Math.min(stretch > 1.05 ? 30 : 16, cell * stretch)),
       track = 22,
       bandH = track + 6 + 9 * cellH + 8 + 26;
     layout = { width, labelW, cols, bands, cell, cellH, track, bandH, height: bands * bandH };
@@ -116,9 +118,11 @@
     }
   }
   function hit(e) {
+    // Si el mapa está escalado (como en la presentación), se pasa del tamaño en pantalla al del dibujo.
     const r = canvas.getBoundingClientRect(),
-      mx = e.clientX - r.left,
-      my = e.clientY - r.top,
+      k = layout.width / r.width,
+      mx = (e.clientX - r.left) * k,
+      my = (e.clientY - r.top) * k,
       band = Math.floor(my / layout.bandH),
       col = band * layout.cols + Math.floor((mx - layout.labelW) / layout.cell);
     if (mx < layout.labelW || col < 0 || col >= 148) return null;

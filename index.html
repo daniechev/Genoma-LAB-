@@ -23,7 +23,7 @@
     <p class="eyebrow">FERIA DE CIENCIAS · BIOLOGÍA</p>
     <h1>¿Qué cambia con <em>una letra?</em></h1>
     <p>Simulamos qué le pasa a la hemoglobina, la proteína que lleva el oxígeno en la sangre, cuando cambia una sola letra de su gen.</p>
-    <div class="poster-actions"><button class="primary" id="start-tour"><span aria-hidden="true">▶</span> Ver el recorrido guiado <small>3 casos reales · 2 min</small></button><button class="ghost" data-tab="lab">Probar el simulador</button></div>
+    <div class="poster-actions"><button class="primary" id="start-tour"><span aria-hidden="true">▶</span> Ver el recorrido guiado <small>3 casos reales · 2 min</small></button><button class="ghost" data-tab="lab">Probar el simulador</button><a class="ghost" href="presentacion.html" target="_blank" rel="noopener">Modo presentación</a></div>
     </div>
     <canvas id="helix" class="helix" aria-hidden="true"></canvas>
     <a class="scroll-cue" href="#journey"><span>Bajá para viajar de vos a una letra</span><i aria-hidden="true"></i></a>
@@ -53,7 +53,7 @@
       <li>Probamos <b>las 1.332 sustituciones</b> posibles de una letra.</li>
       <li>Marcamos cada cambio sobre la <b>estructura 3D real</b> (rayos X, PDB 2HHB).</li>
       <li>Comparamos la cadena beta con la de <b>16 especies</b>, del mandril a la rana.</li>
-      <li>Verificamos el programa con <b>30 pruebas automáticas</b>.</li>
+      <li>Verificamos el programa con <b>31 pruebas automáticas</b>.</li>
     </ol></article>
   </div>
   <article class="poster-card poster-results"><span class="lesson-number">04</span><h2>Resultados</h2>
@@ -142,6 +142,7 @@
         <p class="viewer-caption" id="model-caption">Estructura medida por rayos X. Cada tramo conecta las posiciones reales de los aminoácidos.</p>
         <div class="viewer-settings"><label><input type="checkbox" id="evo-color"> Colorear lo que la evolución no cambió</label><label><input type="checkbox" id="all-chains"> Ver las 4 cadenas</label><label id="confidence-label" hidden><input type="checkbox" id="confidence"> Colorear confianza de IA</label><button id="rotate" aria-pressed="true">Ⅱ Pausar giro</button></div>
         <div class="protein-legend" id="protein-legend"><span class="gradient-line"></span><span>Inicio de la cadena</span><span>Final</span></div>
+        <div class="print-3d"><button class="ghost" id="stl-download"><span aria-hidden="true">⬇</span> Descargar para imprimir en 3D</button><p class="muted">Archivo STL de la cadena beta, de unos 8 cm. Si cambiaste una pieza, lleva una bolita en ese lugar. Imprimila con soportes.</p></div>
       </details>
     </aside>
   </div>

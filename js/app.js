@@ -1009,6 +1009,26 @@
     viewer.onRotation();
   };
   $('focus-mutation').onclick = () => viewer.focusMutation();
+  // Impresión 3D: la cadena beta como un tubo cerrado, con una bolita en la pieza que cambió.
+  $('stl-download').onclick = () => {
+    const model = MODELS[viewer.model],
+      r = viewer.result,
+      mark = r && r.effect === 'missense' && r.piece >= 1 && r.piece <= 146 ? r.piece : 0,
+      file = new Blob([STL.toSTL(STL.proteinMeshes(model.chains[model.beta], { mark }))], {
+        type: 'model/stl',
+      }),
+      url = URL.createObjectURL(file),
+      a = document.createElement('a');
+    a.href = url;
+    a.download = mark ? `hemoglobina-beta-pieza-${mark}.stl` : 'hemoglobina-beta.stl';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    notify(
+      mark
+        ? `Listo: la cadena beta con una bolita en la pieza ${mark}. Imprimila con soportes.`
+        : 'Listo: la cadena beta para imprimir en 3D, de unos 8 cm. Imprimila con soportes.',
+    );
+  };
   $('zoom-in').onclick = () => viewer.zoomBy(1.2);
   $('zoom-out').onclick = () => viewer.zoomBy(1 / 1.2);
   $('reset-view').onclick = () => viewer.reset();
