@@ -4121,3 +4121,7 @@ a.ghost {
   color: var(--text);
   text-decoration: none;
 }
+.name-row input {
+  min-width: 0;
+  width: 100%;
+}

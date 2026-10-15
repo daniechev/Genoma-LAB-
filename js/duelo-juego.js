@@ -217,6 +217,10 @@
     dialog.close();
   }
   $('duel-open').onclick = open;
+  $('tour-duel').onclick = () => {
+    GenomaLab.showTab('lab');
+    open();
+  };
   $('duel-start').onclick = startGame;
   $('duel-again').onclick = startGame;
   $('duel-close').onclick = close;

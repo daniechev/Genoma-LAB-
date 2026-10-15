@@ -48,7 +48,7 @@
       stretch = Number(box.dataset.stretch) || 1.05,
       cellH = Math.max(7, Math.min(stretch > 1.05 ? 30 : 16, cell * stretch)),
       track = 22,
-      bandH = track + 6 + 9 * cellH + 8 + 26;
+      bandH = track + 6 + 9 * cellH + 8 + 26 + (bands > 1 ? 18 : 0);
     layout = { width, labelW, cols, bands, cell, cellH, track, bandH, height: bands * bandH };
     const dpr = Math.min(devicePixelRatio || 1, 2);
     canvas.style.height = `${layout.height}px`;
@@ -73,14 +73,14 @@
       ctx.font = `700 11px ${FONT}`;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
-      ctx.fillText('16 esp.', 0, top + track / 2);
+      ctx.fillText(labelW >= 40 ? '16 esp.' : 'esp.', 0, top + track / 2);
       ['1.ª', '2.ª', '3.ª'].forEach((t, i) => ctx.fillText(t, 4, rowY(i * 3 + 1.5, top)));
       // Números de codón debajo de cada banda.
       const from = band * cols,
         to = Math.min(148, from + cols);
       ctx.textAlign = 'center';
       for (let c = from; c < to; c++)
-        if ((c + 1) % 10 === 0 || c === from) {
+        if ((c + 1) % 10 === 0 || (c === from && (c + 1) % 10 < 8)) {
           const { x } = place(c);
           ctx.fillText(String(c + 1), x + cell / 2, rowY(9, top) + 14);
         }
