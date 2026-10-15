@@ -33,16 +33,21 @@
     }),
     known = new Set(G.CASES.map(c => `${c.position}${c.base}`));
   let layout = null,
+    limit = 148,
     hover = null,
     pinned = null;
 
   function measure() {
     const width = box.clientWidth,
       labelW = width > 600 ? 40 : 30,
-      minCol = width > 900 ? 7 : 8.5;
-    let cols = Math.min(148, Math.floor((width - labelW) / minCol));
-    const bands = Math.ceil(148 / cols);
-    cols = Math.ceil(148 / bands);
+      minCol0 = width > 900 ? 7 : 8.5;
+    // data-compact: en pantallas angostas se muestra solo el comienzo del gen, en una banda.
+    let minCol = minCol0;
+    limit = box.dataset.compact !== undefined && width < 600 ? 37 : 148;
+    if (limit < 148) minCol = Math.min(minCol, (width - labelW) / limit);
+    let cols = Math.min(limit, Math.floor((width - labelW) / minCol));
+    const bands = Math.ceil(limit / cols);
+    cols = Math.ceil(limit / bands);
     const cell = (width - labelW) / cols,
       // data-stretch permite filas más altas (la presentación tiene lugar de sobra).
       stretch = Number(box.dataset.stretch) || 1.05,
@@ -77,7 +82,7 @@
       ['1.ª', '2.ª', '3.ª'].forEach((t, i) => ctx.fillText(t, 4, rowY(i * 3 + 1.5, top)));
       // Números de codón debajo de cada banda.
       const from = band * cols,
-        to = Math.min(148, from + cols);
+        to = Math.min(limit, from + cols);
       ctx.textAlign = 'center';
       for (let c = from; c < to; c++)
         if ((c + 1) % 10 === 0 || (c === from && (c + 1) % 10 < 8)) {
@@ -86,13 +91,14 @@
         }
     }
     // Conservación: barra dorada por pieza (los codones 1 y 148 no fabrican piezas de la cadena madura).
-    for (let c = 1; c <= 146; c++) {
+    for (let c = 1; c <= Math.min(146, limit - 1); c++) {
       const { x, top } = place(c),
         v = cons[c - 1] / E.SPECIES.length;
       ctx.fillStyle = v === 1 ? '#ffd447' : `rgba(255,212,71,${0.25 + 0.5 * v})`;
       ctx.fillRect(x + 0.5, top + track * (1 - v), Math.max(1, cell - 1), track * v);
     }
     for (const g of grid) {
+      if (g.col >= limit) continue;
       const { x, top } = place(g.col),
         y = rowY(g.row, top);
       ctx.fillStyle = COLOR[g.category];
@@ -125,7 +131,7 @@
       my = (e.clientY - r.top) * k,
       band = Math.floor(my / layout.bandH),
       col = band * layout.cols + Math.floor((mx - layout.labelW) / layout.cell);
-    if (mx < layout.labelW || col < 0 || col >= 148) return null;
+    if (mx < layout.labelW || col < 0 || col >= limit) return null;
     const top = band * layout.bandH;
     for (let row = 0; row < 9; row++) {
       const y = rowY(row, top);
@@ -196,7 +202,9 @@
   const letters = G.letterSurvey(),
     seen = E.missenseSeenInNature(),
     pct = (a, b) => Math.round((a / b) * 100);
-  document.getElementById('insights').innerHTML = `
+  const insights = document.getElementById('insights');
+  if (insights)
+    insights.innerHTML = `
     <div><b>${letters[1].synonymous} de ${letters[1].total}</b><span>Cambiar la <em>2.ª letra</em> de un codón casi nunca sale gratis: solo ${letters[1].synonymous === 1 ? 'un cambio deja' : `${letters[1].synonymous} cambios dejan`} la proteína igual.</span></div>
     <div><b>${pct(letters[2].synonymous, letters[2].total)} %</b><span>de los cambios en la <em>3.ª letra</em> no cambian nada (${letters[2].synonymous} de ${letters[2].total}): el código genético tiene «sinónimos» que se diferencian justo ahí.</span></div>
     <div><b>1 de cada ${Math.round(seen.missense / seen.seen)}</b><span>cambios de pieza (${seen.seen} de ${seen.missense}) pone una pieza que <em>ya tiene otro animal</em> en ese mismo lugar.</span></div>`;

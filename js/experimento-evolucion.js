@@ -16,16 +16,19 @@
 
   // La cadena entera: cada cuadradito es una pieza; más dorado = igual en más especies.
   const strip = document.getElementById('evo-strip');
-  strip.innerHTML = [...E.HUMAN]
-    .map((aa, i) => {
-      const c = study.conservation[i],
-        isNear = study.distances[i] < study.cutoff;
-      return `<i class="${c === n ? 'all' : ''}${isNear ? ' near' : ''}" style="--v:${c / n}" title="Pieza ${i + 1} (${G.names[aa]}): igual en ${c} de ${n} especies${isNear ? ' · cerca del hemo' : ''}"></i>`;
-    })
-    .join('');
+  if (strip)
+    strip.innerHTML = [...E.HUMAN]
+      .map((aa, i) => {
+        const c = study.conservation[i],
+          isNear = study.distances[i] < study.cutoff;
+        return `<i class="${c === n ? 'all' : ''}${isNear ? ' near' : ''}" style="--v:${c / n}" title="Pieza ${i + 1} (${G.names[aa]}): igual en ${c} de ${n} especies${isNear ? ' · cerca del hemo' : ''}"></i>`;
+      })
+      .join('');
 
   // Reloj molecular: cuanto más lejano el parentesco, más piezas distintas.
-  const svg = document.getElementById('evo-clock'),
+  const svg =
+      document.getElementById('evo-clock') ||
+      document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
     W = 520,
     H = 280,
     pad = { l: 46, r: 16, t: 14, b: 40 },
@@ -64,4 +67,18 @@
     list = six.length > 1 ? `${six.slice(0, -1).join(', ')} y ${six.at(-1)}` : six[0];
   document.getElementById('evo-six').innerHTML =
     `En ${n - six.length} de ${n} especies la pieza 6 es glutamato (Glu), como en nosotros. ${list}: o sea que ese lugar <b>sí puede cambiar</b>. Pero <b>ninguna especie tiene valina</b>, la pieza de la anemia falciforme. No importa solo <em>dónde</em> cae el cambio: también <em>qué</em> pieza llega.`;
+  // Fichas de la pieza 6: nosotros y las 16 especies; la valina no aparece en ninguna.
+  const chips = document.getElementById('six-chips');
+  if (chips)
+    chips.innerHTML =
+      [{ name: 'Nosotros', aa: 'E' }, ...E.SPECIES.map(s => ({ name: s.name, aa: s.seq[5] }))]
+        .map(
+          (c, i) =>
+            `<span class="${c.aa === 'E' ? '' : 'other'}${i ? '' : ' us'}" title="${c.name}: ${G.names[c.aa]}"><b>${G.names[c.aa]}</b>${c.name}</span>`,
+        )
+        .join('') + '<span class="missing"><b>Val</b>ninguna</span>';
+  // Para la historia paso a paso del póster: la misma idea, más corta.
+  if (!document.getElementById('evo-clock'))
+    document.getElementById('evo-six').innerHTML =
+      `En ${n - six.length} de ${n} especies es glutamato, como en nosotros. En otras ${six.length} es distinta: ese lugar <b>sí puede cambiar</b>. Pero <b>ninguna</b> tiene valina, la pieza de la anemia falciforme. No importa solo <em>dónde</em> cae el cambio: también <em>qué</em> pieza llega.`;
 })();

@@ -56,49 +56,61 @@
       <li>Verificamos el programa con <b>31 pruebas automáticas</b>.</li>
     </ol></article>
   </div>
-  <article class="poster-card poster-results"><span class="lesson-number">04</span><h2>Resultados</h2>
-    <div class="results-layout">
-      <div><p class="poster-headline" id="survey-headline"></p><p class="muted">De las 1.332 formas de cambiar una letra del gen:</p><div class="survey" id="survey"></div></div>
-      <div class="results-side">
-        <h3>Tres casos reales</h3>
-        <table class="cases-table"><thead><tr><th>Enfermedad</th><th>Cambio en el ADN</th><th>Efecto</th></tr></thead><tbody>
-          <tr><td>Anemia falciforme</td><td><code>GAG → G<b>T</b>G</code></td><td>Glu6Val · cambia 1 pieza</td></tr>
-          <tr><td>Hemoglobina C</td><td><code>GAG → <b>A</b>AG</code></td><td>Glu6Lys · cambia 1 pieza</td></tr>
-          <tr><td>Beta-talasemia</td><td><code><b>C</b>AG → <b>T</b>AG</code></td><td>Gln39Stop · se corta</td></tr>
-        </tbody></table>
-        <h3>En el stand</h3><div class="stand-stats" id="stand-stats"></div><button class="text-button" data-tab="stats">Ver todos los resultados del stand</button>
-      </div>
+  <section class="story" id="story" aria-label="Resultados paso a paso">
+    <div class="story-top"><p class="eyebrow">LO QUE DESCUBRIMOS</p><div class="story-dots" id="story-dots" role="group" aria-label="Pasos"></div></div>
+    <div class="story-steps" aria-live="polite">
+      <article class="story-step" data-title="1.332 mutaciones">
+        <span class="lesson-number">04</span><h2>Probamos las 1.332 formas de cambiar una letra</h2>
+        <p class="poster-headline" id="survey-headline"></p>
+        <div class="survey" id="survey"></div>
+      </article>
+      <article class="story-step" data-title="¿Qué letra?">
+        <span class="lesson-number">05</span><h2>Adiviná: ¿qué letra del codón se puede cambiar sin que pase nada?</h2>
+        <div class="quiz" data-answer="3">
+          <div class="quiz-options"><button data-option="1"><b>1.ª</b>letra</button><button data-option="2"><b>2.ª</b>letra</button><button data-option="3"><b>3.ª</b>letra</button></div>
+          <div class="quiz-reveal" hidden>
+            <p class="quiz-verdict"></p>
+            <p class="story-lead">¡La <b>3.ª</b>! 7 de cada 10 cambios en la 3.ª letra no cambian nada. En cambio, la 2.ª casi nunca perdona: solo 1 de 444.</p>
+            <div class="heatmap-key"><span><i class="pieza"></i>Cambia una pieza</span><span><i class="nada"></i>No cambia nada</span><span><i class="corte"></i>Se corta</span></div>
+            <div class="heatmap" id="heatmap" data-compact><canvas id="heatmap-canvas" role="img" aria-label="Mapa de las sustituciones: la franja de la tercera letra es casi toda celeste"></canvas><div class="heatmap-tip" id="heatmap-tip" role="status" hidden></div></div>
+            <p class="muted story-hint">Cada cuadradito es un cambio. Mirá la franja celeste de abajo: es la 3.ª letra. Tocá uno para probarlo.<span class="only-phone"> En el celular se ven los primeros 37 codones.</span></p>
+          </div>
+        </div>
+      </article>
+      <article class="story-step" data-title="Casos reales">
+        <span class="lesson-number">06</span><h2>Mismo codón, otra letra, otra enfermedad</h2>
+        <div class="story-cases">
+          <div><div class="case-codon"><span class="base g">G</span><span class="base t changed">T</span><span class="base g">G</span></div><b>Anemia falciforme</b><span>Codón 7 · cambia 1 pieza</span></div>
+          <div><div class="case-codon"><span class="base a changed">A</span><span class="base a">A</span><span class="base g">G</span></div><b>Hemoglobina C</b><span>El mismo codón, otra letra</span></div>
+          <div><div class="case-codon"><span class="base t changed">T</span><span class="base a">A</span><span class="base g">G</span></div><b>Beta-talasemia</b><span>Codón 40 · un STOP la corta</span></div>
+        </div>
+      </article>
+      <article class="story-step" data-title="La evolución">
+        <span class="lesson-number">07</span><h2>Comparamos 16 especies, del mandril a la rana. Las piezas que agarran el oxígeno…</h2>
+        <div class="quiz" data-answer="menos">
+          <div class="quiz-options"><button data-option="mas"><b>Cambian más</b>que las demás</button><button data-option="igual"><b>Cambian igual</b>que las demás</button><button data-option="menos"><b>Cambian menos</b>que las demás</button></div>
+          <div class="quiz-reveal" hidden>
+            <p class="quiz-verdict"></p>
+            <div class="evo-result" id="evo-result"></div>
+            <button class="ghost" data-evo-view>Verlo en 3D <span aria-hidden="true">→</span></button>
+          </div>
+        </div>
+      </article>
+      <article class="story-step" data-title="La pieza 6">
+        <span class="lesson-number">08</span><h2>Sorpresa: la pieza 6</h2>
+        <div class="six-chips" id="six-chips" aria-hidden="true"></div>
+        <p class="story-lead" id="evo-six"></p>
+      </article>
+      <article class="story-step story-end" data-title="Conclusión">
+        <span class="lesson-number">09</span><h2>Conclusión</h2>
+        <p class="poster-big">Una letra puede <b>no cambiar nada</b>, <b>cambiar una pieza</b> o <b>cortar la proteína</b>. Depende de <b>dónde</b> cae y de <b>qué tipo</b> de cambio es.</p>
+        <div class="story-final"><img src="img/qr-sitio.svg" alt="Código QR que abre la app en el celular"><div><button class="primary" data-tab="lab">Probalo vos <span aria-hidden="true">→</span></button><div class="stand-stats" id="stand-stats"></div></div></div>
+        <p class="muted story-limits">Es una simulación educativa: no calcula cómo se pliega la proteína mutada y no sirve como diagnóstico.</p>
+      </article>
     </div>
-    <div class="heatmap-block">
-      <h3>El mapa de las 1.332 mutaciones</h3>
-      <p class="muted">Cada cuadradito es un cambio posible. Hay una columna por codón y, en cada una, las 3 letras del codón (filas 1.ª, 2.ª y 3.ª) por las 3 letras nuevas. La barra dorada de arriba dice en cuántas de 16 especies esa pieza es igual a la nuestra. Los recuadros blancos son los tres casos reales. Pasá el mouse o tocá un cuadradito.</p>
-      <div class="heatmap-key"><span><i class="pieza"></i>Cambia una pieza</span><span><i class="nada"></i>No cambia nada</span><span><i class="corte"></i>Se corta o no arranca</span><span><i class="desorden"></i>No termina</span><span><i class="gold"></i>Igual en las 16 especies</span></div>
-      <div class="heatmap" id="heatmap"><canvas id="heatmap-canvas" role="img" aria-label="Mapa de las 1.332 sustituciones posibles del gen HBB, coloreadas por su efecto"></canvas><div class="heatmap-tip" id="heatmap-tip" role="status" hidden></div></div>
-      <div class="insights" id="insights"></div>
-    </div>
-  </article>
-  <article class="poster-card poster-evolution"><span class="lesson-number">05</span><h2>Segundo experimento: ¿qué dice la evolución?</h2>
-    <div class="evo-question">
-      <div><h3>Pregunta</h3><p>Cambiar una pieza es facilísimo: 7 de cada 10 cambios de letra lo hacen. Entonces, ¿por qué algunas piezas son iguales en animales que se separaron de nosotros hace más de 300 millones de años?</p></div>
-      <div><h3>Hipótesis</h3><p>Las piezas que la evolución nunca cambió son las que hacen el trabajo: las que sostienen el <b>hemo</b>, la parte que agarra el oxígeno.</p></div>
-      <div><h3>Método</h3><p>Comparamos nuestra cadena beta con la de <b>16 especies</b>, del mandril a la rana. En la estructura 3D real medimos la distancia de cada pieza al hierro del hemo.</p></div>
-    </div>
-    <div class="evo-result" id="evo-result"></div>
-    <h3 class="evo-sub">Las 146 piezas, de la 1 a la 146</h3>
-    <div class="evo-strip" id="evo-strip" role="img" aria-label="Conservación de cada pieza de la cadena beta en 16 especies"></div>
-    <div class="evo-strip-key"><span><i class="all"></i>Igual en las 16 especies</span><span><i class="some"></i>Cambia en alguna</span><span><i class="dot"></i>Cerca del hemo</span></div>
-    <div class="evo-layout">
-      <div><h3>El reloj molecular</h3><p class="muted">Cada punto es una especie. Cuanto más lejano el parentesco, más piezas distintas: los cambios se acumulan con el tiempo, casi como un reloj.</p><svg id="evo-clock" class="evo-clock" role="img" aria-label="Piezas distintas a las nuestras según hace cuánto se separó cada especie"></svg><div class="evo-clock-key"><span><i class="human"></i>Nosotros</span><span><i class="primate"></i>Primates</span><span><i class="mamífero"></i>Otros mamíferos</span><span><i class="monotrema"></i>Mamíferos que ponen huevos</span><span><i class="ave"></i>Aves</span><span><i class="reptil"></i>Reptiles</span><span><i class="anfibio"></i>Anfibios</span></div></div>
-      <div class="evo-six"><h3>¿Y la pieza 6?</h3><p id="evo-six"></p><button class="ghost" data-evo-view>Ver la conservación en 3D <span aria-hidden="true">→</span></button></div>
-    </div>
-    <p class="muted map-source">Secuencias: UniProtKB/Swiss-Prot (incluidas en el tutorial de HMMER, globins45.fa). Tiempos de separación aproximados: TimeTree. Estructura: PDB 2HHB.</p>
-  </article>
-  <article class="poster-card poster-conclusion"><span class="lesson-number">06</span><h2>Conclusión</h2>
-    <p class="poster-big">Una sola letra puede no cambiar nada, cambiar una pieza o cortar toda la proteína. Lo que decide es <b>dónde</b> cae el cambio y <b>qué tipo</b> de cambio es: en el mismo codón 7, cambiar la A por T da anemia falciforme, y cambiar la G por A da hemoglobina C. Y la evolución lo confirma: las piezas que sostienen el hemo casi nunca cambiaron en <b>16 especies</b>.</p>
-    <p class="muted"><b>Límites del modelo:</b> es una simulación educativa. Muestra dónde cambia la secuencia, pero no calcula cómo se pliega la proteína mutada y no sirve como diagnóstico.</p>
-  </article>
-  <article class="poster-card poster-qr"><img src="img/qr-sitio.svg" alt="Código QR que abre la app en el celular"><div><h2>Llevátelo en tu celular</h2><p>Escaneá el código y seguí probando mutaciones desde tu casa.</p><p class="muted">daniechev.github.io/Genoma-LAB-</p></div></article>
-  <p class="poster-sources">Fuentes: estructura <a href="https://www.rcsb.org/structure/2HHB" target="_blank" rel="noreferrer">PDB 2HHB</a> · modelo <a href="https://alphafold.ebi.ac.uk/entry/P68871" target="_blank" rel="noreferrer">AlphaFold P68871</a> · proteína <a href="https://www.uniprot.org/uniprotkb/P68871/entry" target="_blank" rel="noreferrer">UniProt P68871</a></p>
+    <div class="story-nav"><button class="ghost" id="story-prev"><span aria-hidden="true">←</span> Anterior</button><span class="story-count" id="story-count"></span><button class="primary" id="story-next">Siguiente <span aria-hidden="true">→</span></button></div>
+  </section>
+  <p class="poster-sources">Fuentes: <a href="https://www.rcsb.org/structure/2HHB" target="_blank" rel="noreferrer">PDB 2HHB</a> · <a href="https://alphafold.ebi.ac.uk/entry/P68871" target="_blank" rel="noreferrer">AlphaFold P68871</a> · <a href="https://www.uniprot.org/uniprotkb/P68871/entry" target="_blank" rel="noreferrer">UniProt P68871</a> · 16 especies de Swiss-Prot (tutorial de HMMER)</p>
 </section>
 <section id="tab-lab" class="tab-page" hidden>
   <div class="hero lab-hero"><h1>¿Qué cambia con <em>una letra?</em></h1><p>Tocá una letra del ADN, cambiala y mirá al instante qué le pasa a la proteína.</p></div>
@@ -343,6 +355,7 @@
 <script src="js/melodia.js"></script>
 <script src="js/mapa-calor.js"></script>
 <script src="js/experimento-evolucion.js"></script>
+<script src="js/historia.js"></script>
 <script src="js/velcro.js"></script>
 <script src="js/tu-nombre.js"></script>
 <script src="js/duelo-juego.js"></script>
