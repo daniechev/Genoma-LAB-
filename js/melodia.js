@@ -65,7 +65,11 @@
   function update() {
     result = GenomaLab.result;
     first = result ? Math.max(1, Math.min(146 - LENGTH + 1, result.piece - 7)) : 1;
-    buttons.forEach(b => (b.disabled = b.dataset.melody !== 'normal' && !result));
+    buttons.forEach(b => {
+      b.innerHTML = result
+        ? '<span aria-hidden="true">▶</span> Escuchar las dos'
+        : '<span aria-hidden="true">▶</span> Escuchar';
+    });
     caption.innerHTML = describe();
     stop();
     draw();
@@ -177,7 +181,7 @@
           return;
         }
         stop();
-        const which = b.dataset.melody;
+        const which = result ? 'both' : 'normal';
         if (which === 'both') play('normal', () => setTimeout(() => play('mutated'), 350));
         else play(which);
       }),

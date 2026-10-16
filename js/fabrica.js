@@ -22,7 +22,6 @@
   let w = 0,
     h = 0,
     visible = false,
-    fast = false,
     result = null,
     seq = G.DNA,
     start = 0,
@@ -245,7 +244,7 @@
     ctx.lineTo(w, y + size / 2);
     ctx.stroke();
     const shift = mode === 'runoff' ? ease(phase) * 2 : 0;
-    for (let k = cur - 8; k <= cur + 8; k++) {
+    for (let k = cur - 16; k <= cur + 16; k++) {
       if (k < 0) continue;
       const x = rx + (k - cur - slide - shift) * cw - (3 * size + 4) / 2,
         codon = codonAt(seq, k);
@@ -337,7 +336,9 @@
     const dt = Math.min(0.05, (time - lastTime) / 1000);
     lastTime = time;
     if (visible && !document.hidden && canvas.offsetParent && !reduced.matches) {
-      const stepTime = fast ? 0.22 : 0.62;
+      // Después de mostrar el codón que cambió, adelanta rápido hasta el final.
+      const fast = result && mode === 'reading' && cur > result.codon + 3,
+        stepTime = fast ? 0.06 : 0.62;
       if (hold > 0) {
         hold -= dt;
         if (hold <= 0) restart();
@@ -350,7 +351,11 @@
       } else {
         // STOP, sin STOP o sin inicio: termina la escena, se queda quieta un rato y vuelve a empezar.
         phase = Math.min(1, phase + dt / (stepTime * (mode === 'release' ? 3 : 4)));
-        if (phase >= 1) hold = 3.5;
+        if (phase >= 1 && hold <= 0) {
+          hold = 3.5;
+          // Avisa que terminó de fabricar (la banda puede pasar sola a «En la sangre»).
+          document.dispatchEvent(new CustomEvent('genoma:fabrica-fin'));
+        }
       }
       draw();
     }
@@ -360,11 +365,5 @@
   document.addEventListener('genoma:resultado', restart);
   document.addEventListener('genoma:limpio', restart);
   document.getElementById('factory-play').onclick = restart;
-  const speed = document.getElementById('factory-speed');
-  speed.onclick = () => {
-    fast = !fast;
-    speed.setAttribute('aria-pressed', String(fast));
-    speed.textContent = fast ? 'Más lento' : 'Más rápido';
-  };
   restart();
 })();

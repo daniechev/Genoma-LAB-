@@ -4430,3 +4430,71 @@ a.ghost {
     font-size: 10px;
   }
 }
+
+/* ---- «Lo que pasa después» en pestañas: una vista por vez ---- */
+.consequences .cons-grid {
+  display: none;
+}
+.cons-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 16px;
+}
+.cons-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px 10px 12px;
+  border-radius: 999px;
+  background: #ffffff0a;
+  border: 2px solid var(--hair);
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 700;
+}
+.cons-tab.active {
+  background: #ffffff14;
+  border-color: var(--accent);
+  color: var(--text);
+  box-shadow: 0 8px 30px #ffd44722;
+}
+.consequences > .cons-card {
+  animation: rise 0.45s ease both;
+}
+.consequences > .cons-card .cons-canvas {
+  position: relative;
+  height: clamp(240px, 34vh, 340px);
+}
+.consequences > .cons-card .cons-caption {
+  min-height: 0;
+  font-size: 18px;
+  max-width: 900px;
+}
+.cons-replay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ffffff14;
+  border: 1px solid var(--line);
+  font-size: 20px;
+}
+.cons-next {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+@media (max-width: 560px) {
+  .cons-tab {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: 8px 10px;
+    font-size: 15px;
+  }
+  .cons-tab .cons-icon {
+    display: none;
+  }
+}

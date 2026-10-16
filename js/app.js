@@ -1372,6 +1372,7 @@
     for (const dialog of document.querySelectorAll('dialog[open]')) dialog.close();
     stopTour();
     clearResult();
+    emit('reposo');
     startTour(true);
   }
   setInterval(() => {
