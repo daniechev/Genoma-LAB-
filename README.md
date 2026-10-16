@@ -50,7 +50,9 @@ Con el **modo desafío** activado, primero hay que predecir qué va a pasar y de
 
 Cada resultado dice además en cuántas de las 16 especies esa pieza es igual a la nuestra, y si algún animal ya tiene la pieza nueva.
 
-Debajo, **Lo que pasa después** muestra tres miradas del mismo cambio:
+La primera vez que alguien entra al simulador, una **guía de 3 pasos** con globitos le muestra qué tocar (en modo stand, se repite para cada visitante nuevo). `GenomaLab.startGuide()` la vuelve a abrir.
+
+Debajo, **Lo que pasa después** muestra tres miradas del mismo cambio, de a una por vez (con pestañas; después de cada cambio arranca en la fábrica y pasa sola a la sangre):
 
 - **La fábrica:** el ribosoma lee el ARN de verdad (el normal o el tuyo). Llegan los ARN de transferencia con sus piezas; si aparece un STOP, la cadena se suelta ahí. También muestra el corrimiento del marco, la pérdida del inicio y la del STOP.
 - **En la sangre:** glóbulos rojos que pasan por un capilar. Solo se dibuja lo que se sabe de los casos reales: medialunas que se traban con poco oxígeno (falciforme), cristales (hemoglobina C) o glóbulos chicos y pálidos (talasemia), con 1 o 2 copias. Para el resto dice que no se sabe.
@@ -113,6 +115,8 @@ js/experimento-evolucion.js  segundo experimento del póster
 js/velcro.js            cómo se arman las fibras de la anemia falciforme
 js/tu-nombre.js         pestaña «Tu nombre»
 js/duelo-juego.js       pantalla del duelo
+js/guia.js              guía de la primera vez en el simulador
+js/consecuencias.js     pestañas de «Lo que pasa después»
 js/presentacion.js      diapositivas, vista del presentador y sincronización
 img/                    código QR de la dirección pública e íconos de la app
 docs/                   guion para presentar en el stand
