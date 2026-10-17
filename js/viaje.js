@@ -350,11 +350,11 @@
       ctx.fillRect(x - 0.1, -0.79, 0.2, 0.025);
       ctx.restore();
     }
-    ctx.fillStyle = '#ff5c9d';
+    ctx.fillStyle = '#ee6dc8';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
     label('HBB', 0.24, -0.755, 0.07, u);
-    ctx.strokeStyle = '#ff5c9d88';
+    ctx.strokeStyle = '#ee6dc888';
     ctx.lineWidth = 1.5 / u;
     ctx.beginPath();
     ctx.moveTo(0.2, -0.78);

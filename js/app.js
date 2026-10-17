@@ -634,7 +634,7 @@
     ctx.fillText('ADN, GENES Y PROTEÍNAS · FERIA DE CIENCIAS', pad, 140);
     const title = ctx.createLinearGradient(pad, 0, pad + 640, 0);
     title.addColorStop(0, '#ff9a4d');
-    title.addColorStop(1, '#ff5c9d');
+    title.addColorStop(1, '#ee6dc8');
     ctx.fillStyle = title;
     ctx.font = `800 80px ${CARD_FONT}`;
     ctx.fillText('Mi descubrimiento', pad, 236);
