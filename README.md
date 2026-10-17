@@ -51,11 +51,10 @@ Cada resultado dice además en cuántas de las 16 especies esa pieza es igual a 
 
 La primera vez que alguien entra al simulador, una **guía de 3 pasos** con globitos le muestra qué tocar (en modo stand, se repite para cada visitante nuevo). `GenomaLab.startGuide()` la vuelve a abrir.
 
-Debajo, **Lo que pasa después** muestra tres miradas del mismo cambio, de a una por vez (con pestañas; después de cada cambio arranca en la fábrica y pasa sola a la sangre):
+Debajo, **Lo que pasa después** muestra dos miradas del mismo cambio, de a una por vez (con pestañas; después de cada cambio arranca en la fábrica y pasa sola a la sangre):
 
 - **La fábrica:** el ribosoma lee el ARN de verdad (el normal o el tuyo). Llegan los ARN de transferencia con sus piezas; si aparece un STOP, la cadena se suelta ahí. También muestra el corrimiento del marco, la pérdida del inicio y la del STOP.
 - **En la sangre:** glóbulos rojos que pasan por un capilar. Solo se dibuja lo que se sabe de los casos reales: medialunas que se traban con poco oxígeno (falciforme), cristales (hemoglobina C) o glóbulos chicos y pálidos (talasemia), con 1 o 2 copias. Para el resto dice que no se sabe.
-- **Cómo suena:** cada pieza es una nota, según la escala de hidrofobicidad de Kyte y Doolittle (las que huyen del agua, graves; las que tienen carga, agudas). Glu → Val salta de una nota aguda a una grave.
 
 En **Opciones avanzadas** del visor se puede colorear la cadena según lo que la evolución no cambió y **descargar la hemoglobina en STL** para imprimirla en 3D (unos 8 cm, con una bolita en la pieza que cambió).
 
@@ -95,14 +94,13 @@ js/datos-especies.js    cadena beta de 16 especies (Swiss-Prot)
 js/genetica.js          ADN, código genético, casos reales y clasificación de mutaciones
 js/evolucion.js         comparación con las 16 especies y distancia al hemo
 js/stl.js               malla cerrada para imprimir en 3D (STL)
-js/sonido.js            efectos de sonido y melodía de la proteína (Web Audio)
+js/sonido.js            efectos de sonido (Web Audio)
 js/visor-3d.js          visor 3D dibujado en canvas
 js/helice.js            hélice de ADN animada de la portada
 js/app.js               interfaz, póster, recorrido guiado, naturaleza, misiones, tarjeta, modo stand y contador
 js/viaje.js             viaje de la portada, de tu cuerpo a una letra
 js/fabrica.js           el ribosoma leyendo el ARN
 js/sangre.js            glóbulos rojos según los casos conocidos
-js/melodia.js           la proteína como melodía
 js/mapa-calor.js        mapa de las 1.332 sustituciones (presentación)
 js/experimento-evolucion.js  segundo experimento del póster
 js/velcro.js            cómo se arman las fibras de la anemia falciforme
@@ -148,7 +146,6 @@ En GitHub, cada cambio corre las pruebas y revisa el formato automáticamente.
 - Estructura experimental: [PDB 2HHB](https://www.rcsb.org/structure/2HHB).
 - Modelo predicho: [AlphaFold DB, P68871](https://alphafold.ebi.ac.uk/entry/P68871).
 - Otras 16 especies: cadenas beta de UniProtKB/Swiss-Prot (por ejemplo HBB_ORNAN, HBB_COLLI, HBB2_XENTR), tal como vienen en el archivo `globins45.fa` del tutorial de [HMMER](http://hmmer.org). Tiempos de separación aproximados: [TimeTree](https://timetree.org).
-- Notas de la melodía: escala de hidrofobicidad de Kyte y Doolittle (1982).
 
 El contador del stand se guarda en el navegador de cada dispositivo (`localStorage`).
 

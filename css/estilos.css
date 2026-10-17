@@ -2987,13 +2987,6 @@ body {
 .cons-icon.blood {
   background: radial-gradient(circle, #f2707f 0 18%, #d3263f 20% 48%, transparent 50%), #ff5d6c26;
 }
-.cons-icon.melody {
-  background:
-    linear-gradient(#4fd8ff, #4fd8ff) 7px 17px / 4px 7px no-repeat,
-    linear-gradient(#4fd8ff, #4fd8ff) 13px 9px / 4px 15px no-repeat,
-    linear-gradient(#ff5d6c, #ff5d6c) 19px 13px / 4px 11px no-repeat,
-    #4fd8ff21;
-}
 .cons-canvas {
   height: 230px;
   border-radius: 16px;

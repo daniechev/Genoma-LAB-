@@ -186,7 +186,7 @@
     $('viewer-overlay').textContent = idle;
     if (had) emit('limpio');
   }
-  // Avisa a los otros módulos (fábrica, sangre, sonido…) qué pasó en el simulador.
+  // Avisa a los otros módulos (fábrica, sangre…) qué pasó en el simulador.
   function emit(name, detail) {
     document.dispatchEvent(new CustomEvent(`genoma:${name}`, { detail }));
   }

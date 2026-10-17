@@ -150,7 +150,6 @@
     <div class="cons-tabs" role="tablist" aria-label="Qué mirar">
       <button class="cons-tab active" role="tab" id="cons-tab-factory" aria-controls="cons-factory" aria-selected="true" data-view="factory"><span class="cons-icon factory" aria-hidden="true"></span>La fábrica</button>
       <button class="cons-tab" role="tab" id="cons-tab-blood" aria-controls="cons-blood" aria-selected="false" tabindex="-1" data-view="blood"><span class="cons-icon blood" aria-hidden="true"></span>En la sangre</button>
-      <button class="cons-tab" role="tab" id="cons-tab-melody" aria-controls="cons-melody" aria-selected="false" tabindex="-1" data-view="melody"><span class="cons-icon melody" aria-hidden="true"></span>Cómo suena</button>
     </div>
     <article class="cons-card" role="tabpanel" id="cons-factory" aria-labelledby="cons-tab-factory" data-view="factory">
       <div class="cons-canvas"><canvas id="factory" role="img" aria-label="Animación del ribosoma leyendo el ARN"></canvas><button class="cons-replay" id="factory-play" aria-label="Fabricar de nuevo" title="Fabricar de nuevo">↺</button></div>
@@ -163,11 +162,6 @@
         <div class="segmented" role="group" aria-label="Copias de la mutación"><button data-copies="1" aria-pressed="false">1 copia</button><button data-copies="2" aria-pressed="true" class="active">2 copias</button></div>
         <label class="challenge"><input type="checkbox" id="blood-low"> <span><b>Poco oxígeno</b></span></label>
       </div>
-    </article>
-    <article class="cons-card" role="tabpanel" id="cons-melody" aria-labelledby="cons-tab-melody" data-view="melody" hidden>
-      <div class="cons-canvas"><canvas id="melody" role="img" aria-label="Las piezas de la proteína como notas musicales"></canvas></div>
-      <p class="cons-caption" id="melody-caption"></p>
-      <div class="cons-actions"><button class="primary" data-melody="play"><span aria-hidden="true">▶</span> Escuchar</button></div>
     </article>
     <div class="cons-next"><button class="ghost" id="cons-next">Siguiente: en la sangre <span aria-hidden="true">→</span></button></div>
   </section>
@@ -288,7 +282,6 @@
 <script src="js/viaje.js"></script>
 <script src="js/fabrica.js"></script>
 <script src="js/sangre.js"></script>
-<script src="js/melodia.js"></script>
 <script src="js/consecuencias.js"></script>
 <script src="js/experimento-evolucion.js"></script>
 <script src="js/historia.js"></script>

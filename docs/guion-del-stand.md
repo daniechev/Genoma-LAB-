@@ -62,7 +62,6 @@ Si el visitante es chico o le gustan los animales, abrí **Naturaleza → Jaguar
 | Valina 6 y las fibras | Un velcro: la valina son los ganchitos y el bolsillo de otra hemoglobina, los pelitos |
 | Piezas que la evolución no cambia | Las paredes que sostienen una casa: se puede cambiar el color de una puerta, pero no sacar una columna |
 | Reloj molecular | Los cambios se acumulan con el tiempo, como las marcas de un reloj de arena |
-| La proteína como melodía | Cada pieza es una nota; una mutación es una nota desafinada |
 
 ## Preguntas que suele hacer el jurado
 

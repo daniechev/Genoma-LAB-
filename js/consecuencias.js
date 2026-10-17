@@ -1,4 +1,4 @@
-// «Lo que pasa después»: una sola vista por vez (fábrica, sangre o sonido), como pestañas.
+// «Lo que pasa después»: una sola vista por vez (la fábrica o la sangre), como pestañas.
 // Con un cambio nuevo arranca en la fábrica y, cuando termina de fabricar, pasa sola a la sangre.
 (() => {
   'use strict';
@@ -7,7 +7,7 @@
   const panels = [...document.querySelectorAll('.cons-card[data-view]')],
     next = document.getElementById('cons-next'),
     VIEWS = tabs.map(t => t.dataset.view),
-    LABEL = { factory: 'la fábrica', blood: 'en la sangre', melody: 'cómo suena' };
+    LABEL = { factory: 'la fábrica', blood: 'en la sangre' };
   let view = 'factory',
     auto = false,
     timer = null;

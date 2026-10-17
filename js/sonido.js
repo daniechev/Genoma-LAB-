@@ -1,21 +1,8 @@
-// Sonido: efectos suaves de la interfaz y la «melodía» de una proteína.
-// Cada pieza (aminoácido) es una nota: las que se esconden del agua suenan graves y las que tienen carga, agudas.
+// Sonido: efectos suaves de la interfaz.
 // Todo se genera en el momento con Web Audio: no hay archivos de sonido.
 (function (root) {
   'use strict';
-  // Escala de hidrofobicidad de Kyte y Doolittle (1982): de la pieza que más huye del agua a la que más la busca.
-  const ORDER = 'IVLFCMAGTSWYPHEQDNKR';
-  // Escala pentatónica (do, re, mi, sol, la): cualquier combinación de notas suena bien.
-  const PENTA = [0, 2, 4, 7, 9];
-  const midi = n => 48 + 12 * Math.floor(n / 5) + PENTA[n % 5];
-  const freq = m => 440 * 2 ** ((m - 69) / 12);
-  const NOTE = Object.fromEntries([...ORDER].map((aa, i) => [aa, freq(midi(i))]));
-  const NAMES = ['do', 're', 'mi', 'sol', 'la'];
-  const noteName = aa => {
-    const i = ORDER.indexOf(aa);
-    return i < 0 ? '' : `${NAMES[i % 5]}${Math.floor(i / 5) + 3}`;
-  };
-  const api = { ORDER, NOTE, noteName, enabled: true, melody: null, ui: () => {} };
+  const api = { enabled: true, ui: () => {} };
   if (typeof module !== 'undefined') module.exports = api;
   root.Sound = api;
   if (typeof document === 'undefined') return;
@@ -87,40 +74,8 @@
     if (!audio()) return;
     EFFECTS[kind](ctx.currentTime + 0.01);
   };
-  // Toca una lista de notas ({ aa } o { rest: true }) y avisa en cada paso para dibujar el cursor.
-  let playing = null;
-  api.stop = () => {
-    if (!playing) return;
-    playing.timers.forEach(clearTimeout);
-    playing.gain.gain.cancelScheduledValues(ctx.currentTime);
-    playing.gain.gain.setTargetAtTime(0, ctx.currentTime, 0.02);
-    const done = playing.onEnd;
-    playing = null;
-    done?.();
-  };
-  api.melody = (steps, { tempo = 7, onStep, onEnd, voice = 'triangle' } = {}) => {
-    api.stop();
-    if (!audio()) return false;
-    const dur = 1 / tempo,
-      start = ctx.currentTime + 0.08,
-      gain = ctx.createGain(),
-      saved = master;
-    gain.connect(master);
-    master = gain;
-    steps.forEach((s, i) => {
-      if (s.aa && NOTE[s.aa])
-        tone(NOTE[s.aa], start + i * dur, dur * 1.6, { type: voice, gain: 0.13 });
-      if (s.stop) tone(110, start + i * dur, 0.6, { type: 'sine', gain: 0.18, glide: 0.5 });
-    });
-    master = saved;
-    const timers = steps.map((s, i) => setTimeout(() => onStep?.(i), (0.08 + i * dur) * 1000));
-    timers.push(setTimeout(() => api.stop(), (0.2 + steps.length * dur) * 1000));
-    playing = { timers, gain, onEnd };
-    return true;
-  };
   api.setEnabled = on => {
     api.enabled = on;
-    if (!on) api.stop();
     try {
       localStorage.setItem(key, on ? '1' : '0');
     } catch {}
