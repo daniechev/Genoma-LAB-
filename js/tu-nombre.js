@@ -179,7 +179,7 @@
     c.fillText('ADN, GENES Y PROTEÍNAS · FERIA DE CIENCIAS', pad, 140);
     const grad = c.createLinearGradient(pad, 0, W - pad, 0);
     grad.addColorStop(0, '#ff9a4d');
-    grad.addColorStop(1, '#ee6dc8');
+    grad.addColorStop(1, '#c98bff');
     c.fillStyle = grad;
     c.font = `800 64px ${FONT}`;
     c.fillText('Mi nombre en ADN', pad, 226);

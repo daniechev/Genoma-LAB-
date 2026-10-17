@@ -9,7 +9,7 @@
   --muted: #c2bdea;
   --accent: #ffd447;
   --cyan: #4fd8ff;
-  --pink: #ee6dc8;
+  --pink: #c98bff;
   --orange: #ff9a4d;
   --red: #ff5d6c;
   --amber: #ffb020;
@@ -229,7 +229,7 @@ main {
   font-weight: 800;
   font-size: 19px;
   min-height: 58px;
-  box-shadow: 0 10px 28px #ee6dc84d;
+  box-shadow: 0 10px 28px #c98bff4d;
 }
 .primary:hover:not(:disabled) {
   transform: translateY(-2px);
@@ -2229,7 +2229,7 @@ body::before {
   pointer-events: none;
   background:
     radial-gradient(40vmax 30vmax at 15% 10%, #5b2fd170, transparent 70%),
-    radial-gradient(34vmax 28vmax at 88% 28%, #ee6dc833, transparent 70%),
+    radial-gradient(34vmax 28vmax at 88% 28%, #c98bff33, transparent 70%),
     radial-gradient(40vmax 34vmax at 55% 100%, #1fb6ff26, transparent 70%);
   animation: aurora 36s ease-in-out infinite alternate;
 }
@@ -2369,10 +2369,10 @@ body::after {
   background: #ffffff0f;
 }
 .chapter.active {
-  background: linear-gradient(135deg, #ff9a4d26, #ee6dc81f);
+  background: linear-gradient(135deg, #ff9a4d26, #c98bff1f);
   border-color: #ff9a4d99;
   color: var(--text);
-  box-shadow: 0 16px 50px #ee6dc81f;
+  box-shadow: 0 16px 50px #c98bff1f;
 }
 .chapter b {
   font-size: 18px;
@@ -3669,9 +3669,9 @@ body {
   max-width: 900px;
   margin-top: 30px;
   padding: 20px 24px;
-  border: 1px solid #f38fd955;
+  border: 1px solid #dcb0ff55;
   border-radius: 20px;
-  background: linear-gradient(120deg, #ee6dc81f, #ffffff05);
+  background: linear-gradient(120deg, #c98bff1f, #ffffff05);
 }
 .duel-banner h2 {
   font-size: 22px;
