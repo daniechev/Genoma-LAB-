@@ -816,7 +816,6 @@
       viewer.resize();
       render();
     }
-    if (tab !== 'naturaleza') evoStop();
     window.scrollTo({ top: 0, behavior: 'instant' });
     if (changed) {
       Sound.ui('swoosh');
@@ -1588,80 +1587,6 @@
   }
   all('[data-fur]').forEach(el => (el.innerHTML = furSVG(el.dataset.fur)));
 
-  // Jugá a la evolución: frecuencia de la mutación (q) en un pueblo, generación a generación.
-  // Hardy-Weinberg con selección: q' = (p·q·wAS + q²·wSS) / (p²·wAA + 2·p·q·wAS + q²·wSS). Valores ilustrativos.
-  const evo = { q0: 0.02, q: 0.02, gen: 0, history: [], timer: null };
-  const fitness = malaria => ({ AA: malaria ? 0.85 : 1, AS: 1, SS: 0.2 });
-  const genotypes = q => {
-    const p = 1 - q;
-    return { AA: p * p, AS: 2 * p * q, SS: q * q };
-  };
-  // Orden fijo y mezclado de los 100 lugares, para que cada persona no salte de lugar entre generaciones.
-  const seats = [...Array(100).keys()]
-    .map(i => [i, (Math.sin(i * 12.9898) * 43758.5453) % 1])
-    .sort((a, b) => a[1] - b[1])
-    .map(x => x[0]);
-  function evoStep() {
-    const w = fitness($('evo-malaria').checked),
-      p = 1 - evo.q,
-      mean = p * p * w.AA + 2 * p * evo.q * w.AS + evo.q * evo.q * w.SS;
-    evo.q = (p * evo.q * w.AS + evo.q * evo.q * w.SS) / mean;
-    evo.gen++;
-    evo.history.push([evo.gen, genotypes(evo.q).AS, $('evo-malaria').checked]);
-  }
-  function renderEvolution() {
-    const g = genotypes(evo.q),
-      ss = Math.round(g.SS * 100),
-      as = Math.round(g.AS * 100),
-      kind = Array(100).fill('aa');
-    seats.slice(0, as).forEach(i => (kind[i] = 'as'));
-    seats.slice(as, as + ss).forEach(i => (kind[i] = 'ss'));
-    $('village').innerHTML = kind.map(k => `<i class="${k}"></i>`).join('');
-    const pct = v => `${(v * 100).toLocaleString('es-AR', { maximumFractionDigits: 1 })} %`;
-    $('evo-stats').innerHTML =
-      `<div><b>${evo.gen}</b>generaciones</div><div><b>${pct(g.AS)}</b>portadores</div><div><b>${pct(g.SS)}</b>con anemia falciforme</div>`;
-    const maxGen = Math.max(40, evo.gen),
-      x = n => 40 + (n / maxGen) * 350,
-      y = v => 150 - (v / 0.4) * 135,
-      points = [[0, genotypes(evo.q0).AS], ...evo.history.map(([n, v]) => [n, v])];
-    const eq = fitness(true),
-      qEq = (1 - eq.AA) / (1 - eq.AA + (1 - eq.SS)),
-      asEq = 2 * qEq * (1 - qEq);
-    $('evo-chart').innerHTML =
-      `<g class="grid">${[0, 0.1, 0.2, 0.3, 0.4].map(v => `<line x1="40" x2="390" y1="${y(v)}" y2="${y(v)}"/><text x="34" y="${y(v) + 4}">${v * 100}%</text>`).join('')}</g><line class="eq" x1="40" x2="390" y1="${y(asEq)}" y2="${y(asEq)}"/><text class="eq-label" x="388" y="${y(asEq) - 6}">equilibrio con malaria</text><polyline points="${points.map(([n, v]) => `${x(n).toFixed(1)},${y(v).toFixed(1)}`).join(' ')}"/><text x="205" y="168" class="axis">generaciones</text>`;
-  }
-  function evoStop() {
-    clearInterval(evo.timer);
-    evo.timer = null;
-    $('evo-play').innerHTML = '<span aria-hidden="true">▶</span> Avanzar 10';
-  }
-  $('evo-step').onclick = () => {
-    evoStop();
-    evoStep();
-    renderEvolution();
-  };
-  $('evo-play').onclick = () => {
-    if (evo.timer) return evoStop();
-    let n = 0;
-    $('evo-play').textContent = '❚❚ Pausar';
-    const tick = () => {
-      evoStep();
-      renderEvolution();
-      if (++n >= 10) evoStop();
-    };
-    if (viewer.reduced.matches) {
-      while (evo.timer === null && n < 10) tick();
-      evoStop();
-    } else evo.timer = setInterval(tick, 260);
-  };
-  $('evo-reset').onclick = () => {
-    evoStop();
-    evo.q = evo.q0;
-    evo.gen = 0;
-    evo.history = [];
-    renderEvolution();
-  };
-
   // Tarjetas de especies: se abren al tocarlas y algunas llevan su cambio al simulador.
   all('.species-open').forEach(
     b =>
@@ -1748,7 +1673,6 @@
   renderMap();
   renderCatsMap();
   renderAnimalsMap();
-  renderEvolution();
   if (location.hash === '#jurado') startTour();
 
   // ---- Sin internet: guarda una copia de la app en el dispositivo (solo funciona publicada en la web) ----
