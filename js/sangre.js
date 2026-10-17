@@ -25,13 +25,14 @@
 
   function resize() {
     const r = canvas.getBoundingClientRect(),
+      wasHidden = !w,
       dpr = Math.min(devicePixelRatio || 1, 2);
     w = r.width;
     h = r.height;
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    if (!cells.length || reduced.matches) populate();
+    if (!cells.length || wasHidden || reduced.matches) populate();
   }
   new ResizeObserver(resize).observe(canvas);
   new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(canvas);
@@ -107,12 +108,20 @@
       deform: 0,
       crystal: rand(),
       spin: rand() * 6,
+      // Profundidad: los de atrás se ven más chicos y tenues.
+      z: rand(),
+      sq: 1,
     }));
+    layers = [...cells].sort((a, b) => a.z - b.z);
     if (reduced.matches) settle();
   }
+  let layers = [];
   // Sin animación, cada glóbulo toma directamente su forma final.
   function settle() {
-    for (const c of cells) c.deform = target(c);
+    for (const c of cells) {
+      c.deform = target(c);
+      c.sq = squeezeAt(c);
+    }
     draw(0);
   }
   function target(c) {
@@ -127,45 +136,144 @@
         d = (x - waistX()) / (w * 0.16);
       return base - (base - narrow) * Math.exp(-d * d);
     };
+  // Cuánto se aprieta un glóbulo flexible en este punto del vaso (1 = nada).
+  const squeezeAt = c => (c.deform < 0.3 ? half(c.x) / half(0) : 1);
+
+  // Gradientes en unidades del radio: se crean una vez y se reusan con ctx.scale.
+  const grads = new Map();
+  function grad(key, stops, x0 = 0, y0 = 0) {
+    let g = grads.get(key);
+    if (!g) {
+      g = ctx.createRadialGradient(x0, y0, 0, 0, 0, 1);
+      stops.forEach(([o, col]) => g.addColorStop(o, col));
+      grads.set(key, g);
+    }
+    return g;
+  }
+  // Disco bicóncavo: centro hundido y claro, reborde grueso más oscuro.
+  const BODY = {
+    normal: [
+      [0, '#ee8590'],
+      [0.3, '#e05467'],
+      [0.58, '#cf2840'],
+      [0.78, '#b8172f'],
+      [0.92, '#8f0d25'],
+      [1, '#5c0617'],
+    ],
+    thal1: [
+      [0, '#f9b9c0'],
+      [0.4, '#ee8592'],
+      [0.68, '#d63c52'],
+      [0.88, '#a2122b'],
+      [1, '#62071a'],
+    ],
+    thal2: [
+      [0, '#ffe3e6'],
+      [0.5, '#f6b3bb'],
+      [0.74, '#e0566a'],
+      [0.9, '#a8162f'],
+      [1, '#68081c'],
+    ],
+    // La medialuna no tiene hundimiento: es más pareja y oscura.
+    rigid: [
+      [0, '#d63249'],
+      [0.6, '#b51830'],
+      [0.88, '#8c0c24'],
+      [1, '#560516'],
+    ],
+  };
   function cellShape(c, x, y, r) {
     const d = c.deform,
-      squeeze = d < 0.3 ? half(x) / half(0) : 1;
+      sq = c.sq;
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(c.tilt * (1 - d) + d * (Math.sin(c.spin) * 0.6));
+    // Apretado en el capilar, el glóbulo flexible se alinea con el flujo.
+    const align = 1 - (1 - sq) * 1.6;
+    ctx.rotate(c.tilt * (1 - d) * Math.max(0, align) + d * (Math.sin(c.spin) * 0.6));
     // Los glóbulos sanos se estiran para pasar por la parte angosta; los rígidos no.
-    ctx.scale((1 + 0.55 * d) / Math.sqrt(squeeze), (1 - 0.35 * d) * Math.sqrt(squeeze) * 0.86);
+    ctx.scale(
+      (r * (1 + 0.55 * d)) / Math.pow(sq, 0.7),
+      r * (1 - 0.35 * d) * Math.pow(sq, 0.7) * 0.86,
+    );
     const thal = kind === 'thal',
-      pale = thal ? (copies === 2 ? 1 : 0.5) : 0,
-      g = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
-    g.addColorStop(0, pale ? `rgba(255,214,220,${0.6 + 0.3 * pale})` : '#f2707f');
-    g.addColorStop(pale ? 0.62 : 0.42, pale ? '#e35c70' : '#d3263f');
-    g.addColorStop(0.85, d > 0.5 ? '#9c0f28' : '#b5132e');
-    g.addColorStop(1, '#7c0a20');
-    ctx.fillStyle = g;
+      bodyKey = d > 0.5 ? 'rigid' : thal ? (copies === 2 ? 'thal2' : 'thal1') : 'normal';
+    const bx = 1.25 - 0.45 * d,
+      by = -0.35 * d,
+      br = 0.15 + 0.85 * d,
+      // Medialuna: el disco con un «mordisco» que crece (recortado al disco).
+      crescent = () => {
+        ctx.beginPath();
+        ctx.arc(0, 0, 1, 0, 7);
+        ctx.clip();
+        ctx.beginPath();
+        ctx.arc(0, 0, 1, 0, 7);
+        ctx.moveTo(bx + br, by);
+        ctx.arc(bx, by, br, 0, 7);
+      };
+    // Sombra suave sobre el plasma.
+    ctx.fillStyle = 'rgba(8,0,4,0.35)';
+    ctx.save();
+    ctx.translate(0.08, 0.16);
     if (d > 0.02) {
-      // Medialuna: el disco con un «mordisco» que crece.
-      ctx.beginPath();
-      ctx.arc(0, 0, r, 0, 7);
-      ctx.save();
-      ctx.clip();
-      ctx.beginPath();
-      ctx.arc(0, 0, r, 0, 7);
-      ctx.arc(r * (1.25 - 0.45 * d), -r * 0.35 * d, r * (0.15 + 0.85 * d), 0, 7);
+      crescent();
       ctx.fill('evenodd');
+    } else {
+      ctx.beginPath();
+      ctx.arc(0, 0, 1.03, 0, 7);
+      ctx.fill();
+    }
+    ctx.restore();
+    ctx.fillStyle = grad(bodyKey, BODY[bodyKey]);
+    if (d > 0.02) {
+      ctx.save();
+      crescent();
+      ctx.fill('evenodd');
+      // Fibras de hemoglobina a lo largo de la medialuna.
+      ctx.clip('evenodd');
+      ctx.strokeStyle = `rgba(70,0,14,${0.45 * d})`;
+      ctx.lineWidth = 0.05;
+      ctx.beginPath();
+      for (let k = 1; k <= 5; k++) {
+        ctx.moveTo(bx + br + k * 0.17, by);
+        ctx.arc(bx, by, br + k * 0.17, 0, 7);
+      }
+      ctx.stroke();
+      ctx.strokeStyle = `rgba(255,160,170,${0.18 * d})`;
+      ctx.lineWidth = 0.035;
+      ctx.beginPath();
+      ctx.arc(bx, by, br + 0.1, 0, 7);
+      ctx.stroke();
       ctx.restore();
     } else {
       ctx.beginPath();
-      ctx.arc(0, 0, r, 0, 7);
+      ctx.arc(0, 0, 1, 0, 7);
       ctx.fill();
+      // Brillo del reborde iluminado desde arriba.
+      ctx.strokeStyle = 'rgba(255,190,198,0.28)';
+      ctx.lineWidth = 0.09;
+      ctx.beginPath();
+      ctx.arc(0, 0, 0.8, Math.PI * 1.05, Math.PI * 1.75);
+      ctx.stroke();
     }
+    // Brillo húmedo, chiquito y suave.
+    ctx.fillStyle = grad('spec', [
+      [0, 'rgba(255,235,238,0.32)'],
+      [1, 'rgba(255,235,238,0)'],
+    ]);
+    ctx.save();
+    ctx.translate(-0.42, -0.5);
+    ctx.scale(0.32, 0.2);
+    ctx.beginPath();
+    ctx.arc(0, 0, 1, 0, 7);
+    ctx.fill();
+    ctx.restore();
     // Hemoglobina C: un cristal oscuro adentro.
     if (kind === 'hbc' && copies === 2 && c.crystal < 0.7) {
       ctx.rotate(c.spin);
       ctx.fillStyle = '#5a0614';
       ctx.beginPath();
-      const L = r * 0.55,
-        T = r * 0.16;
+      const L = 0.55,
+        T = 0.16;
       ctx.moveTo(-L, 0);
       ctx.lineTo(-L + T, -T);
       ctx.lineTo(L - T, -T);
@@ -174,28 +282,64 @@
       ctx.lineTo(-L + T, T);
       ctx.closePath();
       ctx.fill();
+      // Una cara del cristal refleja la luz.
+      ctx.fillStyle = '#ff9aa733';
+      ctx.beginPath();
+      ctx.moveTo(-L, 0);
+      ctx.lineTo(-L + T, -T);
+      ctx.lineTo(L - T, -T);
+      ctx.lineTo(L, 0);
+      ctx.closePath();
+      ctx.fill();
       ctx.strokeStyle = '#ff9aa766';
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 0.04;
       ctx.stroke();
     }
     ctx.restore();
+  }
+  // Fondo del vaso: se arma una vez por tamaño.
+  let wallKey = '',
+    tissue = null,
+    plasma = null;
+  function wallPaint(cy) {
+    const key = w + 'x' + h;
+    if (key === wallKey) return;
+    wallKey = key;
+    tissue = ctx.createLinearGradient(0, 0, 0, h);
+    tissue.addColorStop(0, '#1d0712');
+    tissue.addColorStop(0.5, '#33101f');
+    tissue.addColorStop(1, '#1d0712');
+    // El plasma se ve más hondo al centro y más claro contra la pared.
+    plasma = ctx.createLinearGradient(0, cy - h * 0.34, 0, cy + h * 0.34);
+    plasma.addColorStop(0, '#2c0918');
+    plasma.addColorStop(0.18, '#1a050d');
+    plasma.addColorStop(0.5, '#120309');
+    plasma.addColorStop(0.82, '#1a050d');
+    plasma.addColorStop(1, '#2c0918');
+  }
+  function vesselPath(cy) {
+    ctx.beginPath();
+    for (let x = 0; x <= w; x += 6) ctx.lineTo(x, cy - half(x));
+    for (let x = w; x >= 0; x -= 6) ctx.lineTo(x, cy + half(x));
+    ctx.closePath();
   }
   function draw(dt) {
     if (!w || !h) return;
     ctx.clearRect(0, 0, w, h);
     const cy = h / 2,
       r0 = Math.min(h * 0.13, 22) * (kind === 'thal' ? (copies === 2 ? 0.72 : 0.88) : 1);
-    // Pared del vaso.
-    ctx.fillStyle = '#2a0b18';
+    wallPaint(cy);
+    // Pared del vaso, con volumen.
+    ctx.fillStyle = tissue;
     ctx.fillRect(0, 0, w, h);
-    ctx.beginPath();
-    for (let x = 0; x <= w; x += 6) ctx.lineTo(x, cy - half(x));
-    for (let x = w; x >= 0; x -= 6) ctx.lineTo(x, cy + half(x));
-    ctx.closePath();
-    ctx.fillStyle = '#16040b';
+    vesselPath(cy);
+    ctx.fillStyle = plasma;
     ctx.fill();
-    ctx.strokeStyle = '#ff8aa066';
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#ff8aa01f';
+    ctx.lineWidth = 9;
+    ctx.stroke();
+    ctx.strokeStyle = '#ff8aa070';
+    ctx.lineWidth = 2;
     ctx.stroke();
     // Movimiento: los glóbulos rígidos se frenan en la parte angosta y hacen fila.
     const jam = kind === 'sickle' && lowBox.checked && copies === 2;
@@ -203,7 +347,9 @@
     let barrier = Infinity;
     for (const c of order) {
       c.deform += (target(c) - c.deform) * Math.min(1, dt * (1.2 + 2 * c.threshold));
-      let x = c.x + c.speed * dt * (1 - 0.3 * c.deform);
+      // Perfil de velocidad: el centro del vaso corre más que los bordes.
+      const flow = 1 - 0.45 * (c.y / 0.45) ** 2;
+      let x = c.x + c.speed * flow * dt * (1 - 0.3 * c.deform);
       if (jam && c.deform > 0.6 && c.x < waistX()) {
         const stopAt = Math.min(barrier, waistX() - r0 * 1.2);
         // Cada tanto uno logra pasar.
@@ -216,11 +362,16 @@
         c.deform = 0;
         c.y = (rand() - 0.5) * 0.9;
       }
+      // Elasticidad: se aprieta y recupera la forma con un poco de demora.
+      c.sq += (squeezeAt(c) - c.sq) * Math.min(1, dt * 7);
     }
-    for (const c of cells) {
-      const limit = half(c.x) - r0 * 0.9;
-      cellShape(c, c.x, cy + c.y * Math.max(0, limit), r0);
+    for (const c of layers) {
+      const r = r0 * (0.8 + 0.2 * c.z),
+        limit = half(c.x) - r * 0.9;
+      ctx.globalAlpha = 0.6 + 0.4 * c.z;
+      cellShape(c, c.x, cy + c.y * Math.max(0, limit), r);
     }
+    ctx.globalAlpha = 1;
     if (kind === 'unknown') {
       ctx.fillStyle = '#ffffffcc';
       ctx.font = `800 ${h * 0.35}px ${FONT}`;

@@ -26,6 +26,11 @@
     smooth = (a, b, v) => {
       const t = clamp((v - a) / (b - a));
       return t * t * (3 - 2 * t);
+    },
+    // Curva más suave en los extremos para que el zoom arranque y frene sin tirones.
+    smoother = v => {
+      const t = clamp(v);
+      return t * t * t * (t * (t * 6 - 15) + 10);
     };
   // Generador de números al azar con semilla: las células quedan siempre en el mismo lugar.
   function seeded(seed) {
@@ -93,24 +98,45 @@
     const beat = Math.exp(-((time % 1000) / 140)) + 0.6 * Math.exp(-(((time + 720) % 1000) / 140));
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    const body = ctx.createLinearGradient(0, -0.9, 0, 0.9);
-    body.addColorStop(0, '#3a3388');
-    body.addColorStop(1, '#1f1a52');
+    // Sombra suave en el piso.
+    const floor = ctx.createRadialGradient(0, 0.93, 0, 0, 0.93, 0.32);
+    floor.addColorStop(0, '#00000066');
+    floor.addColorStop(1, '#00000000');
+    ctx.fillStyle = floor;
+    ctx.save();
+    ctx.scale(1, 0.18);
+    ctx.beginPath();
+    ctx.arc(0, 0.93 / 0.18, 0.32, 0, 7);
+    ctx.restore();
+    ctx.fill();
+    const body = ctx.createLinearGradient(-0.3, -0.9, 0.3, 0.9);
+    body.addColorStop(0, '#4a41a6');
+    body.addColorStop(0.5, '#2f2a74');
+    body.addColorStop(1, '#1a1648');
     ctx.strokeStyle = body;
     ctx.fillStyle = body;
     // Brazos y piernas como trazos gruesos; tronco y cabeza como formas.
-    ctx.lineWidth = 0.11;
+    // Cada miembro en dos tramos: más grueso arriba, más fino abajo.
     for (const side of [1, -1]) {
+      ctx.lineWidth = 0.115;
       ctx.beginPath();
       ctx.moveTo(side * 0.24, -0.47);
-      ctx.quadraticCurveTo(side * 0.34, -0.2, side * 0.39, 0.13);
+      ctx.quadraticCurveTo(side * 0.31, -0.33, side * 0.33, -0.14);
       ctx.stroke();
-    }
-    ctx.lineWidth = 0.14;
-    for (const side of [1, -1]) {
+      ctx.lineWidth = 0.085;
+      ctx.beginPath();
+      ctx.moveTo(side * 0.33, -0.14);
+      ctx.quadraticCurveTo(side * 0.36, 0, side * 0.39, 0.13);
+      ctx.stroke();
+      ctx.lineWidth = 0.16;
       ctx.beginPath();
       ctx.moveTo(side * 0.1, 0.08);
-      ctx.lineTo(side * 0.13, 0.9);
+      ctx.quadraticCurveTo(side * 0.125, 0.3, side * 0.12, 0.48);
+      ctx.stroke();
+      ctx.lineWidth = 0.11;
+      ctx.beginPath();
+      ctx.moveTo(side * 0.12, 0.48);
+      ctx.quadraticCurveTo(side * 0.125, 0.7, side * 0.13, 0.88);
       ctx.stroke();
     }
     ctx.beginPath();
@@ -120,27 +146,43 @@
     ctx.quadraticCurveTo(0, 0.2, -0.2, 0.14);
     ctx.closePath();
     ctx.fill();
-    ctx.fillRect(-0.05, -0.62, 0.1, 0.1);
+    ctx.fillRect(-0.05, -0.64, 0.1, 0.12);
     ctx.beginPath();
-    ctx.arc(0, -0.75, 0.15, 0, Math.PI * 2);
+    ctx.ellipse(0, -0.76, 0.13, 0.155, 0, 0, Math.PI * 2);
     ctx.fill();
-    // Contorno de luz.
-    ctx.strokeStyle = '#8f7cff55';
+    // Luz de borde desde arriba a la izquierda: da volumen sin dibujar más cosas.
+    ctx.strokeStyle = '#a99bff66';
     ctx.lineWidth = 2 / u;
     ctx.beginPath();
-    ctx.arc(0, -0.75, 0.15, 0, Math.PI * 2);
+    ctx.ellipse(0, -0.76, 0.13, 0.155, 0, Math.PI * 0.85, Math.PI * 1.75);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(-0.27, -0.5);
+    ctx.quadraticCurveTo(0, -0.58, 0.2, -0.53);
     ctx.stroke();
     // Vasos sanguíneos: brillan con cada latido del corazón.
     for (const path of vessels) {
       for (const [width, alpha] of [
-        [0.035, 0.18 + 0.25 * beat],
-        [0.01, 0.75 + 0.25 * beat],
+        [0.035, 0.14 + 0.22 * beat],
+        [0.012, 0.7 + 0.3 * beat],
       ]) {
         ctx.strokeStyle = `rgba(255,93,108,${alpha})`;
-        ctx.lineWidth = width;
-        ctx.beginPath();
-        path.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
-        ctx.stroke();
+        // El halo va de un solo trazo: tramos sueltos con transparencia dejan puntos en las uniones.
+        if (width > 0.02) {
+          ctx.lineWidth = width;
+          ctx.beginPath();
+          path.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+          ctx.stroke();
+          continue;
+        }
+        // Cada tramo un poco más fino que el anterior, como las arterias al ramificarse.
+        for (let i = 1; i < path.length; i++) {
+          ctx.lineWidth = width * (1 - (0.5 * (i - 1)) / path.length);
+          ctx.beginPath();
+          ctx.moveTo(path[i - 1][0], path[i - 1][1]);
+          ctx.lineTo(path[i][0], path[i][1]);
+          ctx.stroke();
+        }
       }
     }
     const heart = ctx.createRadialGradient(0.05, -0.33, 0, 0.05, -0.33, 0.09 + 0.03 * beat);
@@ -166,18 +208,33 @@
     ctx.translate(x, y);
     ctx.rotate(tilt);
     ctx.scale(1, squash);
-    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
-    g.addColorStop(0, '#f2707f');
-    g.addColorStop(0.42, '#d3263f');
-    g.addColorStop(0.82, '#b5132e');
-    g.addColorStop(1, '#7c0a20');
+    // Bicóncavo: centro hundido y oscuro, anillo grueso iluminado y borde en sombra.
+    const g = ctx.createRadialGradient(-r * 0.12, -r * 0.15, 0, 0, 0, r);
+    g.addColorStop(0, '#a3132b');
+    g.addColorStop(0.32, '#b91a34');
+    g.addColorStop(0.64, '#e64a5e');
+    g.addColorStop(0.86, '#c01b36');
+    g.addColorStop(1, '#640716');
     ctx.fillStyle = g;
     ctx.beginPath();
     ctx.arc(0, 0, r, 0, Math.PI * 2);
     ctx.fill();
+    // Brillo sobre el anillo, del lado de la luz.
+    ctx.strokeStyle = 'rgba(255,190,200,0.32)';
+    ctx.lineWidth = r * 0.13;
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 0.7, Math.PI * 1.05, Math.PI * 1.6);
+    ctx.stroke();
     ctx.restore();
   }
   function capillary(u, time) {
+    // Plasma: el centro del tubo un poco más claro que los bordes, como un cilindro.
+    const lumen = ctx.createLinearGradient(0, -0.4, 0, 0.4);
+    lumen.addColorStop(0, '#ff5d6c00');
+    lumen.addColorStop(0.45, '#ff8a9a14');
+    lumen.addColorStop(1, '#ff5d6c00');
+    ctx.fillStyle = lumen;
+    ctx.fillRect(-3, -0.4, 6, 0.8);
     for (const side of [-1, 1]) {
       const wall = ctx.createLinearGradient(0, side * 0.36, 0, side * 0.62);
       wall.addColorStop(0, '#ff8aa055');
@@ -195,7 +252,9 @@
     for (const c of flow) {
       const x = ((c.x + time * c.speed + 2.4) % 4.8) - 2.4;
       if (Math.abs(x - 0.12) < 0.3 && Math.abs(c.y - 0.04) < 0.3) continue;
-      redCell(x, c.y, c.r, c.tilt + Math.sin(time / 900 + c.x) * 0.15);
+      // Leve vaivén vertical y giro: el flujo no es perfectamente recto.
+      const y = c.y + Math.sin(time / 1300 + c.x * 3) * 0.015;
+      redCell(x, y, c.r, c.tilt + Math.sin(time / 900 + c.x) * 0.15);
     }
     // El glóbulo que vamos a visitar: quieto en el centro.
     redCell(0.12, 0.04, 0.17, 0.2, 0.9);
@@ -219,11 +278,28 @@
     ctx.beginPath();
     ctx.arc(0, 0, 0.84, 0, Math.PI * 2);
     ctx.fill();
-    // El borde es más grueso que el centro (forma de rosquilla sin agujero).
-    ctx.strokeStyle = '#ff9aa733';
-    ctx.lineWidth = 0.08;
+    // Luz desde arriba a la izquierda y sombra abajo a la derecha: le da volumen.
+    const light = ctx.createLinearGradient(-0.6, -0.6, 0.6, 0.6);
+    light.addColorStop(0, 'rgba(255,170,185,0.28)');
+    light.addColorStop(0.5, 'rgba(255,170,185,0)');
+    light.addColorStop(1, 'rgba(40,0,10,0.4)');
+    ctx.fillStyle = light;
+    ctx.fill();
+    // El hundido del centro (forma de rosquilla sin agujero): sombra arriba, luz abajo.
+    const dish = ctx.createLinearGradient(-0.3, -0.35, 0.3, 0.35);
+    dish.addColorStop(0, 'rgba(70,0,15,0.38)');
+    dish.addColorStop(0.55, 'rgba(70,0,15,0.05)');
+    dish.addColorStop(1, 'rgba(255,150,165,0.22)');
+    ctx.fillStyle = dish;
     ctx.beginPath();
-    ctx.arc(0, 0, 0.66, 0, Math.PI * 2);
+    ctx.arc(0, 0, 0.46, 0, Math.PI * 2);
+    ctx.fill();
+    // Brillo sobre el anillo grueso.
+    ctx.strokeStyle = 'rgba(255,200,210,0.15)';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = 0.06;
+    ctx.beginPath();
+    ctx.arc(0, 0, 0.65, Math.PI * 1.02, Math.PI * 1.62);
     ctx.stroke();
     ctx.fillStyle = '#ffd6dd';
     for (const [x, y, p] of hbDots) {
@@ -279,20 +355,23 @@
         .sort((p, q) => p.z - q.z);
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
+    // Tres pasadas: halo, tubo y un brillo fino corrido hacia la luz. Lo de atrás es más fino y oscuro.
     for (const c of chains) {
-      for (const [width, alpha] of [
-        [0.05, 0.16],
-        [0.018, 1],
+      for (const [width, alpha, light, dx] of [
+        [0.05, 0.13, 0, 0],
+        [0.024, 1, 0, 0],
+        [0.008, 0.55, 1, -0.005],
       ]) {
         for (let i = 0; i < c.rp.length - 1; i++) {
           const t = i / c.rp.length,
-            color = c.beta ? `hsl(${192 + t * 12},95%,${56 + t * 16}%)` : '#9b86ff';
-          ctx.strokeStyle = color;
-          ctx.globalAlpha = alpha * (0.55 + 0.45 * clamp((c.rp[i][2] + 1) / 2));
-          ctx.lineWidth = width;
+            d = clamp((c.rp[i][2] + 1) / 2),
+            l = light ? 88 : (c.beta ? 34 + t * 14 : 50) + 22 * d;
+          ctx.strokeStyle = c.beta ? `hsl(${192 + t * 12},95%,${l}%)` : `hsl(252,100%,${l + 6}%)`;
+          ctx.globalAlpha = alpha * (0.5 + 0.5 * d);
+          ctx.lineWidth = width * (0.7 + 0.6 * d);
           ctx.beginPath();
-          ctx.moveTo(c.rp[i][0], c.rp[i][1]);
-          ctx.lineTo(c.rp[i + 1][0], c.rp[i + 1][1]);
+          ctx.moveTo(c.rp[i][0] + dx, c.rp[i][1] + dx);
+          ctx.lineTo(c.rp[i + 1][0] + dx, c.rp[i + 1][1] + dx);
           ctx.stroke();
         }
       }
@@ -308,6 +387,11 @@
       ctx.beginPath();
       ctx.arc(x, y, 0.07, 0, 7);
       ctx.fill();
+      // El hierro del centro, como una cuenta sólida.
+      ctx.fillStyle = '#fff2c2';
+      ctx.beginPath();
+      ctx.arc(x, y, 0.012, 0, 7);
+      ctx.fill();
     }
   }
   // La pieza 6 de una cadena beta: ahí nace la escena siguiente.
@@ -315,52 +399,95 @@
 
   // ---- Escena 4: el cromosoma 11, con el gen HBB cerca de la punta del brazo corto (11p15.4). ----
   const BANDS = [-0.62, -0.5, -0.38, -0.05, 0.08, 0.2, 0.33, 0.46, 0.58, 0.7];
-  function chromatid(x) {
-    ctx.beginPath();
+  // Las dos cromátidas se abren hacia las puntas y se tocan en el centrómero: forma de X.
+  const WAIST = -0.18,
+    chromX = (x, side, y) => x + side * 0.09 * ((y - WAIST) / 0.7) ** 2;
+  function chromatid(x, side) {
     const top = -0.86,
       bottom = 0.86,
-      waist = -0.18,
-      r = 0.085;
-    ctx.moveTo(x - r, top + r);
-    ctx.quadraticCurveTo(x - r, top, x, top);
-    ctx.quadraticCurveTo(x + r, top, x + r, top + r);
-    ctx.quadraticCurveTo(x + r, waist - 0.08, x + r * 0.45, waist);
-    ctx.quadraticCurveTo(x + r, waist + 0.08, x + r, bottom - r);
-    ctx.quadraticCurveTo(x + r, bottom, x, bottom);
-    ctx.quadraticCurveTo(x - r, bottom, x - r, bottom - r);
-    ctx.quadraticCurveTo(x - r, waist + 0.08, x - r * 0.45, waist);
-    ctx.quadraticCurveTo(x - r, waist - 0.08, x - r, top + r);
+      r = 0.085,
+      n = 48,
+      half = y => {
+        const tip = Math.min(1, (y - top) / r, (bottom - y) / r),
+          pinch = 1 - 0.55 * Math.exp(-(((y - WAIST) / 0.07) ** 2));
+        return r * pinch * Math.sqrt(Math.max(0, 1 - (1 - tip) ** 2));
+      };
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const y = top + ((bottom - top) * i) / n;
+      ctx.lineTo(chromX(x, side, y) + half(y), y);
+    }
+    for (let i = n; i >= 0; i--) {
+      const y = top + ((bottom - top) * i) / n;
+      ctx.lineTo(chromX(x, side, y) - half(y), y);
+    }
     ctx.closePath();
   }
   function chromosome(u, time) {
-    for (const x of [-0.1, 0.1]) {
-      const g = ctx.createLinearGradient(x - 0.09, 0, x + 0.09, 0);
-      g.addColorStop(0, '#5a3fd6');
-      g.addColorStop(0.5, '#9b86ff');
-      g.addColorStop(1, '#4a32b8');
-      chromatid(x);
+    // Sombra suave debajo, para separarlo del fondo.
+    ctx.fillStyle = '#05031466';
+    for (const [x, side] of [
+      [-0.1, -1],
+      [0.1, 1],
+    ]) {
+      ctx.save();
+      ctx.translate(0.018, 0.026);
+      chromatid(x, side);
+      ctx.fill();
+      ctx.restore();
+    }
+    for (const [x, side] of [
+      [-0.1, -1],
+      [0.1, 1],
+    ]) {
+      const g = ctx.createLinearGradient(x - 0.13, 0, x + 0.13, 0);
+      g.addColorStop(0, '#3e2a9e');
+      g.addColorStop(0.38, '#a796ff');
+      g.addColorStop(0.62, '#7b63ea');
+      g.addColorStop(1, '#2f2085');
+      chromatid(x, side);
       ctx.fillStyle = g;
       ctx.fill();
       ctx.save();
       ctx.clip();
-      ctx.fillStyle = '#20155a88';
-      for (const y of BANDS) ctx.fillRect(x - 0.1, y, 0.2, 0.045);
+      // Bandas que siguen la curva de la cromátida.
+      ctx.fillStyle = '#1c124f99';
+      for (const y of BANDS) {
+        const bx = chromX(x, side, y + 0.022);
+        ctx.fillRect(bx - 0.11, y, 0.22, 0.045);
+      }
       const glow = 0.6 + 0.4 * Math.sin(time / 300);
       ctx.fillStyle = `rgba(255,92,157,${glow})`;
-      ctx.fillRect(x - 0.1, -0.79, 0.2, 0.025);
+      ctx.fillRect(chromX(x, side, -0.78) - 0.11, -0.79, 0.22, 0.025);
+      // Brillo de borde del lado de la luz.
+      ctx.strokeStyle = '#d9d0ff55';
+      ctx.lineWidth = 3 / u;
+      ctx.translate(-0.012, -0.006);
+      chromatid(x, side);
+      ctx.stroke();
       ctx.restore();
     }
+    // Centrómero: el nudo donde se unen las dos cromátidas.
+    const knot = ctx.createRadialGradient(0, WAIST, 0, 0, WAIST, 0.07);
+    knot.addColorStop(0, '#2a1a78');
+    knot.addColorStop(1, '#2a1a7800');
+    ctx.fillStyle = knot;
+    ctx.beginPath();
+    ctx.arc(0, WAIST, 0.07, 0, 7);
+    ctx.fill();
+    const hx = chromX(0.1, 1, -0.78);
     ctx.fillStyle = '#c98bff';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
-    label('HBB', 0.24, -0.755, 0.07, u);
+    label('HBB', hx + 0.14, -0.755, 0.07, u);
     ctx.strokeStyle = '#c98bff88';
     ctx.lineWidth = 1.5 / u;
     ctx.beginPath();
-    ctx.moveTo(0.2, -0.78);
-    ctx.lineTo(0.235, -0.78);
+    ctx.moveTo(hx + 0.1, -0.78);
+    ctx.lineTo(hx + 0.135, -0.78);
     ctx.stroke();
   }
+  const chromFocus = () => [chromX(0.1, 1, -0.78), -0.78];
 
   // ---- Escena 5: la doble hélice del gen HBB, con sus letras reales. ----
   const helixPhase = time => time * 0.0009;
@@ -369,36 +496,57 @@
     const PAIR = { A: 'T', T: 'A', C: 'G', G: 'C' },
       x = i => 0.18 + (i - 19) * 0.11,
       nodes = [];
+    // Peldaños: cada mitad del color de su letra, más apagados cuanto más de perfil.
     for (let i = 0; i < 46; i++) {
       const y = helixY(i, time),
-        z = Math.cos(helixPhase(time) + i * 0.62);
-      ctx.strokeStyle = `rgba(255,255,255,${0.12 + 0.12 * (1 - Math.abs(z))})`;
-      ctx.lineWidth = 0.012;
+        z = Math.cos(helixPhase(time) + i * 0.62),
+        a = 0.18 + 0.22 * (1 - Math.abs(z));
+      ctx.lineWidth = 0.014;
+      ctx.globalAlpha = a;
+      ctx.strokeStyle = COLORS[DNA[i]];
       ctx.beginPath();
       ctx.moveTo(x(i), y);
+      ctx.lineTo(x(i), 0);
+      ctx.stroke();
+      ctx.strokeStyle = COLORS[PAIR[DNA[i]]];
+      ctx.beginPath();
+      ctx.moveTo(x(i), 0);
       ctx.lineTo(x(i), -y);
       ctx.stroke();
       nodes.push({ x: x(i), y, z, b: DNA[i], i }, { x: x(i), y: -y, z: -z, b: PAIR[DNA[i]], i });
     }
+    ctx.globalAlpha = 1;
+    // Esqueletos: más gruesos y claros adelante, finos y oscuros atrás (perspectiva).
     for (const side of [1, -1]) {
-      ctx.strokeStyle = side > 0 ? '#ffffff55' : '#ffffff30';
-      ctx.lineWidth = 0.014;
-      ctx.beginPath();
-      for (let k = 0; k <= 45 * 4; k++) {
+      for (let k = 0; k < 45 * 4; k++) {
         const i = k / 4,
-          y = side * helixY(i, time);
-        k ? ctx.lineTo(x(i), y) : ctx.moveTo(x(i), y);
+          j = (k + 1) / 4,
+          d = (side * Math.cos(helixPhase(time) + (i + 0.125) * 0.62) + 1) / 2;
+        ctx.strokeStyle = `rgba(225,220,255,${0.14 + 0.5 * d})`;
+        ctx.lineWidth = 0.008 + 0.014 * d;
+        ctx.beginPath();
+        ctx.moveTo(x(i), side * helixY(i, time));
+        ctx.lineTo(x(j), side * helixY(j, time));
+        ctx.stroke();
       }
-      ctx.stroke();
     }
     nodes.sort((a, b) => a.z - b.z);
     for (const n of nodes) {
       const depth = (n.z + 1) / 2,
-        r = 0.028 + 0.016 * depth;
-      ctx.globalAlpha = 0.35 + 0.65 * depth;
+        r = 0.026 + 0.02 * depth;
+      ctx.globalAlpha = 0.3 + 0.7 * depth;
       ctx.fillStyle = COLORS[n.b];
       ctx.beginPath();
       ctx.arc(n.x, n.y, r, 0, 7);
+      ctx.fill();
+      // Sombra abajo y brillo arriba: cada letra parece una esfera.
+      ctx.fillStyle = '#0b082055';
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, r, 0.1, Math.PI - 0.1);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff66';
+      ctx.beginPath();
+      ctx.arc(n.x - r * 0.35, n.y - r * 0.4, r * 0.3, 0, 7);
       ctx.fill();
       if (depth > 0.55 && r * u > 9) {
         ctx.fillStyle = '#1a1335';
@@ -486,7 +634,7 @@
     { bg: '#1e0612', draw: capillary, focus: () => [0.12, 0.04] },
     { bg: '#2a0610', draw: bloodCell, focus: () => [0.3, -0.22] },
     { bg: '#0b0a28', draw: hemoglobin, focus: hbFocus },
-    { bg: '#130a2c', draw: chromosome, focus: () => [0.1, -0.78] },
+    { bg: '#130a2c', draw: chromosome, focus: chromFocus },
     { bg: '#0a0b2a', draw: helix, focus: helixFocus },
     { bg: '#0e0b24', draw: letter, focus: () => [0, 0] },
   ];
@@ -564,7 +712,7 @@
     if (t < 0.0005) return scene(k, cx, cy, U, 1, time);
     const [fx, fy] = SCENES[k].focus(time),
       Z = ZMAX ** t,
-      e = smooth(0, 1, t),
+      e = smoother(t),
       // La escena actual se agranda alrededor de su punto; la siguiente crece desde ese punto.
       px = cx + U * fx * (1 - e),
       py = cy + U * fy * (1 - e);

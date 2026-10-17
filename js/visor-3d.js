@@ -20,6 +20,11 @@ class ProteinViewer {
     this.rotating = !this.reduced.matches;
     this.pointers = new Map();
     this.lastTime = 0;
+    // Velocidad del arrastre (inercia al soltar) y vista suavizada hacia el zoom y el centro pedidos.
+    this.spin = { x: 0, y: 0 };
+    this.lastMove = 0;
+    this.view = null;
+    this.rgbCache = new Map();
     this.reduced.addEventListener('change', () => {
       this.rotating = !this.reduced.matches;
       this.onRotation?.();
@@ -29,6 +34,7 @@ class ProteinViewer {
     canvas.addEventListener('pointerdown', e => {
       this.pointers.set(e.pointerId, [e.clientX, e.clientY]);
       canvas.setPointerCapture(e.pointerId);
+      this.spin = { x: 0, y: 0 };
       this.rotating = false;
       this.onRotation?.();
     });
@@ -41,13 +47,23 @@ class ProteinViewer {
         const after = Math.hypot(e.clientX - other[0], e.clientY - other[1]);
         if (before > 0) this.zoomBy(after / before);
       } else {
-        this.ry += (e.clientX - old[0]) * 0.012;
-        this.rx += (e.clientY - old[1]) * 0.012;
+        const dy = (e.clientX - old[0]) * 0.012,
+          dx = (e.clientY - old[1]) * 0.012;
+        this.ry += dy;
+        this.rx += dx;
+        // Promedio suave de la velocidad, para que el giro siga un poco al soltar.
+        this.spin = { x: this.spin.x * 0.5 + dx * 0.5, y: this.spin.y * 0.5 + dy * 0.5 };
+        this.lastMove = performance.now();
       }
       this.pointers.set(e.pointerId, [e.clientX, e.clientY]);
     });
     for (const event of ['pointerup', 'pointercancel', 'lostpointercapture'])
-      canvas.addEventListener(event, e => this.pointers.delete(e.pointerId));
+      canvas.addEventListener(event, e => {
+        this.pointers.delete(e.pointerId);
+        // Sin inercia si se soltó quieto (el último movimiento fue hace rato) o con varios dedos.
+        if (this.pointers.size || this.reduced.matches || performance.now() - this.lastMove > 90)
+          this.spin = { x: 0, y: 0 };
+      });
     canvas.addEventListener(
       'wheel',
       e => {
@@ -76,6 +92,14 @@ class ProteinViewer {
       this.lastTime = t;
       if (!document.hidden && this.canvas.clientWidth) {
         if (this.rotating) this.ry += dt * 0.00012;
+        // Inercia: el giro se frena solo, como una pieza con rozamiento.
+        if (!this.pointers.size && (this.spin.x || this.spin.y)) {
+          const k = Math.pow(0.86, dt / 16.7);
+          this.rx += this.spin.x * (dt / 16.7);
+          this.ry += this.spin.y * (dt / 16.7);
+          this.spin = { x: this.spin.x * k, y: this.spin.y * k };
+          if (Math.abs(this.spin.x) + Math.abs(this.spin.y) < 0.0004) this.spin = { x: 0, y: 0 };
+        }
         this.draw();
       }
       requestAnimationFrame(this.frame);
@@ -100,6 +124,7 @@ class ProteinViewer {
     this.ry = 0.35;
     this.zoom = 1;
     this.focus = null;
+    this.spin = { x: 0, y: 0 };
   }
   // Centra y acerca la vista en la pieza que cambió.
   focusMutation() {
@@ -140,6 +165,49 @@ class ProteinViewer {
   mix(a, b, t) {
     return `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * t)).join(',')})`;
   }
+  // Pasa '#rrggbb' o 'rgb(r,g,b)' a números (con caché, se usa miles de veces por cuadro).
+  rgb(c) {
+    let v = this.rgbCache.get(c);
+    if (!v) {
+      v =
+        c[0] === '#'
+          ? [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16))
+          : c.match(/\d+/g).map(Number);
+      this.rgbCache.set(c, v);
+    }
+    return v;
+  }
+  // Tono final: más luz adelante y niebla violeta (la del fondo del visor) hacia atrás.
+  shade(c, light, fog) {
+    const r = Math.min(255, c[0] * light),
+      g = Math.min(255, c[1] * light),
+      b = Math.min(255, c[2] * light);
+    return `rgb(${Math.round(r + (24 - r) * fog)},${Math.round(g + (19 - g) * fog)},${Math.round(b + (60 - b) * fog)})`;
+  }
+  // Esfera iluminada desde arriba a la izquierda, con un halo suave en vez de shadowBlur.
+  sphere(x, y, r, [cr, cg, cb], halo) {
+    const ctx = this.ctx;
+    if (halo) {
+      const g = ctx.createRadialGradient(x, y, r * 0.6, x, y, r * halo);
+      g.addColorStop(0, `rgba(${cr},${cg},${cb},0.35)`);
+      g.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(x, y, r * halo, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    const g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.08, x, y, r);
+    g.addColorStop(0, '#ffffff');
+    g.addColorStop(0.25, `rgb(${cr},${cg},${cb})`);
+    g.addColorStop(
+      1,
+      `rgb(${Math.round(cr * 0.35)},${Math.round(cg * 0.3)},${Math.round(cb * 0.4)})`,
+    );
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
   // Se llama en cada cuadro: gira los puntos, los proyecta en 2D y dibuja primero lo que está más lejos.
   draw() {
     const ctx = this.ctx,
@@ -152,7 +220,7 @@ class ProteinViewer {
       pts = model.chains[beta],
       all = this.all && this.model === 'pdb';
     const visible = all ? Object.entries(model.chains) : [[beta, pts]];
-    const center =
+    const target =
       this.focus ||
       pts.reduce(
         (s, p) => ({
@@ -162,7 +230,21 @@ class ProteinViewer {
         }),
         { x: 0, y: 0, z: 0 },
       );
-    const scale = Math.min(w / (all ? 99 : 68), h / (all ? 92 : 65)) * this.zoom;
+    // La cámara se acerca al zoom y al centro pedidos con un frenado suave (salto directo si se reduce el movimiento).
+    const now = performance.now(),
+      v = this.view,
+      k = !v || this.reduced.matches ? 1 : 1 - Math.pow(0.86, Math.min(50, now - v.t) / 16.7);
+    this.view = v
+      ? {
+          t: now,
+          zoom: v.zoom + (this.zoom - v.zoom) * k,
+          x: v.x + (target.x - v.x) * k,
+          y: v.y + (target.y - v.y) * k,
+          z: v.z + (target.z - v.z) * k,
+        }
+      : { t: now, zoom: this.zoom, ...target };
+    const center = this.view;
+    const scale = Math.min(w / (all ? 99 : 68), h / (all ? 92 : 65)) * this.view.zoom;
     const cy = Math.cos(this.ry),
       sy = Math.sin(this.ry),
       cx = Math.cos(this.rx),
@@ -189,8 +271,8 @@ class ProteinViewer {
           p2 = points[i + 1],
           p3 = points[Math.min(points.length - 1, i + 2)];
         let prev = project(p1);
-        for (let j = 1; j <= 6; j++) {
-          const t = j / 6,
+        for (let j = 1; j <= 8; j++) {
+          const t = j / 8,
             t2 = t * t,
             t3 = t2 * t,
             p = {};
@@ -213,7 +295,7 @@ class ProteinViewer {
             a: prev,
             b: next,
             z: (prev.z + next.z) / 2,
-            color: this.color(p1.res, p1.confidence, isBeta),
+            color: this.rgb(this.color(p1.res, p1.confidence, isBeta)),
             opacity,
             width: isBeta ? Math.max(3.4, scale * 1.05) : Math.max(2, scale * 0.65),
           });
@@ -224,16 +306,47 @@ class ProteinViewer {
         marker = project(points[this.result.piece - 1]);
     }
     segments.sort((a, b) => b.z - a.z);
+    // Profundidad normalizada: 0 = lo más cercano, 1 = lo más lejano.
+    const zNear = segments.length ? segments[segments.length - 1].z : 0,
+      zFar = segments.length ? segments[0].z : 1,
+      zSpan = Math.max(1, zFar - zNear);
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    for (const s of segments) {
-      ctx.globalAlpha = s.opacity * Math.max(0.52, Math.min(1, 0.85 - s.z * 0.009));
-      ctx.strokeStyle = s.color;
-      ctx.lineWidth = s.width;
+    // Tubo con volumen: borde oscuro, cuerpo y un brillo corrido hacia la luz (arriba a la izquierda).
+    // Todo opaco (sin globalAlpha) y por capas de profundidad: en cada capa van primero los bordes, después
+    // los cuerpos y al final los brillos, así las uniones entre tramos no se marcan como anillos.
+    const line = (s, dx, dy) => {
       ctx.beginPath();
-      ctx.moveTo(s.a.x, s.a.y);
-      ctx.lineTo(s.b.x, s.b.y);
+      ctx.moveTo(s.a.x + dx, s.a.y + dy);
+      ctx.lineTo(s.b.x + dx, s.b.y + dy);
       ctx.stroke();
+    };
+    for (let i = 0; i < segments.length; ) {
+      let j = i;
+      while (j < segments.length && segments[i].z - segments[j].z < zSpan * 0.05) j++;
+      const layer = segments.slice(i, j);
+      for (const s of layer) {
+        const d = (s.z - zNear) / zSpan;
+        s.lw = s.width * (1.12 - 0.34 * d);
+        s.fog = 1 - s.opacity * (1 - d * 0.55);
+        s.light = 1.08 - 0.3 * d;
+        s.d = d;
+        ctx.strokeStyle = this.shade(s.color, s.light * 0.5, s.fog);
+        ctx.lineWidth = s.lw;
+        line(s, 0, 0);
+      }
+      for (const s of layer) {
+        ctx.strokeStyle = this.shade(s.color, s.light, s.fog);
+        ctx.lineWidth = s.lw * 0.7;
+        line(s, -s.lw * 0.06, -s.lw * 0.08);
+      }
+      for (const s of layer) {
+        if (s.opacity < 0.3) continue;
+        ctx.strokeStyle = this.shade(s.color, 1 + 0.5 * (1 - s.d), s.fog + 0.15 * s.d);
+        ctx.lineWidth = s.lw * 0.24;
+        line(s, -s.lw * 0.2, -s.lw * 0.2);
+      }
+      i = j;
     }
     ctx.globalAlpha = 1;
     const hemes = all
@@ -244,10 +357,7 @@ class ProteinViewer {
     for (const heme of hemes) {
       const p = project({ x: heme[0], y: heme[1], z: heme[2] }),
         big = !all;
-      ctx.fillStyle = big ? '#fff3b0' : '#dfbc72';
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, big ? 7 : 4.5, 0, Math.PI * 2);
-      ctx.fill();
+      this.sphere(p.x, p.y, big ? 7.5 : 5, big ? [255, 212, 71] : [223, 160, 90], big ? 2.4 : 0);
       if (big) {
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 2;
@@ -263,10 +373,7 @@ class ProteinViewer {
       ctx.beginPath();
       ctx.arc(marker.x, marker.y, 11, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.fillStyle = col;
-      ctx.beginPath();
-      ctx.arc(marker.x, marker.y, 5, 0, Math.PI * 2);
-      ctx.fill();
+      this.sphere(marker.x, marker.y, 6, this.rgb(col), 2.6);
       const label = `Pieza ${this.result.piece}`;
       ctx.font = '700 15px Consolas, monospace';
       const tw = ctx.measureText(label).width;
