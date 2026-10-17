@@ -11,37 +11,31 @@
       goal: 'Andá al <b>codón 7: GAG</b>. Cambiá su letra del medio para que la pieza 6 deje de ser glutamato (Glu) y pase a ser valina (Val).',
       display: 'G <span>?</span> G',
       hint: 'Pista: el codón tiene que quedar GTG.',
-      toast: 'Codón 7 seleccionado: cambiá la A del medio por T y hacé tu predicción.',
       tour: [
         'Este es el codón 7 del gen de la hemoglobina: GAG. Le indica a la célula que ponga la pieza 6, glutamato (Glu).',
         'Cambiamos una sola letra: la A del medio por una T. GAG pasa a ser GTG. ¿Qué creés que le pasa a la proteína?',
         'Ahora la pieza 6 es valina (Val). Cambió 1 pieza de 146, pero alcanza: esta hemoglobina forma fibras cuando falta oxígeno y deforma los glóbulos rojos. Es la anemia falciforme.',
       ],
-      note: '<b>Encontraste el caso de la anemia falciforme: Glu6Val.</b> Cambiaste la letra 20, A por T. La hemoglobina alterada puede formar fibras cuando hay poco oxígeno y deformar los glóbulos rojos. El visor marca la pieza 6 en la estructura normal.',
     },
     hbc: {
       goal: 'Andá al <b>codón 7: GAG</b>, el mismo de la anemia falciforme. Cambiá su <b>primera</b> letra para que la pieza 6 pase de glutamato (Glu) a lisina (Lys).',
       display: '<span>?</span> A G',
       hint: 'Pista: la lisina se escribe con los codones AAA o AAG.',
-      toast: 'Codón 7 seleccionado: cambiá la G del principio por A y hacé tu predicción.',
       tour: [
         'Volvemos al mismo codón 7: GAG. Esta vez vamos a cambiar otra de sus letras.',
         'Cambiamos la primera letra: la G por una A. GAG pasa a ser AAG. ¿Será el mismo resultado?',
         'La pieza 6 ahora es lisina (Lys). Mismo lugar, otra letra, otra enfermedad: la hemoglobina C forma cristales y suele dar una anemia más leve.',
       ],
-      note: '<b>Encontraste la hemoglobina C: Glu6Lys.</b> Cambiaste la letra 19, G por A. Es el mismo lugar que la anemia falciforme, pero con otra letra, y el resultado es distinto: esta hemoglobina tiende a formar cristales dentro del glóbulo rojo y suele causar una anemia más leve. El visor marca la pieza 6 en la estructura normal.',
     },
     thal: {
       goal: 'Andá al <b>codón 40: CAG</b>, que fabrica la pieza 39, glutamina (Gln). Cambiá su <b>primera</b> letra para convertirlo en una señal de STOP.',
       display: '<span>?</span> A G',
       hint: 'Pista: las señales de STOP son TAA, TAG y TGA.',
-      toast: 'Codón 40 seleccionado: cambiá la C del principio por T y hacé tu predicción.',
       tour: [
         'Ahora vamos al codón 40: CAG. Le indica a la célula que ponga la pieza 39, glutamina (Gln).',
         'Cambiamos la primera letra: la C por una T. CAG pasa a ser TAG, que es una señal de STOP.',
         'La lectura se corta antes de tiempo: la cadena beta queda con 38 de sus 146 piezas. Sin suficiente cadena beta, el cuerpo fabrica menos hemoglobina. Es una beta-talasemia.',
       ],
-      note: '<b>Encontraste un caso de beta-talasemia: Gln39Stop.</b> Cambiaste la letra 118, C por T, y el codón CAG se volvió TAG, una señal de STOP. La lectura se corta y la cadena beta queda con solo 38 de sus 146 piezas. Sin suficiente cadena beta, el cuerpo fabrica menos hemoglobina.',
     },
   };
   // ---- Nombres de cada resultado ----
@@ -50,14 +44,6 @@
     pieza: 'Cambió una pieza',
     corte: 'La proteína se cortó',
     desorden: 'Se desordenó lo que sigue',
-  };
-  const effects = {
-    synonymous: 'Mutación silenciosa',
-    missense: 'Cambio de aminoácido',
-    nonsense: 'STOP prematuro',
-    'start-loss': 'Pérdida del inicio',
-    'stop-loss': 'Pérdida del STOP',
-    frameshift: 'Cambio del marco de lectura',
   };
   const baseNames = { A: 'adenina', T: 'timina', C: 'citosina', G: 'guanina' };
   const idle = 'La hemoglobina ayuda a llevar oxígeno por tu cuerpo.';
@@ -98,6 +84,8 @@
   } catch {}
   // ---- Visor 3D ----
   const viewer = new ProteinViewer($('protein'), MODELS);
+  // Quieta hasta que alguien la gire (solo el recorrido guiado la hace girar).
+  viewer.rotating = false;
   const piezas = n => (n === 1 ? '1 pieza' : `${n} piezas`);
   const aaName = codon => G.names[G.table[codon]];
   const fullNames = {
@@ -137,8 +125,6 @@
     revealed = false;
     viewer.result = null;
     viewer.focus = null;
-    $('focus-mutation').hidden = true;
-    $('science-note').hidden = true;
     $('viewer-overlay').textContent = idle;
     if (had) emit('limpio');
   }
@@ -154,7 +140,8 @@
     const css = getComputedStyle(strip),
       size = parseFloat(css.getPropertyValue('--tile')) || 36,
       gap = parseFloat(css.columnGap) || 14;
-    const n = Math.max(2, Math.min(12, Math.floor((width + gap) / (3 * size + 6 + gap))));
+    // Pocos codones a la vista: alcanza para ubicarse sin llenar la pantalla.
+    const n = Math.max(2, Math.min(5, Math.floor((width + gap) / (3 * size + 6 + gap))));
     const changed = n !== perView;
     perView = n;
     return changed;
@@ -181,8 +168,6 @@
       strip = $('codons');
     strip.replaceChildren();
     strip.classList.toggle('mutated', !!r);
-    $('gene-range').max = max;
-    $('gene-range').value = offset;
     $('region-label').textContent = `Codones ${offset + 1}–${offset + perView} de 148`;
     const labels = document.createElement('div');
     labels.className = 'codon-labels';
@@ -256,21 +241,15 @@
   function centerOn(p) {
     offset = Math.floor(p / 3) - Math.floor(perView / 2);
   }
-  // Herramienta: con la letra elegida, un toque cambia, quita o agrega.
+  // Herramienta: con la letra elegida, un toque la cambia. Agregar, quitar y «al azar» quedan en «Más opciones».
+  let moreOpen = false;
   function renderTool() {
     const b = G.DNA[position],
       codon = Math.floor(position / 3),
       triplet = G.DNA.slice(codon * 3, codon * 3 + 3),
       r = current,
       tool = $('tool');
-    const summary = !r
-      ? ''
-      : r.type === 'sub'
-        ? `Cambiaste la letra ${r.position + 1}: ${b} → ${r.base}.`
-        : r.type === 'del'
-          ? `Quitaste la letra ${r.position + 1} (${b}).`
-          : `Agregaste una ${r.base} después de la letra ${r.position + 1}.`;
-    tool.innerHTML = `<div class="tool-info"><span class="base big ${b.toLowerCase()}">${b}</span><div><b>Letra ${position + 1} de 444</b><span>Codón ${codon + 1}: ${triplet} → ${aaName(triplet)}</span></div>${r ? `<div class="tool-change"><p class="tool-summary">${summary}</p><button class="ghost tool-undo" id="undo"><span aria-hidden="true">↶</span> Deshacer</button></div>` : ''}</div><div class="tool-actions"><div class="tool-group"><span>Cambiar por</span><div class="tool-bases" data-kind="sub"></div></div><div class="tool-group"><span>Agregar después</span><div class="tool-bases" data-kind="ins"></div></div><div class="tool-group"><span>Quitar</span><button class="ghost tool-del${r?.type === 'del' ? ' active' : ''}" id="delete" aria-pressed="${r?.type === 'del'}">✕ Quitar la ${b}</button></div></div>`;
+    tool.innerHTML = `<div class="tool-info"><span class="base big ${b.toLowerCase()}">${b}</span><div><b>Letra ${position + 1}</b><span>Codón ${codon + 1}: ${triplet}</span></div>${r ? '<button class="ghost tool-undo" id="undo"><span aria-hidden="true">↶</span> Deshacer</button>' : ''}</div><div class="tool-group"><span>Cambiala por</span><div class="tool-bases" data-kind="sub"></div></div><details class="tool-more"${moreOpen ? ' open' : ''}><summary>Más opciones</summary><div class="tool-actions"><div class="tool-group"><span>Agregar después</span><div class="tool-bases" data-kind="ins"></div></div><div class="tool-group"><span>Quitar</span><button class="ghost tool-del${r?.type === 'del' ? ' active' : ''}" id="delete" aria-pressed="${r?.type === 'del'}">✕ Quitar la ${b}</button></div><div class="tool-group"><span>Sorpresa</span><button class="ghost" id="random"><span aria-hidden="true">⚄</span> Al azar</button></div></div></details>`;
     for (const box of tool.querySelectorAll('.tool-bases')) {
       const kind = box.dataset.kind;
       for (const option of 'ATCG') {
@@ -286,10 +265,14 @@
         box.append(button);
       }
     }
+    tool.querySelector('.tool-more').ontoggle = e => (moreOpen = e.target.open);
     $('delete').onclick = () => apply({ position, type: 'del' });
+    $('random').onclick = randomMutation;
     $('undo') && ($('undo').onclick = undo);
   }
   function render() {
+    // Paso a paso: el resultado, el 3D y lo que pasa después aparecen recién con un cambio.
+    $('tab-lab').classList.toggle('waiting', !current);
     renderGene();
     renderTool();
     renderResult();
@@ -320,29 +303,22 @@
       centerOn(position);
     if (guess) render();
     else reveal(null, count);
-    if (!tour.active)
-      $('result')
-        .closest('.panel')
-        .scrollIntoView({
-          block: 'nearest',
-          behavior: viewer.reduced.matches ? 'instant' : 'smooth',
-        });
     return result;
   }
   // ---- Panel de resultado ----
   // Resumen en palabras simples: es lo primero que se lee.
   function lead(r) {
-    if (r.effect === 'start-loss')
-      return 'Se perdió la señal de inicio de la receta. En este modelo, la proteína no se fabrica.';
-    if (r.effect === 'stop-loss')
-      return 'Se perdió la señal de STOP del final. La fabricación podría continuar y no sabemos dónde termina.';
+    if (r.effect === 'start-loss') return 'Se borró la señal de inicio: la proteína no se fabrica.';
+    if (r.effect === 'stop-loss') return 'Se borró la señal de STOP: no sabemos dónde termina.';
     if (r.effect === 'synonymous')
-      return `Cambiaste una letra, pero el codón sigue indicando la misma pieza: ${aaFull(r.originalCodon)}. La proteína queda igual.`;
+      return `El codón sigue pidiendo la misma pieza (${aaName(r.originalCodon)}). La proteína queda igual.`;
     if (r.effect === 'missense')
-      return `La pieza ${r.piece} de la proteína cambió: antes era ${aaFull(r.originalCodon)} y ahora es ${aaFull(r.mutatedCodon)}. Todas las demás quedaron igual.`;
+      return `La pieza ${r.piece} pasó de ${aaFull(r.originalCodon)} a ${aaFull(r.mutatedCodon)}.`;
     if (r.effect === 'nonsense')
-      return `Apareció una señal de STOP antes de tiempo. La proteína queda con ${piezas(r.mature.length)} en lugar de 146.`;
-    return `Al ${r.type === 'del' ? 'quitar' : 'agregar'} una letra, los grupos de tres que siguen se corrieron.${r.startLost ? ' Además se perdió la señal de inicio: en este modelo, la proteína no se fabrica.' : r.lengthUnknown ? ' No aparece una señal de STOP, así que no sabemos dónde termina la proteína.' : r.mature.length === 146 ? ' La proteína conserva 146 piezas.' : ` La proteína queda con ${piezas(r.mature.length)} en lugar de 146.`}`;
+      return `Apareció un STOP: la proteína queda con ${piezas(r.mature.length)} de 146.`;
+    return r.startLost
+      ? 'Se corrieron los grupos de tres y se perdió el inicio: la proteína no se fabrica.'
+      : 'Se corrieron todos los grupos de tres que siguen: las piezas salen distintas.';
   }
   // Barra que compara la proteína normal (146 piezas) con la mutada.
   function chainBar(r) {
@@ -412,14 +388,7 @@
     }
     const guess = lastGuess,
       heading = resultHeading(r);
-    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}</p>` : ''}`;
-    $('see-3d').onclick = () => {
-      if (!$('focus-mutation').hidden) viewer.focusMutation();
-      document.querySelector('.protein-panel').scrollIntoView({
-        block: 'center',
-        behavior: viewer.reduced.matches ? 'instant' : 'smooth',
-      });
-    };
+    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p>${chainBar(r)}${r.realCase ? `<p class="sickle-note">Es un caso real: <b>${r.realCase.name}</b>.</p>` : ''}`;
   }
   // Muestra el resultado, lo suma al contador y lo marca en el visor 3D.
   function reveal(guess = null, count = true) {
@@ -437,8 +406,6 @@
     }
     viewer.result = r;
     viewer.focus = null;
-    $('focus-mutation').hidden = r.piece < 1 || r.piece > 146;
-    $('science-note').hidden = false;
     $('viewer-overlay').textContent =
       r.effect === 'stop-loss'
         ? 'El cambio está en el STOP, fuera de la cadena dibujada.'
@@ -460,7 +427,7 @@
     stopTour();
     clearResult();
     viewer.reset();
-    viewer.rotating = !viewer.reduced.matches;
+    viewer.rotating = false;
     render();
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
@@ -532,11 +499,8 @@
     offset += Math.max(1, perView - 1);
     renderGene();
   };
-  $('gene-range').oninput = e => {
-    offset = Number(e.target.value);
-    renderGene();
-  };
-  $('random').onclick = () => {
+  // «Al azar»: una mutación cualquiera en cualquier lugar del gen.
+  function randomMutation() {
     const n = Math.random(),
       p = Math.floor(Math.random() * G.DNA.length),
       kind = n < 0.6 ? 'sub' : n < 0.8 ? 'del' : 'ins',
@@ -544,7 +508,7 @@
     position = p;
     centerOn(p);
     apply({ position: p, type: kind, base: choices[Math.floor(Math.random() * choices.length)] });
-  };
+  }
   // Casos reales: textos de cada misión (los datos científicos están en genetica.js).
   let missionCase = 'sickle';
   function renderMission() {
@@ -580,8 +544,6 @@
     position = c.position;
     centerOn(c.position);
     render();
-    $('tool').scrollIntoView({ block: 'nearest' });
-    notify(caseInfo[c.id].toast);
   };
   // Modo evolución del visor: dorado = pieza igual en las 16 especies; el punto amarillo es el hierro del hemo.
   const study = Evolution.hemeStudy(MODELS.pdb);
@@ -613,10 +575,6 @@
         );
       }),
   );
-  $('focus-mutation').onclick = () => viewer.focusMutation();
-  $('zoom-in').onclick = () => viewer.zoomBy(1.2);
-  $('zoom-out').onclick = () => viewer.zoomBy(1 / 1.2);
-  $('reset-view').onclick = () => viewer.reset();
   $('fullscreen').onclick = async () => {
     try {
       if (document.fullscreenElement) await document.exitFullscreen();

@@ -38,15 +38,13 @@ El **recorrido guiado** (al final del viaje o en el pie de página) muestra los 
 
 ### El simulador
 
-Todo está en una sola pantalla:
+Va paso a paso y nada se mueve solo: al principio solo se ve el ADN, y el resultado, el 3D y lo que pasa después aparecen con el primer cambio.
 
 1. **Tocá una letra** de los 444 nucleótidos del gen.
-2. **Cambiala, quitala o agregá una letra** con un solo toque. La tira del ADN muestra el *antes* y el *después* de cada codón, con la pieza (aminoácido) que fabrica.
+2. **Cambiala** por otra con un toque (agregar, quitar y *Al azar* están en *Más opciones*). La tira del ADN muestra el *antes* y el *después* de cada codón, con la pieza (aminoácido) que fabrica.
 3. **Mirá al instante** qué le pasa a la proteína y dónde cae el cambio en el modelo 3D. **Deshacer** vuelve al gen normal.
 
-La primera vez que alguien entra al simulador, una **guía de 3 pasos** con globitos le muestra qué tocar (en modo stand, se repite para cada visitante nuevo). `GenomaLab.startGuide()` la vuelve a abrir.
-
-Debajo, **Lo que pasa después** muestra dos miradas del mismo cambio, de a una por vez (con pestañas; después de cada cambio arranca en la fábrica y pasa sola a la sangre):
+Debajo, **Lo que pasa después** muestra dos miradas del mismo cambio, de a una por vez (con pestañas; después de cada cambio arranca en la fábrica):
 
 - **La fábrica:** el ribosoma lee el ARN de verdad (el normal o el tuyo). Llegan los ARN de transferencia con sus piezas; si aparece un STOP, la cadena se suelta ahí. También muestra el corrimiento del marco, la pérdida del inicio y la del STOP.
 - **En la sangre:** glóbulos rojos que pasan por un capilar. Solo se dibuja lo que se sabe de los casos reales: medialunas que se traban con poco oxígeno (falciforme), cristales (hemoglobina C) o glóbulos chicos y pálidos (talasemia), con 1 o 2 copias. Para el resto dice que no se sabe.
@@ -84,7 +82,6 @@ js/fabrica.js           el ribosoma leyendo el ARN
 js/sangre.js            glóbulos rojos según los casos conocidos
 js/mapa-calor.js        mapa de las 1.332 sustituciones (presentación)
 js/experimento-evolucion.js  segundo experimento del póster
-js/guia.js              guía de la primera vez en el simulador
 js/consecuencias.js     pestañas de «Lo que pasa después»
 js/presentacion.js      diapositivas, vista del presentador y sincronización
 img/                    código QR de la dirección pública e íconos de la app

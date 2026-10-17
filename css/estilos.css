@@ -308,13 +308,6 @@ button.base:hover:not(:disabled) {
   color: var(--muted);
   text-align: center;
 }
-.range-label input {
-  display: block;
-  width: 100%;
-  accent-color: var(--pink);
-  height: 30px;
-  margin-top: 2px;
-}
 .shortcuts {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -445,23 +438,6 @@ button.base:hover:not(:disabled) {
 }
 .result-lead {
   font-size: 20px;
-}
-.sci-name {
-  font-size: 16px;
-  color: var(--muted);
-}
-.see-3d {
-  display: none;
-  width: 100%;
-  margin-top: 16px;
-  background: #4fd8ff1f;
-  border: 2px solid var(--cyan);
-  color: var(--cyan);
-  border-radius: 14px;
-  padding: 12px;
-  font-size: 17px;
-  font-weight: 700;
-  min-height: 52px;
 }
 .chain-compare {
   display: grid;
@@ -630,13 +606,6 @@ details p {
   border-radius: 8px;
   font-size: 17px;
 }
-.tool-change {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-left: auto;
-  flex-wrap: wrap;
-}
 .panel-head .lead b {
   color: var(--text);
 }
@@ -761,10 +730,6 @@ details p {
   display: block;
   color: var(--muted);
   font-size: 16px;
-}
-.tool-summary {
-  font-weight: 700;
-  color: var(--accent);
 }
 .tool-undo {
   min-height: 44px;
@@ -959,55 +924,12 @@ canvas {
 canvas:active {
   cursor: grabbing;
 }
-.zoom-buttons {
-  position: absolute;
-  right: 14px;
-  bottom: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.zoom-buttons button {
-  width: 44px;
-  height: 44px;
-  background: #262260d9;
-  border: 2px solid var(--line);
-  border-radius: 12px;
-  font-size: 21px;
-}
+
 .viewer-overlay {
   text-align: center;
   font-size: 16px;
   color: var(--muted);
   padding: 4px 22px 16px;
-}
-.viewer-controls {
-  padding: 0 22px;
-}
-.viewer-controls button {
-  width: 100%;
-  margin-bottom: 16px;
-  background: #4fd8ff1f;
-  border: 2px solid var(--cyan);
-  color: var(--cyan);
-  border-radius: 14px;
-  padding: 12px;
-  font-size: 17px;
-  font-weight: 700;
-  min-height: 52px;
-}
-.science-note {
-  display: flex;
-  align-items: start;
-  gap: 10px;
-  border-top: 1px solid var(--hair);
-  padding: 14px 22px;
-  font-size: 15px;
-  color: var(--muted);
-}
-.science-note strong {
-  font-weight: 600;
-  color: var(--text);
 }
 
 .disclaimer {
@@ -1579,9 +1501,7 @@ body.touring .protein-panel {
   .hero p {
     font-size: 17px;
   }
-  .see-3d {
-    display: block;
-  }
+
   .protein-panel {
     scroll-margin-top: 70px;
   }
@@ -3077,11 +2997,7 @@ a.ghost {
   border: 1px solid var(--line);
   font-size: 20px;
 }
-.cons-next {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 14px;
-}
+
 @media (max-width: 560px) {
   .cons-tab {
     flex: 1 1 auto;
@@ -3091,5 +3007,61 @@ a.ghost {
   }
   .cons-tab .cons-icon {
     display: none;
+  }
+}
+
+/* ---- Simulador paso a paso: primero el ADN; el resto aparece con el primer cambio ---- */
+#tab-lab .workspace {
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 1fr);
+  grid-template-areas:
+    'dna dna'
+    'result viewer';
+  column-gap: 40px;
+}
+#tab-lab .stage {
+  display: contents;
+}
+#tab-lab .dna-panel {
+  grid-area: dna;
+  max-width: 900px;
+}
+#tab-lab .result-panel {
+  grid-area: result;
+  border-top: 1px solid var(--hair);
+  padding-top: 30px;
+}
+#tab-lab .protein-panel {
+  grid-area: viewer;
+  position: static;
+  border-top: 1px solid var(--hair);
+  padding-top: 22px;
+}
+#tab-lab.waiting .result-panel,
+#tab-lab.waiting .protein-panel,
+#tab-lab.waiting .consequences {
+  display: none;
+}
+.tool-info .tool-undo {
+  margin-left: auto;
+}
+.tool-more summary {
+  color: var(--muted);
+  font-size: 16px;
+}
+.tool-more .tool-actions {
+  margin-top: 14px;
+}
+.science-note {
+  color: var(--muted);
+  font-size: 15px;
+  padding: 0 22px 12px;
+}
+@media (max-width: 900px) {
+  #tab-lab .workspace {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'dna'
+      'result'
+      'viewer';
   }
 }

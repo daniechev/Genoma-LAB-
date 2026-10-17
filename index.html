@@ -8,7 +8,6 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="img/icono-192.png">
 <link rel="stylesheet" href="css/estilos.css">
-<link rel="stylesheet" href="css/guia.css">
 </head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
@@ -100,7 +99,7 @@
   <p class="poster-sources">Fuentes: <a href="https://www.rcsb.org/structure/2HHB" target="_blank" rel="noreferrer">PDB 2HHB</a> · <a href="https://alphafold.ebi.ac.uk/entry/P68871" target="_blank" rel="noreferrer">AlphaFold P68871</a> · <a href="https://www.uniprot.org/uniprotkb/P68871/entry" target="_blank" rel="noreferrer">UniProt P68871</a> · 16 especies de Swiss-Prot (tutorial de HMMER)</p>
 </section>
 <section id="tab-lab" class="tab-page" hidden>
-  <div class="hero lab-hero"><h1>¿Qué cambia con <em>una letra?</em></h1><p>Tocá una letra del ADN, cambiala y mirá al instante qué le pasa a la proteína.</p></div>
+  <div class="hero lab-hero"><h1>Cambiá <em>una letra</em></h1></div>
   <section class="tour-bar" id="tour-bar" aria-label="Recorrido guiado" hidden>
     <div class="tour-progress" aria-hidden="true"><i id="tour-timer"></i></div>
     <div class="tour-body">
@@ -119,26 +118,25 @@
   <div class="workspace" id="experiment">
     <div class="stage">
       <section class="panel dna-panel" aria-labelledby="dna-heading">
-        <div class="panel-head"><h2 id="dna-heading" tabindex="-1">1 · El ADN</h2><div class="quick"><button id="random"><span class="shortcut-icon dice" aria-hidden="true">⚄</span>Al azar</button><button id="mission"><span class="shortcut-icon target" aria-hidden="true">◎</span>Casos reales</button></div><p class="lead">La receta de la hemoglobina tiene 444 letras. Cada grupo de tres, el <b>codón</b>, indica una pieza (aminoácido) de la proteína.</p></div>
+        <div class="panel-head"><h2 id="dna-heading" tabindex="-1">1 · Tocá una letra del ADN</h2><div class="quick"><button id="mission"><span class="shortcut-icon target" aria-hidden="true">◎</span>Casos reales</button></div></div>
         <div class="codon-strip" id="codons" role="group" aria-label="Secuencia de ADN, seleccioná una letra"></div>
-        <div class="gene-nav"><button id="previous" class="round-button" aria-label="Ver letras anteriores">←</button><label class="range-label" for="gene-range"><span id="region-label">Codones 1–4 de 148</span><input id="gene-range" type="range" min="0" max="144" value="0" aria-label="Recorrer el gen"></label><button id="next" class="round-button" aria-label="Ver letras siguientes">→</button></div>
+        <div class="gene-nav"><button id="previous" class="round-button" aria-label="Ver letras anteriores">←</button><span class="range-label" id="region-label">Codones 1–4 de 148</span><button id="next" class="round-button" aria-label="Ver letras siguientes">→</button></div>
         <div class="tool" id="tool"></div>
       </section>
       <section class="panel result-panel" aria-labelledby="result-heading">
-        <div class="result-head"><h2 id="result-heading">2 · La proteína</h2></div>
+        <div class="result-head"><h2 id="result-heading">2 · Qué le pasó a la proteína</h2></div>
         <div id="result" aria-live="polite"></div>
       </section>
     </div>
     <aside class="protein-panel">
-      <div class="protein-header"><h2>La proteína en 3D</h2><p>Arrastrala con el dedo o el mouse para girarla.</p></div>
-      <div class="canvas-wrap"><canvas id="protein" tabindex="0" aria-label="Modelo 3D de hemoglobina. Arrastrá o usá las flechas para girar; más y menos para acercar."></canvas><div class="zoom-buttons"><button id="zoom-in" aria-label="Acercar proteína">+</button><button id="zoom-out" aria-label="Alejar proteína">−</button><button id="reset-view" aria-label="Restablecer vista">⟲</button></div></div>
+      <div class="protein-header"><h2>3 · Dónde cayó el cambio</h2><p>Arrastrala para girarla.</p></div>
+      <div class="canvas-wrap"><canvas id="protein" tabindex="0" aria-label="Modelo 3D de hemoglobina. Arrastrá o usá las flechas para girar; más y menos para acercar."></canvas></div>
       <p class="viewer-overlay" id="viewer-overlay">La hemoglobina ayuda a llevar oxígeno por tu cuerpo.</p>
-      <div class="viewer-controls"><button id="focus-mutation" hidden>◎ Ver dónde cayó mi mutación</button></div>
-      <div class="science-note" id="science-note" hidden><span aria-hidden="true">ⓘ</span><p>Los colores marcan qué piezas cambiaron. <strong>No muestran la forma real de la proteína con la mutación.</strong></p></div>
+      <p class="science-note">Es la proteína normal: el color solo marca dónde cayó tu cambio.</p>
     </aside>
   </div>
   <section class="consequences" id="consequences" aria-labelledby="cons-heading">
-    <div class="cons-head"><h2 id="cons-heading">3 · Lo que pasa después</h2><p>Tu cambio, visto de cerca. Mirá una cosa por vez.</p></div>
+    <div class="cons-head"><h2 id="cons-heading">4 · Lo que pasa después</h2></div>
     <div class="cons-tabs" role="tablist" aria-label="Qué mirar">
       <button class="cons-tab active" role="tab" id="cons-tab-factory" aria-controls="cons-factory" aria-selected="true" data-view="factory"><span class="cons-icon factory" aria-hidden="true"></span>La fábrica</button>
       <button class="cons-tab" role="tab" id="cons-tab-blood" aria-controls="cons-blood" aria-selected="false" tabindex="-1" data-view="blood"><span class="cons-icon blood" aria-hidden="true"></span>En la sangre</button>
@@ -155,7 +153,6 @@
         <label class="challenge"><input type="checkbox" id="blood-low"> <span><b>Poco oxígeno</b></span></label>
       </div>
     </article>
-    <div class="cons-next"><button class="ghost" id="cons-next">Siguiente: en la sangre <span aria-hidden="true">→</span></button></div>
   </section>
   <p class="disclaimer">Una simulación educativa con una secuencia pública. No es un diagnóstico.</p>
 </section>
@@ -185,5 +182,4 @@
 <script src="js/consecuencias.js"></script>
 <script src="js/experimento-evolucion.js"></script>
 <script src="js/historia.js"></script>
-<script src="js/guia.js"></script>
 </body></html>
