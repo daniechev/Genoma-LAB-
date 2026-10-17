@@ -64,15 +64,12 @@
   const empty = () => ({ nada: 0, pieza: 0, corte: 0, desorden: 0, ok: 0, n: 0 });
   // ---- Estado: qué letra está elegida, qué mutación se hizo y el contador del stand ----
   let stats = empty(),
-    persistent = true,
     position = 19,
     offset = 0,
     perView = 4,
     current = null,
     revealed = false,
-    toastTimer,
-    resetTimer,
-    resetArmed = false;
+    toastTimer;
   const counterKey = 'genomalab-app-contador';
   function notify(message) {
     $('toast').textContent = message;
@@ -85,10 +82,7 @@
     try {
       localStorage.setItem(counterKey, JSON.stringify(stats));
     } catch {
-      persistent = false;
-      notify(
-        'El navegador no permite guardar. Los resultados duran hasta cerrar esta página; podés descargarlos.',
-      );
+      notify('El navegador no permite guardar. El contador dura hasta cerrar esta página.');
     }
     renderStats();
   }
@@ -101,9 +95,7 @@
       stored.n <= stored.nada + stored.pieza + stored.corte + stored.desorden
     )
       stats = Object.fromEntries(Object.keys(empty()).map(k => [k, stored[k]]));
-  } catch {
-    persistent = false;
-  }
+  } catch {}
   // ---- Visor 3D ----
   const viewer = new ProteinViewer($('protein'), MODELS);
   const piezas = n => (n === 1 ? '1 pieza' : `${n} piezas`);
@@ -492,7 +484,7 @@
       else b.removeAttribute('aria-current');
     });
     moveNavPill();
-    if (tab === 'stats' || tab === 'proyecto') renderStats();
+    if (tab === 'proyecto') renderStats();
     if (tab === 'lab') {
       viewer.resize();
       render();
@@ -515,19 +507,8 @@
   new ResizeObserver(moveNavPill).observe(document.querySelector('.topbar nav'));
   function renderStats() {
     const total = stats.nada + stats.pieza + stats.corte + stats.desorden;
-    $('stats-overview').innerHTML =
-      `<div class="stat"><b>${total}</b>Mutaciones descubiertas</div><div class="stat"><b>${stats.n}</b>Predicciones del público</div><div class="stat"><b>${stats.n ? Math.round((stats.ok / stats.n) * 100) + ' %' : '—'}</b>${stats.n ? `${stats.ok} respuestas correctas` : 'Todavía sin predicciones'}</div>`;
-    $('stats-bars').innerHTML = Object.entries(titles)
-      .map(
-        ([key, label]) =>
-          `<div class="bar-row"><div><span>${label}</span><b>${stats[key]}</b></div><div class="bar-track"><i style="width:${total ? (stats[key] / total) * 100 : 0}%"></i></div></div>`,
-      )
-      .join('');
     $('stand-stats').innerHTML =
       `<div class="stat"><b>${total}</b>mutaciones probadas</div><div class="stat"><b>${stats.n ? Math.round((stats.ok / stats.n) * 100) + ' %' : '—'}</b>${stats.n ? `de ${stats.n === 1 ? '1 predicción acertada' : stats.n + ' predicciones acertadas'}` : 'todavía sin predicciones'}</div>`;
-    $('storage-status').textContent = persistent
-      ? 'Los datos persisten en este navegador. Descargalos antes de cambiar de equipo o borrar los datos del navegador.'
-      : 'Guardado permanente no disponible. Descargá los resultados antes de cerrar.';
   }
   // ---- Botones ----
   all('[data-tab]').forEach(
@@ -650,39 +631,6 @@
       document.fullscreenElement ? 'Salir de pantalla completa' : 'Activar pantalla completa',
     );
   });
-  $('reset-count').onclick = () => {
-    if (!resetArmed) {
-      resetArmed = true;
-      $('reset-count').textContent = 'Confirmar: borrar todos los resultados';
-      resetTimer = setTimeout(() => {
-        resetArmed = false;
-        $('reset-count').textContent = 'Reiniciar contador';
-      }, 7000);
-      return;
-    }
-    clearTimeout(resetTimer);
-    resetArmed = false;
-    stats = empty();
-    save();
-    $('reset-count').textContent = 'Reiniciar contador';
-    notify('Contador reiniciado.');
-  };
-  $('export').onclick = () => {
-    const rows = [
-      'Categoría;Cantidad',
-      ...Object.entries(titles).map(([key, label]) => `${label};${stats[key]}`),
-      `Predicciones;${stats.n}`,
-      `Aciertos;${stats.ok}`,
-    ];
-    const url = URL.createObjectURL(
-        new Blob(['﻿' + rows.join('\r\n')], { type: 'text/csv;charset=utf-8' }),
-      ),
-      a = document.createElement('a');
-    a.href = url;
-    a.download = `resultados-adn-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  };
   if (document.modelContext?.registerTool) {
     try {
       document.modelContext.registerTool({
@@ -738,12 +686,6 @@
       .map(
         ([key, label, sci, cat]) =>
           `<div class="survey-row"><div class="survey-label"><span>${label} <small>${sci}</small></span><b>${counts[key].toLocaleString('es-AR')} · ${pct(counts[key])}</b></div><div class="bar-track"><i class="${cat}" style="width:${Math.max(0.6, (counts[key] / total) * 100)}%"></i></div></div>`,
-      )
-      .join('');
-    $('survey-table').innerHTML = rows
-      .map(
-        ([key, , sci]) =>
-          `<tr><td>${sci[0].toUpperCase() + sci.slice(1)}</td><td>${counts[key].toLocaleString('es-AR')}</td><td>${pct(counts[key])}</td></tr>`,
       )
       .join('');
   }
@@ -892,32 +834,11 @@
   });
 
   // ---- Modo stand: si nadie usa la pantalla un rato, vuelve al inicio y muestra el recorrido guiado ----
-  // Se activa en «Resultados del stand» o abriendo la página con ?stand. Queda guardado en este navegador.
-  const standKey = 'genomalab-modo-stand',
-    STAND_IDLE = 90000;
-  let standMode = false,
-    lastActivity = performance.now();
-  try {
-    standMode = localStorage.getItem(standKey) === '1';
-  } catch {}
-  function setStandMode(on) {
-    standMode = on;
-    lastActivity = performance.now();
-    $('stand-mode').checked = on;
-    document.body.classList.toggle('stand', on);
-    try {
-      localStorage.setItem(standKey, on ? '1' : '0');
-    } catch {}
-  }
-  setStandMode(standMode || new URLSearchParams(location.search).has('stand'));
-  $('stand-mode').onchange = e => {
-    setStandMode(e.target.checked);
-    notify(
-      e.target.checked
-        ? 'Modo stand activado: tras 90 segundos sin uso, la pantalla vuelve al inicio sola.'
-        : 'Modo stand desactivado.',
-    );
-  };
+  // Se activa abriendo la página con ?stand.
+  const STAND_IDLE = 90000,
+    standMode = new URLSearchParams(location.search).has('stand');
+  let lastActivity = performance.now();
+  document.body.classList.toggle('stand', standMode);
   let stopOnClick = false;
   for (const type of ['pointerdown', 'pointermove', 'keydown', 'wheel'])
     document.addEventListener(

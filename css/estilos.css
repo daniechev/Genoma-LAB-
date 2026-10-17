@@ -241,14 +241,7 @@ main {
   font-size: 22px;
   line-height: 1;
 }
-.secondary {
-  background: var(--card-2);
-  border: 2px solid var(--line);
-  padding: 12px 20px;
-  border-radius: 14px;
-  font-size: 17px;
-  font-weight: 600;
-}
+
 .text-button {
   background: none;
   color: var(--cyan);
@@ -1042,8 +1035,7 @@ canvas:active {
   gap: 20px;
   margin: 28px 0;
 }
-.learning-grid article,
-.stats-card {
+.learning-grid article {
   padding: 28px 0 0;
   border-top: 1px solid var(--hair);
 }
@@ -1096,12 +1088,7 @@ canvas:active {
 .reading-page > .primary {
   margin-top: 18px;
 }
-.stats-overview {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin: 28px 0;
-}
+
 .stat {
   border-left: 2px solid var(--hair);
   padding: 2px 0 2px 18px;
@@ -1116,29 +1103,7 @@ canvas:active {
   line-height: 1.15;
   letter-spacing: -0.03em;
 }
-.stats-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px;
-}
-.stats-card p {
-  font-size: 16px;
-  color: var(--muted);
-  margin-top: 15px;
-}
-.stats-card h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
-}
-.bar-row {
-  margin: 25px 0;
-}
-.bar-row > div:first-child {
-  display: flex;
-  justify-content: space-between;
-  font-size: 16px;
-  margin-bottom: 9px;
-}
+
 .bar-track {
   height: 12px;
   background: var(--well);
@@ -1169,21 +1134,6 @@ th {
 td:nth-child(n + 2),
 th:nth-child(n + 2) {
   text-align: right;
-}
-.stats-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-top: 25px;
-}
-.danger {
-  color: #ff9c8c;
-}
-#storage-status {
-  color: var(--muted);
-  font-size: 15px;
-  margin-top: 14px;
 }
 
 footer {
@@ -1647,7 +1597,6 @@ body.touring .protein-panel {
   }
 
   .learning-grid,
-  .stats-layout,
   .poster-grid,
   .results-layout,
   .evolution {
@@ -1662,9 +1611,7 @@ body.touring .protein-panel {
   .tour-controls {
     justify-content: space-between;
   }
-  .stats-overview {
-    gap: 10px;
-  }
+
   .stat {
     padding: 14px;
   }
@@ -1742,8 +1689,7 @@ body.touring .protein-panel {
     border-radius: 8px;
   }
   .shortcuts,
-  .prediction-options,
-  .stats-overview {
+  .prediction-options {
     grid-template-columns: 1fr;
   }
   .case-picker {
@@ -1768,10 +1714,7 @@ body.touring .protein-panel {
     grid-column: 1/-1;
     grid-row: 2;
   }
-  .stats-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
+
   dialog {
     padding: 24px;
   }
@@ -1785,17 +1728,6 @@ body.touring .protein-panel {
     animation: none !important;
     transition: none !important;
   }
-}
-
-/* Modo stand */
-.stand-toggle {
-  margin-top: 25px;
-  align-items: flex-start;
-  border-radius: 16px;
-  padding: 12px 16px;
-}
-.stand-toggle input {
-  margin-top: 4px;
 }
 
 /* Código QR para llevarse la app al celular */

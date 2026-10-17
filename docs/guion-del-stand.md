@@ -5,8 +5,8 @@ Una guía para que cualquiera del grupo pueda presentar igual de bien. Los tiemp
 ## Antes de abrir el stand
 
 - [ ] Abrir `index.html` y ponerla en pantalla completa (botón ⛶ arriba a la derecha, o F11).
-- [ ] En **Resultados del stand** (abajo a la derecha), activar el **modo stand**. Si nadie toca la pantalla durante 90 segundos, la app vuelve sola al inicio y muestra el recorrido guiado.
-- [ ] Imprimir el cartel con el código QR (en **Resultados del stand**, o abriendo `cartel.html`).
+- [ ] Abrir la app con `index.html?stand` para activar el **modo stand**. Si nadie toca la pantalla durante 90 segundos, la app vuelve sola al inicio y muestra el recorrido guiado.
+- [ ] Imprimir el cartel con el código QR (abriendo `cartel.html`).
 - [ ] Probar que el QR abra la app en un celular.
 - [ ] Si viene el jurado: tener una terminal lista para correr `node --test` (muestra las 27 pruebas automáticas).
 - [ ] Para presentar al jurado: abrir `presentacion.html` en la pantalla grande y apretar **P** para abrir la vista del presentador en la notebook (notas, cronómetro y diapositiva siguiente).
