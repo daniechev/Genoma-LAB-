@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const PAGES = ['index.html', 'cartel.html', 'presentacion.html'];
 
 test('el póster dice cuántas pruebas automáticas hay de verdad', () => {
   const total = fs
@@ -15,6 +16,24 @@ test('el póster dice cuántas pruebas automáticas hay de verdad', () => {
   const shown = html.match(/<b>(\d+) pruebas automáticas<\/b>/);
   assert.ok(shown, 'el póster debe mencionar las pruebas automáticas');
   assert.equal(Number(shown[1]), total, 'actualizá el número de pruebas en index.html');
+  const deck = fs.readFileSync(path.join(__dirname, '..', 'presentacion.html'), 'utf8');
+  const inDeck = deck.match(/<span id="test-count">(\d+)<\/span> pruebas automáticas/);
+  assert.ok(inDeck, 'la presentación debe mencionar las pruebas automáticas');
+  assert.equal(Number(inDeck[1]), total, 'actualizá el número de pruebas en presentacion.html');
+});
+
+test('cada diapositiva tiene título y notas para el presentador', () => {
+  const deck = fs.readFileSync(path.join(__dirname, '..', 'presentacion.html'), 'utf8');
+  const slides = deck.split('<section class="slide').slice(1);
+  assert.ok(slides.length >= 10, 'la presentación tiene que tener al menos 10 diapositivas');
+  for (const slide of slides) {
+    assert.match(slide, /^[^>]*data-title="[^"]+"/, 'falta data-title en una diapositiva');
+    assert.match(
+      slide,
+      /<aside class="notes">[^<]{40,}<\/aside>/,
+      'falta la nota de una diapositiva',
+    );
+  }
 });
 
 test('la copia sin internet incluye todos los archivos que usa la página', () => {
@@ -28,7 +47,7 @@ test('la copia sin internet incluye todos los archivos que usa la página', () =
   );
   const manifest = JSON.parse(fs.readFileSync(path.join(root, 'manifest.webmanifest'), 'utf8'));
   const used = [
-    ...['index.html', 'cartel.html'].flatMap(page =>
+    ...PAGES.flatMap(page =>
       [...fs.readFileSync(path.join(root, page), 'utf8').matchAll(/(?:src|href)="([^"#:]+)"/g)].map(
         m => m[1],
       ),
@@ -39,6 +58,6 @@ test('la copia sin internet incluye todos los archivos que usa la página', () =
   for (const file of saved.filter(f => f !== './'))
     assert.ok(fs.existsSync(path.join(root, file)), `${file} está en sw.js pero no existe`);
   const pages = fs.readFileSync(path.join(root, '.github', 'workflows', 'pages.yml'), 'utf8');
-  for (const file of ['sw.js', 'manifest.webmanifest'])
+  for (const file of ['sw.js', 'manifest.webmanifest', ...PAGES])
     assert.match(pages, new RegExp(file.replace('.', '\\.')), `pages.yml debe publicar ${file}`);
 });

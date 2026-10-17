@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0e0b24"><title>¿Qué cambia con una letra? · Presentación</title>
+<link rel="icon" type="image/svg+xml" href="img/icono.svg">
+<link rel="stylesheet" href="css/estilos.css">
+<link rel="stylesheet" href="css/presentacion.css">
+</head>
+<body class="deck">
+<!-- Vista del público: una diapositiva por vez. Con ?presentador se ve la vista del presentador. -->
+<div class="presenter-bar" id="presenter-bar" hidden>
+  <div class="presenter-time"><b id="p-elapsed">00:00</b><span>transcurrido</span></div>
+  <div class="presenter-time"><b id="p-clock">--:--</b><span>hora</span></div>
+  <div class="presenter-count" id="p-count"></div>
+  <div class="presenter-buttons"><button class="ghost" id="p-reset">Reiniciar cronómetro</button><button class="ghost" id="p-prev" aria-label="Diapositiva anterior">←</button><button class="primary" id="p-next" aria-label="Diapositiva siguiente">→</button></div>
+</div>
+<main class="viewport" id="viewport">
+<div class="stage" id="stage">
+
+<section class="slide title-slide" data-title="Portada">
+  <div class="title-text"><p class="eyebrow">FERIA DE CIENCIAS · BIOLOGÍA</p><h1>¿Qué cambia con <em>una letra?</em></h1><p>Simulamos qué le pasa a la hemoglobina, la proteína que lleva el oxígeno en la sangre, cuando cambia una sola letra de su gen.</p></div>
+  <canvas id="helix" class="helix" aria-hidden="true"></canvas>
+  <aside class="notes">Saludo. «¿Sabían que cambiar una sola letra de su ADN puede causar una enfermedad? Y que otra letra, en el mismo lugar, puede no hacer nada?» Presentarse en una frase.</aside>
+</section>
+
+<section class="slide" data-title="El ADN es una receta">
+  <p class="eyebrow">01 · LA IDEA</p><h2>El ADN es una <em>receta</em> escrita con 4 letras</h2>
+  <div class="big-bases"><span class="base a">A</span><span class="base t">T</span><span class="base c">C</span><span class="base g">G</span></div>
+  <p class="slide-lead">La receta de la <b>hemoglobina</b> (gen <i>HBB</i>) tiene <b>444 letras</b>. La célula la lee de a tres: cada grupo, el <b>codón</b>, indica una pieza de la proteína.</p>
+  <div class="read-demo"><div><span class="base a">A</span><span class="base t">T</span><span class="base g">G</span><b>Met</b></div><div><span class="base g">G</span><span class="base t">T</span><span class="base g">G</span><b>Val</b></div><div><span class="base c">C</span><span class="base a">A</span><span class="base t">T</span><b>His</b></div><div><span class="base c">C</span><span class="base t">T</span><span class="base g">G</span><b>Leu</b></div><i>…</i></div>
+  <aside class="notes">Analogía: el ADN es un libro de recetas con solo cuatro letras. Cada palabra tiene tres letras (el codón) y le dice a la célula qué pieza poner. La proteína es un collar de 146 cuentas.</aside>
+</section>
+
+<section class="slide two-col" data-title="Pregunta e hipótesis">
+  <div><p class="eyebrow">02 · PREGUNTA</p><h2>¿Qué le pasa a una proteína si cambia <em>una sola letra</em> de su ADN?</h2></div>
+  <div><p class="eyebrow">03 · HIPÓTESIS</p><p class="slide-big">Casi siempre va a cambiar la proteína, pero el efecto va a depender de <b>qué letra</b> cambie y <b>cómo</b>.</p></div>
+  <aside class="notes">Leer la pregunta en voz alta. La hipótesis tiene dos partes: casi siempre cambia, y el efecto depende del lugar y del tipo de cambio. Las dos se ponen a prueba.</aside>
+</section>
+
+<section class="slide" data-title="Método">
+  <p class="eyebrow">04 · MÉTODO</p><h2>Cómo lo probamos</h2>
+  <ol class="slide-steps">
+    <li><b>La receta real</b> del gen HBB: 444 letras, 148 codones.</li>
+    <li><b>El código genético</b> programado: los 64 codones.</li>
+    <li><b>Las 1.332 sustituciones</b> posibles, una por una.</li>
+    <li><b>La estructura 3D real</b> de la hemoglobina (rayos X, PDB 2HHB).</li>
+    <li><b>16 especies</b> comparadas, del mandril a la rana.</li>
+    <li><b><span id="test-count">31</span> pruebas automáticas</b> para verificar el programa.</li>
+  </ol>
+  <aside class="notes">Destacar que todo es real: la secuencia de UniProt, la estructura medida con rayos X y las secuencias de otras especies. El programa se verifica con pruebas automáticas: una comprueba que el gen normal da exactamente la proteína publicada.</aside>
+</section>
+
+<section class="slide" data-title="Resultado 1">
+  <p class="eyebrow">05 · RESULTADO</p><h2>De las 1.332 formas de cambiar una letra…</h2>
+  <div class="slide-survey" id="slide-survey"></div>
+  <aside class="notes">Unas 7 de cada 10 cambian una pieza; 1 de cada 4 no cambia nada; muy pocas cortan la proteína. Se confirma la primera parte de la hipótesis: casi siempre cambia algo.</aside>
+</section>
+
+<section class="slide" data-title="El mapa de las mutaciones">
+  <p class="eyebrow">05 · RESULTADO</p><h2>El mapa: <em>dónde</em> cae el cambio importa</h2>
+  <div class="heatmap" id="heatmap" data-stretch="2.4"><canvas id="heatmap-canvas" role="img" aria-label="Mapa de las 1.332 sustituciones"></canvas><div class="heatmap-tip" id="heatmap-tip" hidden></div></div>
+  <div class="insights" id="insights"></div>
+  <aside class="notes">Cada cuadradito es un cambio. La franja celeste de abajo es la tercera letra de cada codón: 7 de cada 10 de esos cambios no hacen nada. La segunda letra casi nunca perdona. Eso confirma la segunda parte: depende de qué letra cambie.</aside>
+</section>
+
+<section class="slide" data-title="Tres casos reales">
+  <p class="eyebrow">06 · CASOS REALES</p><h2>Mismo codón, otra letra, otra enfermedad</h2>
+  <div class="cases-grid">
+    <div class="case"><div class="case-codon"><span class="base g">G</span><span class="base t changed">T</span><span class="base g">G</span></div><b>Anemia falciforme</b><span>Codón 7 · Glu6Val · cambia 1 pieza de 146</span></div>
+    <div class="case"><div class="case-codon"><span class="base a changed">A</span><span class="base a">A</span><span class="base g">G</span></div><b>Hemoglobina C</b><span>Codón 7 · Glu6Lys · otra letra del mismo codón</span></div>
+    <div class="case"><div class="case-codon"><span class="base t changed">T</span><span class="base a">A</span><span class="base g">G</span></div><b>Beta-talasemia</b><span>Codón 40 · CAG → TAG · STOP: quedan 38 piezas</span></div>
+  </div>
+  <aside class="notes">En el mismo codón 7, cambiar la A del medio por T da anemia falciforme; cambiar la G del principio por A da hemoglobina C. Un STOP en el codón 40 corta la cadena: beta-talasemia. Si preguntan por qué pieza 6 y codón 7: la primera metionina se quita.</aside>
+</section>
+
+<section class="slide" data-title="Segundo experimento">
+  <p class="eyebrow">07 · SEGUNDO EXPERIMENTO</p><h2>¿Qué piezas no cambió nunca la evolución?</h2>
+  <div class="evo-result" id="evo-result"></div>
+  <div class="evo-strip" id="evo-strip" role="img" aria-label="Conservación de cada pieza en 16 especies"></div>
+  <aside class="notes">Hipótesis: las piezas que nunca cambiaron son las que hacen el trabajo. Comparamos con 16 especies y medimos en la estructura 3D la distancia al hierro del hemo. Cerca del hemo, casi 6 de cada 10 piezas son iguales en todas; lejos, 2 de cada 10. La evolución ya hizo el experimento.</aside>
+</section>
+
+<section class="slide two-col" data-title="El reloj molecular">
+  <div><p class="eyebrow">07 · SEGUNDO EXPERIMENTO</p><h2>El reloj molecular</h2><svg id="evo-clock" class="evo-clock" role="img" aria-label="Piezas distintas según el parentesco"></svg></div>
+  <div class="evo-six"><h3>¿Y la pieza 6?</h3><p id="evo-six"></p></div>
+  <aside class="notes">Cuanto más lejano el parentesco, más piezas distintas: casi como un reloj. Y la sorpresa: la pieza 6 sí cambia en tres especies, pero ninguna tiene valina. No importa solo dónde cae el cambio: también qué pieza llega.</aside>
+</section>
+
+<section class="slide demo-slide" data-title="Demostración">
+  <p class="eyebrow">08 · AHORA, USTEDES</p><h2>Cambien una letra y descubran qué pasa</h2>
+  <div class="demo-row"><img src="img/qr-sitio.svg" alt="Código QR que abre la app en el celular"><div><p class="slide-big">Escaneá el código o probalo en la pantalla del stand.</p><p class="muted">daniechev.github.io/Genoma-LAB-</p><a class="primary" href="index.html" target="_blank" rel="noopener">Abrir el simulador <span aria-hidden="true">→</span></a></div></div>
+  <aside class="notes">Abrir el simulador y hacer la demostración: Casos reales → Anemia falciforme → cambiar la A del medio por T. Mostrar la fábrica, la sangre con poco oxígeno y cómo suena. Si hay tiempo: Tu nombre en ADN o un duelo.</aside>
+</section>
+
+<section class="slide conclusion-slide" data-title="Conclusión">
+  <p class="eyebrow">09 · CONCLUSIÓN</p>
+  <p class="slide-big">Una sola letra puede <b>no cambiar nada</b>, <b>cambiar una pieza</b> o <b>cortar toda la proteína</b>. Lo que decide es <em>dónde</em> cae el cambio y <em>qué tipo</em> de cambio es. Y la evolución lo confirma: las piezas que sostienen el hemo casi nunca cambiaron.</p>
+  <p class="muted limits"><b>Límites:</b> es una simulación educativa. No calcula cómo se pliega la proteína mutada y no sirve como diagnóstico.</p>
+  <aside class="notes">Cerrar con la conclusión y los límites (al jurado le gusta que digamos qué no hace el modelo). Invitar a preguntas.</aside>
+</section>
+
+<section class="slide end-slide" data-title="Gracias">
+  <h2>¡Gracias!</h2><p class="slide-big">¿Preguntas?</p><img src="img/qr-sitio.svg" alt="Código QR que abre la app en el celular">
+  <p class="muted">Fuentes: UniProt P68871 · PDB 2HHB · AlphaFold P68871 · Swiss-Prot (16 especies) · TimeTree</p>
+  <aside class="notes">Preguntas frecuentes: ¿lo programaron ustedes? Sí, el código genético está en genetica.js. ¿El 3D muestra la proteína mutada? No, marca dónde cae el cambio. ¿Por qué es común la falciforme? Una copia protege contra la malaria.</aside>
+</section>
+
+</div>
+</main>
+<div class="deck-progress" aria-hidden="true"><i id="deck-progress"></i></div>
+<div class="deck-help" id="deck-help">← → para avanzar · <kbd>P</kbd> vista del presentador · <kbd>F</kbd> pantalla completa · <kbd>B</kbd> pantalla negra</div>
+<div class="presenter-side" id="presenter-side" hidden>
+  <div class="presenter-next"><span>Siguiente</span><b id="p-next-title"></b></div>
+  <div class="presenter-notes"><span>Notas</span><p id="p-notes"></p></div>
+</div>
+<div class="blackout" id="blackout" hidden></div>
+<script src="js/datos-modelos.js"></script>
+<script src="js/datos-especies.js"></script>
+<script src="js/genetica.js"></script>
+<script src="js/evolucion.js"></script>
+<script src="js/presentacion.js"></script>
+<script src="js/helice.js"></script>
+<script src="js/mapa-calor.js"></script>
+<script src="js/experimento-evolucion.js"></script>
+</body>
+</html>

@@ -8,13 +8,14 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="img/icono-192.png">
 <link rel="stylesheet" href="css/estilos.css">
+<link rel="stylesheet" href="css/guia.css">
 </head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
 <header class="topbar">
   <a class="brand" href="#" aria-label="ADN, genes y proteínas, inicio"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="brand-gradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9a4d"/><stop offset="1" stop-color="#ff5c9d"/></linearGradient></defs><path d="M9 4c0 12 14 12 14 24M23 4C23 16 9 16 9 28M10 8h12M11 24h10M13 13h6M13 19h6" stroke="url(#brand-gradient)" fill="none" stroke-width="2.4" stroke-linecap="round"/></svg><span>ADN, genes<br><b>y proteínas</b></span></a>
-  <nav aria-label="Secciones"><button class="nav active" data-tab="proyecto" aria-current="page">Proyecto</button><button class="nav" data-tab="lab">Simulador</button><button class="nav" data-tab="naturaleza">Naturaleza</button><button class="nav" data-tab="learn">Cómo funciona</button></nav>
-  <button id="fullscreen" class="icon-button" title="Pantalla completa" aria-label="Activar pantalla completa">⛶</button>
+  <nav aria-label="Secciones"><button class="nav active" data-tab="proyecto" aria-current="page">Proyecto</button><button class="nav" data-tab="lab">Simulador</button><button class="nav" data-tab="naturaleza">Naturaleza</button><button class="nav" data-tab="nombre">Tu nombre</button><button class="nav" data-tab="learn">Cómo funciona</button></nav>
+  <div class="top-actions"><button id="sound-toggle" class="icon-button" aria-pressed="true" aria-label="Apagar el sonido" title="Sonido prendido"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4Z" fill="currentColor"/><path class="waves" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="slash" d="m16 9 6 6m0-6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button id="fullscreen" class="icon-button" title="Pantalla completa" aria-label="Activar pantalla completa">⛶</button></div>
 </header>
 <main id="main">
 <section id="tab-proyecto" class="tab-page poster">
@@ -23,11 +24,28 @@
     <p class="eyebrow">FERIA DE CIENCIAS · BIOLOGÍA</p>
     <h1>¿Qué cambia con <em>una letra?</em></h1>
     <p>Simulamos qué le pasa a la hemoglobina, la proteína que lleva el oxígeno en la sangre, cuando cambia una sola letra de su gen.</p>
-    <div class="poster-actions"><button class="primary" id="start-tour"><span aria-hidden="true">▶</span> Ver el recorrido guiado <small>3 casos reales · 2 min</small></button><button class="ghost" data-tab="lab">Probar el simulador</button></div>
+    <div class="poster-actions"><button class="primary" id="start-tour"><span aria-hidden="true">▶</span> Ver el recorrido guiado <small>3 casos reales · 2 min</small></button><button class="ghost" data-tab="lab">Probar el simulador</button><a class="ghost" href="presentacion.html" target="_blank" rel="noopener">Modo presentación</a></div>
     </div>
     <canvas id="helix" class="helix" aria-hidden="true"></canvas>
+    <a class="scroll-cue" href="#journey"><span>Bajá para viajar de vos a una letra</span><i aria-hidden="true"></i></a>
   </div>
-  <div class="poster-grid">
+  <section class="journey" id="journey" aria-label="Viaje: de tu cuerpo a una letra del ADN">
+    <div class="journey-sticky">
+      <canvas id="journey-canvas" aria-hidden="true"></canvas>
+      <ol class="journey-steps">
+        <li class="journey-step active"><span class="journey-scale">1,7 m</span><b>Vos</b><p>Tu cuerpo tiene unos <em>37 billones</em> de células. Por adentro corre la sangre.</p></li>
+        <li class="journey-step"><span class="journey-scale">0,01 mm</span><b>Un capilar</b><p>Por los vasos más finos, los glóbulos rojos pasan de a uno. Tenés unos <em>25 billones</em>.</p></li>
+        <li class="journey-step"><span class="journey-scale">0,007 mm</span><b>Un glóbulo rojo</b><p>Cada uno lleva unas <em>270 millones</em> de moléculas de hemoglobina.</p></li>
+        <li class="journey-step"><span class="journey-scale">5 nanómetros</span><b>Una hemoglobina</b><p>Cuatro cadenas: dos <em>alfa</em> (violeta) y dos <em>beta</em> (celeste). Los puntos dorados agarran el oxígeno. Dibujada con sus coordenadas reales.</p></li>
+        <li class="journey-step"><span class="journey-scale">Cromosoma 11</span><b>La receta</b><p>¿De dónde sale la cadena beta? De una receta guardada en el <em>cromosoma 11</em>: el gen <em>HBB</em>.</p></li>
+        <li class="journey-step"><span class="journey-scale">2 nanómetros</span><b>El gen HBB</b><p>Un tramo de ADN de <em>444 letras</em>, entre los 3.000 millones de letras de tu genoma.</p></li>
+        <li class="journey-step"><span class="journey-scale">1 letra</span><b>La letra 20</b><p>Es una <em>A</em>. Si se convierte en <em>T</em>, la pieza 6 cambia y aparece la anemia falciforme.</p><div class="journey-cta"><button class="primary" data-tab="lab">Cambiala vos <span aria-hidden="true">→</span></button><button class="ghost" id="journey-tour">Ver los 3 casos reales</button></div></li>
+      </ol>
+      <div class="journey-dots" role="group" aria-label="Saltar a una parte del viaje"></div>
+      <a class="journey-skip" href="#poster-start">Saltar el viaje ↓</a>
+    </div>
+  </section>
+  <div class="poster-grid" id="poster-start">
     <article class="poster-card"><span class="lesson-number">01</span><h2>Pregunta</h2><p class="poster-big">¿Qué le pasa a una proteína si cambia <b>una sola letra</b> de su ADN?</p></article>
     <article class="poster-card"><span class="lesson-number">02</span><h2>Hipótesis</h2><p class="poster-big">Casi siempre va a cambiar la proteína, pero el efecto va a depender de <b>qué letra</b> cambie y <b>cómo</b>.</p></article>
     <article class="poster-card"><span class="lesson-number">03</span><h2>Método</h2><ol class="method-list">
@@ -35,29 +53,65 @@
       <li>Programamos el <b>código genético</b> (64 codones) para traducir el ADN en proteína.</li>
       <li>Probamos <b>las 1.332 sustituciones</b> posibles de una letra.</li>
       <li>Marcamos cada cambio sobre la <b>estructura 3D real</b> (rayos X, PDB 2HHB).</li>
-      <li>Verificamos el programa con <b>21 pruebas automáticas</b>.</li>
+      <li>Comparamos la cadena beta con la de <b>16 especies</b>, del mandril a la rana.</li>
+      <li>Verificamos el programa con <b>31 pruebas automáticas</b>.</li>
     </ol></article>
   </div>
-  <article class="poster-card poster-results"><span class="lesson-number">04</span><h2>Resultados</h2>
-    <div class="results-layout">
-      <div><p class="poster-headline" id="survey-headline"></p><p class="muted">De las 1.332 formas de cambiar una letra del gen:</p><div class="survey" id="survey"></div></div>
-      <div class="results-side">
-        <h3>Tres casos reales</h3>
-        <table class="cases-table"><thead><tr><th>Enfermedad</th><th>Cambio en el ADN</th><th>Efecto</th></tr></thead><tbody>
-          <tr><td>Anemia falciforme</td><td><code>GAG → G<b>T</b>G</code></td><td>Glu6Val · cambia 1 pieza</td></tr>
-          <tr><td>Hemoglobina C</td><td><code>GAG → <b>A</b>AG</code></td><td>Glu6Lys · cambia 1 pieza</td></tr>
-          <tr><td>Beta-talasemia</td><td><code><b>C</b>AG → <b>T</b>AG</code></td><td>Gln39Stop · se corta</td></tr>
-        </tbody></table>
-        <h3>En el stand</h3><div class="stand-stats" id="stand-stats"></div><button class="text-button" data-tab="stats">Ver todos los resultados del stand</button>
-      </div>
+  <section class="story" id="story" aria-label="Resultados paso a paso">
+    <div class="story-top"><p class="eyebrow">LO QUE DESCUBRIMOS</p><div class="story-dots" id="story-dots" role="group" aria-label="Pasos"></div></div>
+    <div class="story-steps" aria-live="polite">
+      <article class="story-step" data-title="1.332 mutaciones">
+        <span class="lesson-number">04</span><h2>Probamos las 1.332 formas de cambiar una letra</h2>
+        <p class="poster-headline" id="survey-headline"></p>
+        <div class="survey" id="survey"></div>
+      </article>
+      <article class="story-step" data-title="¿Qué letra?">
+        <span class="lesson-number">05</span><h2>Adiviná: ¿qué letra del codón se puede cambiar sin que pase nada?</h2>
+        <div class="quiz" data-answer="3">
+          <div class="quiz-options"><button data-option="1"><b>1.ª</b>letra</button><button data-option="2"><b>2.ª</b>letra</button><button data-option="3"><b>3.ª</b>letra</button></div>
+          <div class="quiz-reveal" hidden>
+            <p class="quiz-verdict"></p>
+            <p class="story-lead">¡La <b>3.ª</b>! 7 de cada 10 cambios en la 3.ª letra no cambian nada. En cambio, la 2.ª casi nunca perdona: solo 1 de 444.</p>
+            <div class="heatmap-key"><span><i class="pieza"></i>Cambia una pieza</span><span><i class="nada"></i>No cambia nada</span><span><i class="corte"></i>Se corta</span></div>
+            <div class="heatmap" id="heatmap" data-compact><canvas id="heatmap-canvas" role="img" aria-label="Mapa de las sustituciones: la franja de la tercera letra es casi toda celeste"></canvas><div class="heatmap-tip" id="heatmap-tip" role="status" hidden></div></div>
+            <p class="muted story-hint">Cada cuadradito es un cambio. Mirá la franja celeste de abajo: es la 3.ª letra. Tocá uno para probarlo.<span class="only-phone"> En el celular se ven los primeros 37 codones.</span></p>
+          </div>
+        </div>
+      </article>
+      <article class="story-step" data-title="Casos reales">
+        <span class="lesson-number">06</span><h2>Mismo codón, otra letra, otra enfermedad</h2>
+        <div class="story-cases">
+          <div><div class="case-codon"><span class="base g">G</span><span class="base t changed">T</span><span class="base g">G</span></div><b>Anemia falciforme</b><span>Codón 7 · cambia 1 pieza</span></div>
+          <div><div class="case-codon"><span class="base a changed">A</span><span class="base a">A</span><span class="base g">G</span></div><b>Hemoglobina C</b><span>El mismo codón, otra letra</span></div>
+          <div><div class="case-codon"><span class="base t changed">T</span><span class="base a">A</span><span class="base g">G</span></div><b>Beta-talasemia</b><span>Codón 40 · un STOP la corta</span></div>
+        </div>
+      </article>
+      <article class="story-step" data-title="La evolución">
+        <span class="lesson-number">07</span><h2>Comparamos 16 especies, del mandril a la rana. Las piezas que agarran el oxígeno…</h2>
+        <div class="quiz" data-answer="menos">
+          <div class="quiz-options"><button data-option="mas"><b>Cambian más</b>que las demás</button><button data-option="igual"><b>Cambian igual</b>que las demás</button><button data-option="menos"><b>Cambian menos</b>que las demás</button></div>
+          <div class="quiz-reveal" hidden>
+            <p class="quiz-verdict"></p>
+            <div class="evo-result" id="evo-result"></div>
+            <button class="ghost" data-evo-view>Verlo en 3D <span aria-hidden="true">→</span></button>
+          </div>
+        </div>
+      </article>
+      <article class="story-step" data-title="La pieza 6">
+        <span class="lesson-number">08</span><h2>Sorpresa: la pieza 6</h2>
+        <div class="six-chips" id="six-chips" aria-hidden="true"></div>
+        <p class="story-lead" id="evo-six"></p>
+      </article>
+      <article class="story-step story-end" data-title="Conclusión">
+        <span class="lesson-number">09</span><h2>Conclusión</h2>
+        <p class="poster-big">Una letra puede <b>no cambiar nada</b>, <b>cambiar una pieza</b> o <b>cortar la proteína</b>. Depende de <b>dónde</b> cae y de <b>qué tipo</b> de cambio es.</p>
+        <div class="story-final"><img src="img/qr-sitio.svg" alt="Código QR que abre la app en el celular"><div><button class="primary" data-tab="lab">Probalo vos <span aria-hidden="true">→</span></button><div class="stand-stats" id="stand-stats"></div></div></div>
+        <p class="muted story-limits">Es una simulación educativa: no calcula cómo se pliega la proteína mutada y no sirve como diagnóstico.</p>
+      </article>
     </div>
-  </article>
-  <article class="poster-card poster-conclusion"><span class="lesson-number">05</span><h2>Conclusión</h2>
-    <p class="poster-big">Una sola letra puede no cambiar nada, cambiar una pieza o cortar toda la proteína. Lo que decide es <b>dónde</b> cae el cambio y <b>qué tipo</b> de cambio es: en el mismo codón 7, cambiar la A por T da anemia falciforme, y cambiar la G por A da hemoglobina C.</p>
-    <p class="muted"><b>Límites del modelo:</b> es una simulación educativa. Muestra dónde cambia la secuencia, pero no calcula cómo se pliega la proteína mutada y no sirve como diagnóstico.</p>
-  </article>
-  <article class="poster-card poster-qr"><img src="img/qr-sitio.svg" alt="Código QR que abre la app en el celular"><div><h2>Llevátelo en tu celular</h2><p>Escaneá el código y seguí probando mutaciones desde tu casa.</p><p class="muted">daniechev.github.io/Genoma-LAB-</p></div></article>
-  <p class="poster-sources">Fuentes: estructura <a href="https://www.rcsb.org/structure/2HHB" target="_blank" rel="noreferrer">PDB 2HHB</a> · modelo <a href="https://alphafold.ebi.ac.uk/entry/P68871" target="_blank" rel="noreferrer">AlphaFold P68871</a> · proteína <a href="https://www.uniprot.org/uniprotkb/P68871/entry" target="_blank" rel="noreferrer">UniProt P68871</a></p>
+    <div class="story-nav"><button class="ghost" id="story-prev"><span aria-hidden="true">←</span> Anterior</button><span class="story-count" id="story-count"></span><button class="primary" id="story-next">Siguiente <span aria-hidden="true">→</span></button></div>
+  </section>
+  <p class="poster-sources">Fuentes: <a href="https://www.rcsb.org/structure/2HHB" target="_blank" rel="noreferrer">PDB 2HHB</a> · <a href="https://alphafold.ebi.ac.uk/entry/P68871" target="_blank" rel="noreferrer">AlphaFold P68871</a> · <a href="https://www.uniprot.org/uniprotkb/P68871/entry" target="_blank" rel="noreferrer">UniProt P68871</a> · 16 especies de Swiss-Prot (tutorial de HMMER)</p>
 </section>
 <section id="tab-lab" class="tab-page" hidden>
   <div class="hero lab-hero"><h1>¿Qué cambia con <em>una letra?</em></h1><p>Tocá una letra del ADN, cambiala y mirá al instante qué le pasa a la proteína.</p></div>
@@ -74,12 +128,12 @@
       <span class="tour-count" id="tour-count"></span>
       <button class="ghost tour-exit" id="tour-exit">Salir</button>
     </div>
-    <div class="tour-end" id="tour-end" hidden><button class="primary" id="tour-try">Probarlo vos <span aria-hidden="true">→</span></button><button class="ghost" id="tour-project">Volver al proyecto</button><button class="ghost" id="tour-replay"><span aria-hidden="true">↺</span> Repetir</button><span class="tour-qr"><img src="img/qr-sitio.svg" alt="Código QR que abre la app en el celular"> Escaneá y jugá en tu celular</span></div>
+    <div class="tour-end" id="tour-end" hidden><button class="primary" id="tour-try">Probarlo vos <span aria-hidden="true">→</span></button><button class="ghost" id="tour-project">Volver al proyecto</button><button class="ghost" id="tour-replay"><span aria-hidden="true">↺</span> Repetir</button><button class="ghost" id="tour-duel"><span aria-hidden="true">⚔</span> Jugar un duelo</button><span class="tour-qr"><img src="img/qr-sitio.svg" alt="Código QR que abre la app en el celular"> Escaneá y jugá en tu celular</span></div>
   </section>
   <div class="workspace" id="experiment">
     <div class="stage">
       <section class="panel dna-panel" aria-labelledby="dna-heading">
-        <div class="panel-head"><h2 id="dna-heading" tabindex="-1">1 · El ADN</h2><div class="quick"><button id="random"><span class="shortcut-icon dice" aria-hidden="true">⚄</span>Al azar</button><button id="mission"><span class="shortcut-icon target" aria-hidden="true">◎</span>Casos reales</button></div><p class="lead">La receta de la hemoglobina tiene 444 letras. Cada grupo de tres, el <b>codón</b>, indica una pieza (aminoácido) de la proteína.</p></div>
+        <div class="panel-head"><h2 id="dna-heading" tabindex="-1">1 · El ADN</h2><div class="quick"><button id="random"><span class="shortcut-icon dice" aria-hidden="true">⚄</span>Al azar</button><button id="mission"><span class="shortcut-icon target" aria-hidden="true">◎</span>Casos reales</button><button id="duel-open"><span class="shortcut-icon duel" aria-hidden="true">⚔</span>Duelo</button></div><p class="lead">La receta de la hemoglobina tiene 444 letras. Cada grupo de tres, el <b>codón</b>, indica una pieza (aminoácido) de la proteína.</p></div>
         <div class="codon-strip" id="codons" role="group" aria-label="Secuencia de ADN, seleccioná una letra"></div>
         <div class="gene-nav"><button id="previous" class="round-button" aria-label="Ver letras anteriores">←</button><label class="range-label" for="gene-range"><span id="region-label">Codones 1–4 de 148</span><input id="gene-range" type="range" min="0" max="144" value="0" aria-label="Recorrer el gen"></label><button id="next" class="round-button" aria-label="Ver letras siguientes">→</button></div>
         <div class="tool" id="tool"></div>
@@ -99,11 +153,38 @@
         <div class="viewer-tabs" role="group" aria-label="Estructura de referencia"><button class="active" data-model="pdb" aria-pressed="true">Experimental</button><button data-model="af" aria-pressed="false">AlphaFold · IA</button></div>
         <p class="viewer-badge" id="viewer-badge">CADENA BETA · PDB 2HHB</p>
         <p class="viewer-caption" id="model-caption">Estructura medida por rayos X. Cada tramo conecta las posiciones reales de los aminoácidos.</p>
-        <div class="viewer-settings"><label><input type="checkbox" id="all-chains"> Ver las 4 cadenas</label><label id="confidence-label" hidden><input type="checkbox" id="confidence"> Colorear confianza de IA</label><button id="rotate" aria-pressed="true">Ⅱ Pausar giro</button></div>
+        <div class="viewer-settings"><label><input type="checkbox" id="evo-color"> Colorear lo que la evolución no cambió</label><label><input type="checkbox" id="all-chains"> Ver las 4 cadenas</label><label id="confidence-label" hidden><input type="checkbox" id="confidence"> Colorear confianza de IA</label><button id="rotate" aria-pressed="true">Ⅱ Pausar giro</button></div>
         <div class="protein-legend" id="protein-legend"><span class="gradient-line"></span><span>Inicio de la cadena</span><span>Final</span></div>
+        <div class="print-3d"><button class="ghost" id="stl-download"><span aria-hidden="true">⬇</span> Descargar para imprimir en 3D</button><p class="muted">Archivo STL de la cadena beta, de unos 8 cm. Si cambiaste una pieza, lleva una bolita en ese lugar. Imprimila con soportes.</p></div>
       </details>
     </aside>
   </div>
+  <section class="consequences" id="consequences" aria-labelledby="cons-heading">
+    <div class="cons-head"><h2 id="cons-heading">3 · Lo que pasa después</h2><p>Tu cambio, visto de cerca. Mirá una cosa por vez.</p></div>
+    <div class="cons-tabs" role="tablist" aria-label="Qué mirar">
+      <button class="cons-tab active" role="tab" id="cons-tab-factory" aria-controls="cons-factory" aria-selected="true" data-view="factory"><span class="cons-icon factory" aria-hidden="true"></span>La fábrica</button>
+      <button class="cons-tab" role="tab" id="cons-tab-blood" aria-controls="cons-blood" aria-selected="false" tabindex="-1" data-view="blood"><span class="cons-icon blood" aria-hidden="true"></span>En la sangre</button>
+      <button class="cons-tab" role="tab" id="cons-tab-melody" aria-controls="cons-melody" aria-selected="false" tabindex="-1" data-view="melody"><span class="cons-icon melody" aria-hidden="true"></span>Cómo suena</button>
+    </div>
+    <article class="cons-card" role="tabpanel" id="cons-factory" aria-labelledby="cons-tab-factory" data-view="factory">
+      <div class="cons-canvas"><canvas id="factory" role="img" aria-label="Animación del ribosoma leyendo el ARN"></canvas><button class="cons-replay" id="factory-play" aria-label="Fabricar de nuevo" title="Fabricar de nuevo">↺</button></div>
+      <p class="cons-caption" id="factory-caption" aria-live="polite">El ribosoma lee el ARN de a tres letras. Por cada codón llega una pieza y la cadena crece.</p>
+    </article>
+    <article class="cons-card" role="tabpanel" id="cons-blood" aria-labelledby="cons-tab-blood" data-view="blood" hidden>
+      <div class="cons-canvas"><canvas id="blood" role="img" aria-label="Glóbulos rojos pasando por un vaso sanguíneo"></canvas></div>
+      <p class="cons-caption" id="blood-caption" aria-live="polite"></p>
+      <div class="cons-actions">
+        <div class="segmented" role="group" aria-label="Copias de la mutación"><button data-copies="1" aria-pressed="false">1 copia</button><button data-copies="2" aria-pressed="true" class="active">2 copias</button></div>
+        <label class="challenge"><input type="checkbox" id="blood-low"> <span><b>Poco oxígeno</b></span></label>
+      </div>
+    </article>
+    <article class="cons-card" role="tabpanel" id="cons-melody" aria-labelledby="cons-tab-melody" data-view="melody" hidden>
+      <div class="cons-canvas"><canvas id="melody" role="img" aria-label="Las piezas de la proteína como notas musicales"></canvas></div>
+      <p class="cons-caption" id="melody-caption"></p>
+      <div class="cons-actions"><button class="primary" data-melody="play"><span aria-hidden="true">▶</span> Escuchar</button></div>
+    </article>
+    <div class="cons-next"><button class="ghost" id="cons-next">Siguiente: en la sangre <span aria-hidden="true">→</span></button></div>
+  </section>
   <p class="disclaimer">Una simulación educativa con una secuencia pública. No es un diagnóstico.</p>
 </section>
 <section id="tab-naturaleza" class="tab-page nature" hidden>
@@ -124,6 +205,17 @@
       <div class="genotype ss"><span class="cells" aria-hidden="true"><i class="s"></i><i class="s"></i></span><b>Dos copias</b><span>Anemia falciforme: los glóbulos rojos se deforman y se traban.</span></div>
     </div>
     <p class="muted nature-note">Cada persona tiene dos copias del gen: una de su mamá y otra de su papá.</p>
+
+    <h3 class="nature-sub" id="velcro">¿Por qué una sola pieza arruina todo? El velcro</h3>
+    <div class="velcro">
+      <div class="velcro-stage"><canvas id="velcro-canvas" role="img" aria-label="Hemoglobinas dentro de un glóbulo rojo"></canvas></div>
+      <div class="velcro-side">
+        <p>Imaginá un <b>velcro</b>. Con la mutación, la pieza 6 pasa a ser <b>valina</b>, una pieza que huye del agua: es el lado de los <b>ganchitos</b>. Otra hemoglobina tiene un <b>bolsillo</b> (formado por las piezas 85 y 88) que es el lado de los pelitos.</p>
+        <div class="segmented" role="group" aria-label="Pieza 6"><button data-velcro="E" aria-pressed="false">Pieza 6: Glu (normal)</button><button data-velcro="V" aria-pressed="true" class="active">Pieza 6: Val (falciforme)</button></div>
+        <label class="challenge"><input type="checkbox" id="velcro-low"> <span><b>Poco oxígeno</b> el bolsillo se abre</span></label>
+        <p class="velcro-caption" id="velcro-caption" aria-live="polite"></p>
+      </div>
+    </div>
 
     <h3 class="nature-sub">¿Dónde pasa?</h3>
     <div class="map-controls" role="group" aria-label="Capa del mapa">
@@ -199,6 +291,21 @@
     </div>
   </article>
 </section>
+<section id="tab-nombre" class="tab-page name-page" hidden>
+  <div class="poster-hero"><p class="eyebrow">TU PROPIA RECETA</p><h1>Tu nombre <em>en ADN</em></h1><p>Cada pieza de una proteína tiene una letra: A es alanina, N es asparagina, L es leucina… Escribí tu nombre y mirá el ADN que lo fabricaría.</p></div>
+  <form class="name-form" id="name-form" autocomplete="off"><label for="name-input">Tu nombre</label><div class="name-row"><input id="name-input" maxlength="24" placeholder="Por ejemplo: Lucía" spellcheck="false"><button class="primary" type="submit">Escribirlo en ADN <span aria-hidden="true">→</span></button></div></form>
+  <div class="name-result" id="name-result" hidden>
+    <div class="name-strip" id="name-strip" aria-live="polite"></div>
+    <div class="name-facts" id="name-facts"></div>
+    <div class="name-mutate">
+      <div><h2>¿Y si una letra del ADN cambia?</h2><p class="muted">Una mutación también puede cambiar tu nombre, cortarlo con un STOP… o no cambiar nada.</p></div>
+      <div class="name-mutate-actions"><button class="ghost" id="name-mutate"><span aria-hidden="true">⚄</span> Cambiar una letra al azar</button><button class="text-button" id="name-undo" hidden>Volver a mi nombre</button></div>
+      <p class="name-mutation" id="name-mutation" aria-live="polite"></p>
+    </div>
+    <div class="name-actions"><button class="primary" id="name-card"><span aria-hidden="true">★</span> Guardar mi tarjeta</button></div>
+  </div>
+  <details class="name-how"><summary>¿Cómo lo calculamos?</summary><p>Las proteínas usan 20 piezas y cada una tiene una letra: A C D E F G H I K L M N P Q R S T V W Y. Para cada letra de tu nombre elegimos el codón que más usan los genes humanos. Adelante va ATG, la señal de inicio (por eso toda proteína empieza con M), y al final, TAA, una señal de STOP.</p><p>La B, la J, la X y la Z no son ninguna pieza, así que las salteamos. La U es la <b>selenocisteína</b>, una pieza rara que se escribe con TGA, ¡un STOP disfrazado! Tu cuerpo tiene unas 25 proteínas con ella. La O es la <b>pirrolisina</b>: solo la usan algunos microbios, que la escriben con TAG. La Ñ y las letras con tilde se escriben sin la marca.</p><p>Es un juego: no existe una proteína real con tu nombre.</p></details>
+</section>
 <section id="tab-learn" class="tab-page reading-page" hidden><p class="eyebrow">CUATRO IDEAS PARA EMPEZAR</p><h1>De cuatro letras a una proteína.</h1><div class="learning-grid">
   <article><span class="lesson-number">01</span><h2>¿Qué es el ADN?</h2><p>Es una molécula que guarda instrucciones de los seres vivos. Usa cuatro letras: A, T, C y G. En su doble hélice, A se une con T y C con G.</p><div class="pair-demo"><span class="base a">A</span><i>···</i><span class="base t">T</span><span class="base c">C</span><i>···</i><span class="base g">G</span></div><p>Un gen es un tramo de ADN. Algunos genes contienen la receta para fabricar una proteína.</p></article>
   <article><span class="lesson-number">02</span><h2>¿Cómo se lee?</h2><p>La célula hace una copia de trabajo, el ARN. El ribosoma lee esa copia de tres en tres. Cada grupo, llamado <b>codón</b>, indica un aminoácido o una señal de parada.</p><div class="recipe"><span>ADN <b>ATG GAA TTT TGA</b></span><span>ARN <b>AUG GAA UUU UGA</b></span><span>Piezas <b>Met · Glu · Phe · STOP</b></span></div></article>
@@ -212,11 +319,47 @@
 <footer><span>ADN, genes y proteínas · Feria de ciencias</span><button class="footer-link" data-tab="stats">Resultados del stand</button></footer>
 <div class="toast" id="toast" role="status" hidden></div>
 <dialog id="mission-dialog" aria-labelledby="mission-heading"><button class="dialog-close" aria-label="Cerrar" id="close-mission">×</button><p class="eyebrow">MISIÓN / UNA LETRA PUEDE CAMBIARLO TODO</p><h2 id="mission-heading">Elegí un caso real.</h2><div class="case-picker" role="group" aria-label="Casos reales"><button data-case="sickle" class="active" aria-pressed="true"><b>Anemia falciforme</b>Glu6Val</button><button data-case="hbc" aria-pressed="false"><b>Hemoglobina C</b>Glu6Lys</button><button data-case="thal" aria-pressed="false"><b>Beta-talasemia</b>Gln39Stop</button></div><div id="case-detail" aria-live="polite"></div><p class="muted">Son casos históricos, sin relación con las personas que visitan el stand.</p><button class="primary" id="start-mission">Ir al codón 7</button></dialog>
+<dialog id="duel-dialog" class="duel" aria-labelledby="duel-title"><button class="dialog-close" aria-label="Cerrar" id="duel-close">×</button>
+  <div class="duel-intro" id="duel-intro">
+    <p class="eyebrow">DUELO DE PREDICCIONES</p><h2 id="duel-title">¿Quién entiende más el ADN?</h2>
+    <p>Dos jugadores, una pantalla. En cada ronda aparece un cambio en el ADN y los dos eligen, en secreto, qué le pasa a la proteína. Acertar suma 1 punto; si los dos aciertan, el más rápido suma 1 extra.</p>
+    <div class="duel-names"><label class="p1">Jugador 1<input id="duel-n1" value="Jugador 1" maxlength="14"></label><label class="p2">Jugador 2<input id="duel-n2" value="Jugador 2" maxlength="14"></label></div>
+    <p class="muted duel-keys">Con teclado: el jugador 1 usa <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> y el jugador 2, <kbd>7</kbd> <kbd>8</kbd> <kbd>9</kbd> <kbd>0</kbd>.</p>
+    <button class="primary" id="duel-start">Empezar · 5 rondas <span aria-hidden="true">→</span></button>
+  </div>
+  <div class="duel-game" id="duel-game" hidden>
+    <div class="duel-head"><p class="eyebrow" id="duel-round"></p><div class="duel-change" id="duel-change"></div><div class="duel-timer" aria-hidden="true"><i id="duel-timer"></i></div></div>
+    <div class="duel-players">
+      <section class="duel-player p1" data-player="0" aria-label="Jugador 1"><header><b class="duel-name"></b><span class="duel-score">0</span></header><div class="duel-options"></div><p class="duel-status" aria-live="polite"></p></section>
+      <section class="duel-player p2" data-player="1" aria-label="Jugador 2"><header><b class="duel-name"></b><span class="duel-score">0</span></header><div class="duel-options"></div><p class="duel-status" aria-live="polite"></p></section>
+    </div>
+    <div class="duel-reveal" id="duel-reveal" aria-live="polite" hidden></div>
+  </div>
+  <div class="duel-end" id="duel-end" hidden><canvas id="duel-confetti" aria-hidden="true"></canvas><p class="eyebrow">FINAL DEL DUELO</p><h2 id="duel-winner"></h2><p id="duel-final"></p><div class="duel-end-actions"><button class="primary" id="duel-again">Revancha</button><button class="ghost" id="duel-exit">Volver al simulador</button></div></div>
+</dialog>
 <dialog id="card-dialog" class="card-dialog" aria-labelledby="card-heading"><button class="dialog-close" aria-label="Cerrar" id="close-card">×</button><h2 id="card-heading">Tu descubrimiento</h2><canvas id="card-canvas" width="1080" height="1350" role="img"></canvas><p class="muted card-photo">Sacale una foto con tu celular para llevártela.</p><div class="card-actions"><button class="primary" id="card-download">Descargar imagen</button><button class="secondary" id="card-share" hidden>Compartir</button></div></dialog>
 <script src="js/datos-modelos.js"></script>
 <script src="js/datos-mapa.js"></script>
+<script src="js/datos-especies.js"></script>
 <script src="js/genetica.js"></script>
+<script src="js/evolucion.js"></script>
+<script src="js/nombre.js"></script>
+<script src="js/duelo.js"></script>
+<script src="js/stl.js"></script>
+<script src="js/sonido.js"></script>
 <script src="js/helice.js"></script>
 <script src="js/visor-3d.js"></script>
 <script src="js/app.js"></script>
+<script src="js/viaje.js"></script>
+<script src="js/fabrica.js"></script>
+<script src="js/sangre.js"></script>
+<script src="js/melodia.js"></script>
+<script src="js/consecuencias.js"></script>
+<script src="js/mapa-calor.js"></script>
+<script src="js/experimento-evolucion.js"></script>
+<script src="js/historia.js"></script>
+<script src="js/velcro.js"></script>
+<script src="js/tu-nombre.js"></script>
+<script src="js/duelo-juego.js"></script>
+<script src="js/guia.js"></script>
 </body></html>
