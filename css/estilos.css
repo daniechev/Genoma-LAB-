@@ -1536,6 +1536,12 @@ footer {
   color: #9792cc;
   font-size: 15px;
 }
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 22px;
+}
 .footer-link {
   background: none;
   color: #9792cc;
@@ -2038,7 +2044,7 @@ body.touring .protein-panel {
   }
   .topbar nav {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     border-radius: 18px;
   }
   .nav {
@@ -2762,14 +2768,8 @@ svg.world .countries path {
   }
 }
 @media (max-width: 560px) {
-  .topbar nav {
-    grid-template-columns: repeat(6, 1fr);
-  }
   .topbar nav .nav {
-    grid-column: span 2;
-  }
-  .topbar nav .nav:nth-child(n + 4) {
-    grid-column: span 3;
+    font-size: 14px;
   }
   .topbar nav::before {
     display: none;
@@ -2916,13 +2916,6 @@ body {
 .journey-dots button[aria-current='true'] {
   background: var(--accent);
   box-shadow: 0 0 14px var(--accent);
-}
-.journey-skip {
-  position: absolute;
-  right: clamp(16px, 3vw, 40px);
-  bottom: 22px;
-  color: var(--muted);
-  font-size: 15px;
 }
 @media (max-width: 700px) {
   .journey {
@@ -3667,6 +3660,34 @@ body {
   max-width: 900px;
   margin-top: 30px;
 }
+/* En «Jugá», el duelo para dos queda a la vista debajo del nombre. */
+.duel-banner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  max-width: 900px;
+  margin-top: 30px;
+  padding: 20px 24px;
+  border: 1px solid #ff7aa855;
+  border-radius: 20px;
+  background: linear-gradient(120deg, #ff5c9d1f, #ffffff05);
+}
+.duel-banner h2 {
+  font-size: 22px;
+}
+.duel-banner p {
+  margin-top: 4px;
+}
+.duel-banner-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--pink);
+  font-size: 28px;
+}
 @media (max-width: 560px) {
   .name-strip {
     padding: 16px;
@@ -3688,6 +3709,13 @@ body {
   }
   .name-mutate {
     grid-template-columns: 1fr;
+  }
+  .duel-banner {
+    grid-template-columns: auto 1fr;
+    padding: 16px;
+  }
+  .duel-banner .primary {
+    grid-column: 1 / -1;
   }
   .name-row input {
     font-size: 22px;

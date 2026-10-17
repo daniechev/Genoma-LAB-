@@ -622,4 +622,30 @@
   }
   requestAnimationFrame(frame);
   document.getElementById('journey-tour').onclick = () => GenomaLab.startTour();
+
+  // «Empezar»: el viaje se reproduce solo, escena por escena, y termina en «Cambiala vos».
+  // Si la persona toca, usa la rueda o el teclado, se detiene y sigue a mano.
+  let auto = null;
+  function stopPlay() {
+    clearTimeout(auto);
+    auto = null;
+  }
+  function play() {
+    stopPlay();
+    if (reduced.matches) scrollTo({ top: section.getBoundingClientRect().top + scrollY });
+    let i = 0;
+    const next = () => {
+      go(i);
+      auto = ++i < N ? setTimeout(next, i === 1 ? 1200 : 2900) : null;
+    };
+    next();
+  }
+  ['wheel', 'touchstart', 'keydown'].forEach(type =>
+    addEventListener(type, () => auto && stopPlay(), { passive: true }),
+  );
+  document.addEventListener('genoma:pestaña', stopPlay);
+  document.getElementById('start-journey').onclick = e => {
+    e.stopPropagation();
+    play();
+  };
 })();

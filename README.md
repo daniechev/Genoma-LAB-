@@ -15,7 +15,7 @@ Descargá el repositorio y abrí `index.html` en el navegador. No hace falta ins
 - **Tarjeta del descubrimiento:** después de cada resultado, *Guardar mi descubrimiento* arma una imagen con el cambio y su efecto, para descargarla, compartirla o sacarle una foto.
 - **Sin internet:** publicada en GitHub Pages, la app se guarda en el celular la primera vez que se abre (aparece el aviso *«Listo: la app ya funciona aunque no tengas internet»*). Después funciona aunque se corte el wifi, y se puede agregar a la pantalla de inicio como una app. Si se cambia un archivo, la copia se renueva sola en la visita siguiente; si se agrega un archivo nuevo, hay que sumarlo a la lista `ARCHIVOS` de `sw.js` (una prueba avisa si falta).
 - **Guion:** [`docs/guion-del-stand.md`](docs/guion-del-stand.md) tiene una explicación de un minuto con analogías y respuestas a las preguntas que suele hacer el jurado.
-- **Para la fila:** el **duelo** (botón *Duelo* del simulador) enfrenta a dos personas en la misma pantalla, y **Tu nombre** escribe el nombre del visitante en ADN y arma una tarjeta para llevarse.
+- **Para la fila:** la pestaña **Jugá** escribe el nombre del visitante en ADN y arma una tarjeta para llevarse; ahí mismo, el **duelo** enfrenta a dos personas en la misma pantalla.
 - **Sonido:** el botón del parlante, arriba a la derecha, prende o apaga los sonidos. Los efectos solo suenan después de que alguien toca la pantalla, así que el modo stand no hace ruido solo.
 
 ### Publicarla en internet (GitHub Pages)
@@ -29,14 +29,14 @@ Si la dirección cambia, hay que generar un QR nuevo y reemplazar `img/qr-sitio.
 
 ### Para el jurado
 
-La página abre en **Proyecto**. Al bajar, un **viaje** acerca la cámara de tu cuerpo a una sola letra: la sangre, un glóbulo rojo, la hemoglobina (dibujada con las coordenadas reales de 2HHB), el cromosoma 11, el gen y la letra 20. Después viene el póster con la pregunta, la hipótesis y el método. Los resultados se cuentan **paso a paso**, una idea por pantalla y con preguntas para adivinar antes de ver la respuesta: las 1.332 mutaciones, qué letra del codón perdona, los tres casos reales, la evolución, la sorpresa de la pieza 6 y la conclusión. Todo se calcula en el momento con el mismo motor del simulador:
+La página abre en **Inicio**, con un solo botón: **Empezar**. Reproduce solo, en unos 20 segundos, un **viaje** que acerca la cámara de tu cuerpo a una sola letra: la sangre, un glóbulo rojo, la hemoglobina (dibujada con las coordenadas reales de 2HHB), el cromosoma 11, el gen y la letra 20. Al final, **Cambiala vos** lleva al simulador. También se puede recorrer bajando con el dedo; tocar la pantalla frena la reproducción. Después viene el póster con la pregunta, la hipótesis y el método. Los resultados se cuentan **paso a paso**, una idea por pantalla y con preguntas para adivinar antes de ver la respuesta: las 1.332 mutaciones, qué letra del codón perdona, los tres casos reales, la evolución, la sorpresa de la pieza 6 y la conclusión. Todo se calcula en el momento con el mismo motor del simulador:
 
 - **El mapa de las 1.332 mutaciones:** cada cambio posible coloreado por su efecto. Se ve que la 2.ª letra de un codón casi nunca perdona (solo 1 de 444 cambios es silencioso) y que la 3.ª perdona 7 de cada 10 veces. Tocar un cuadradito lo lleva al simulador.
 - **Segundo experimento, la evolución:** comparamos la cadena beta humana con la de 16 especies, del mandril a la rana, y medimos en la estructura 3D la distancia de cada pieza al hierro del hemo. Cerca del hemo, 21 de 37 piezas son iguales en todas las especies (57 %); lejos, 22 de 109 (20 %). Incluye el reloj molecular y una sorpresa: la pieza 6 cambia en tres especies, pero ninguna tiene valina.
 
 **Modo presentación:** `presentacion.html` (o el botón *Modo presentación*) tiene 12 diapositivas para el jurado con los mismos gráficos en vivo. Se avanza con las flechas o un control remoto; **P** abre la vista del presentador en otra ventana (notas, cronómetro y diapositiva siguiente) y las dos avanzan juntas; **F** pone pantalla completa y **B** deja la pantalla en negro.
 
-El botón **Ver el recorrido guiado** muestra los tres casos reales solo, paso a paso, en unos dos minutos. Se puede pausar, avanzar o volver con los botones, con las flechas del teclado o con un control remoto de presentaciones (AvPág/RePág); Esc lo cierra. Para que arranque directamente, abrí `index.html#jurado`. El recorrido no suma al contador del stand, salvo que el jurado haga su propia predicción.
+El **recorrido guiado** (al final del viaje o en el pie de página) muestra los tres casos reales solo, paso a paso, en unos dos minutos. Se puede pausar, avanzar o volver con los botones, con las flechas del teclado o con un control remoto de presentaciones (AvPág/RePág); Esc lo cierra. Para que arranque directamente, abrí `index.html#jurado`. El recorrido no suma al contador del stand, salvo que el jurado haga su propia predicción.
 
 ### El simulador
 

@@ -44,7 +44,7 @@ Si el visitante es chico o le gustan los animales, abrí **Naturaleza → Jaguar
 
 > «¿Jaguar o leopardo? Mirá las manchas: si tienen puntitos adentro, es un jaguar. Y la pantera negra no es una especie: al leopardo le cambió **una sola letra** y apareció un STOP. ¿Lo probamos en la hemoglobina?»
 
-Para chicos o familias que esperan: **Tu nombre** («¿Querés ver tu nombre escrito en ADN?») o un **duelo** entre dos («¿Quién entiende más el ADN?»).
+Para chicos o familias que esperan, la pestaña **Jugá**: su nombre escrito en ADN («¿Querés ver tu nombre escrito en ADN?») o un **duelo** entre dos («¿Quién entiende más el ADN?»).
 
 ## Analogías que funcionan
 
@@ -96,7 +96,7 @@ Sí cambia: en el suslik, el equidna y el ornitorrinco es otra. Pero ninguna esp
 No. Es una ilustración de lo que se sabe de los casos reales (falciforme, hemoglobina C y talasemias). Para los demás cambios dice que no se sabe.
 
 **Si la anemia falciforme es grave, ¿por qué es tan común?**
-Porque tener una sola copia de la mutación protege contra la malaria. Donde había mucha malaria, los portadores sobrevivían más. Está en la pestaña **Naturaleza**, con un juego que lo simula generación a generación.
+Porque tener una sola copia de la mutación protege contra la malaria. Donde había mucha malaria, los portadores sobrevivían más. Está en la pestaña **Naturaleza**, con un mapa que superpone la mutación y la malaria.
 
 **¿Qué límites tiene el simulador?**
 No calcula la forma ni la función de la proteína mutada, no incluye el ADN que está después del gen y no sirve como diagnóstico.
