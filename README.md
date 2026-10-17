@@ -29,7 +29,7 @@ Si la dirección cambia, hay que generar un QR nuevo y reemplazar `img/qr-sitio.
 
 ### Para el jurado
 
-La página abre en **Inicio**, con un solo botón: **Empezar**. Reproduce solo, en unos 20 segundos, un **viaje** que acerca la cámara de tu cuerpo a una sola letra: la sangre, un glóbulo rojo, la hemoglobina (dibujada con las coordenadas reales de 2HHB), el cromosoma 11, el gen y la letra 20. Al final, **Cambiala vos** lleva al simulador. También se puede recorrer bajando con el dedo; tocar la pantalla frena la reproducción. Después viene el póster con la pregunta, la hipótesis y el método. Los resultados se cuentan **paso a paso**, una idea por pantalla y con preguntas para adivinar antes de ver la respuesta: las 1.332 mutaciones, qué letra del codón perdona, los tres casos reales, la evolución, la sorpresa de la pieza 6 y la conclusión. Todo se calcula en el momento con el mismo motor del simulador:
+La página abre en **Inicio**, con un solo botón: **Empezar**. Reproduce solo, en unos 20 segundos, un **viaje** que acerca la cámara de tu cuerpo a una sola letra: la sangre, un glóbulo rojo, la hemoglobina (dibujada con las coordenadas reales de 2HHB), el cromosoma 11, el gen y la letra 20. Al final, **Cambiala vos** lleva al simulador. También se puede recorrer bajando con el dedo; tocar la pantalla frena la reproducción. Después viene el póster con la pregunta, la hipótesis y el método. Los resultados se cuentan **paso a paso**, una idea por pantalla y con preguntas para adivinar antes de ver la respuesta: las 1.332 mutaciones, los tres casos reales, la evolución, la sorpresa de la pieza 6 y la conclusión. Todo se calcula en el momento con el mismo motor del simulador:
 
 - **El mapa de las 1.332 mutaciones:** cada cambio posible coloreado por su efecto. Se ve que la 2.ª letra de un codón casi nunca perdona (solo 1 de 444 cambios es silencioso) y que la 3.ª perdona 7 de cada 10 veces. Tocar un cuadradito lo lleva al simulador.
 - **Segundo experimento, la evolución:** comparamos la cadena beta humana con la de 16 especies, del mandril a la rana, y medimos en la estructura 3D la distancia de cada pieza al hierro del hemo. Cerca del hemo, 21 de 37 piezas son iguales en todas las especies (57 %); lejos, 22 de 109 (20 %). Incluye el reloj molecular y una sorpresa: la pieza 6 cambia en tres especies, pero ninguna tiene valina.
@@ -110,7 +110,7 @@ js/viaje.js             viaje de la portada, de tu cuerpo a una letra
 js/fabrica.js           el ribosoma leyendo el ARN
 js/sangre.js            glóbulos rojos según los casos conocidos
 js/melodia.js           la proteína como melodía
-js/mapa-calor.js        mapa de las 1.332 sustituciones
+js/mapa-calor.js        mapa de las 1.332 sustituciones (presentación)
 js/experimento-evolucion.js  segundo experimento del póster
 js/velcro.js            cómo se arman las fibras de la anemia falciforme
 js/tu-nombre.js         pestaña «Tu nombre»
