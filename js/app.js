@@ -1,11 +1,11 @@
-// Interfaz de la página: pestañas, simulador, recorrido guiado, naturaleza y contador del stand.
+// Interfaz de la página: pestañas, simulador, recorrido guiado y contador del stand.
 // La ciencia está en genetica.js; acá solo se muestra.
 (() => {
   'use strict';
   const G = Genetics,
     $ = id => document.getElementById(id),
     all = selector => [...document.querySelectorAll(selector)];
-  // ---- Textos de los casos reales y de las especies ----
+  // ---- Textos de los casos reales ----
   const caseInfo = {
     sickle: {
       goal: 'Andá al <b>codón 7: GAG</b>. Cambiá su letra del medio para que la pieza 6 deje de ser glutamato (Glu) y pase a ser valina (Val).',
@@ -44,18 +44,6 @@
       note: '<b>Encontraste un caso de beta-talasemia: Gln39Stop.</b> Cambiaste la letra 118, C por T, y el codón CAG se volvió TAG, una señal de STOP. La lectura se corta y la cadena beta queda con solo 38 de sus 146 piezas. Sin suficiente cadena beta, el cuerpo fabrica menos hemoglobina.',
     },
   };
-  const speciesNotes = {
-    leopard:
-      '<b>¡El mismo STOP que el del leopardo negro!</b> La pieza 93 es una cisteína, escrita TGT. Con la A, queda TGA y la lectura se corta. Al leopardo le pasó algo parecido en otro gen, el ASIP: su codón TGC se volvió TGA, la proteína quedó cortada y su pelo se volvió negro.',
-    llama:
-      '<b>¡Así es en la llama!</b> Con esta letra, la pieza 2 pasa de histidina a asparagina, como en la hemoglobina de las llamas, alpacas y guanacos. Ese cambio ayuda a que su hemoglobina agarre más fuerte el oxígeno en la altura de los Andes.',
-    mammoth12:
-      '<b>¡Uno de los cambios del mamut lanudo!</b> La pieza 12 pasa de treonina a alanina. Junto con otros dos cambios (Ala86Ser y Glu101Gln), ayudaba a que su hemoglobina soltara bien el oxígeno aunque hiciera mucho frío.',
-    mammoth86:
-      '<b>¡Uno de los cambios del mamut lanudo!</b> La pieza 86 pasa de alanina a serina. Junto con otros dos cambios (Thr12Ala y Glu101Gln), ayudaba a que su hemoglobina soltara bien el oxígeno aunque hiciera mucho frío.',
-    mammoth101:
-      '<b>¡Uno de los cambios del mamut lanudo!</b> La pieza 101 pasa de glutamato a glutamina. Junto con otros dos cambios (Thr12Ala y Ala86Ser), ayudaba a que su hemoglobina soltara bien el oxígeno aunque hiciera mucho frío.',
-  };
   // ---- Nombres de cada resultado ----
   const titles = {
     nada: 'No cambió ninguna pieza',
@@ -85,12 +73,7 @@
     toastTimer,
     resetTimer,
     resetArmed = false;
-  const counterKey = 'genomalab-app-contador',
-    challengeKey = 'genomalab-desafio';
-  let challenge = false;
-  try {
-    challenge = localStorage.getItem(challengeKey) === '1';
-  } catch {}
+  const counterKey = 'genomalab-app-contador';
   function notify(message) {
     $('toast').textContent = message;
     $('toast').hidden = false;
@@ -122,26 +105,7 @@
     persistent = false;
   }
   // ---- Visor 3D ----
-  const bundledAF = JSON.parse(JSON.stringify(MODELS.af));
   const viewer = new ProteinViewer($('protein'), MODELS);
-  function restoreCustom() {
-    try {
-      const text = localStorage.getItem('adn-hbb-custom-pdb');
-      if (text) {
-        MODELS.af = G.parsePDB(text, true);
-        $('import-status').textContent = 'Se restauró tu modelo P68871 guardado en este navegador.';
-      }
-    } catch {
-      $('import-status').textContent =
-        'No se pudo restaurar el archivo guardado; se usará el modelo incluido.';
-    }
-  }
-  restoreCustom();
-  viewer.onRotation = () => {
-    $('rotate').textContent = viewer.rotating ? 'Ⅱ Pausar giro' : '▷ Girar';
-    $('rotate').setAttribute('aria-pressed', String(viewer.rotating));
-  };
-  viewer.onRotation();
   const piezas = n => (n === 1 ? '1 pieza' : `${n} piezas`);
   const aaName = codon => G.names[G.table[codon]];
   const fullNames = {
@@ -348,8 +312,8 @@
     render();
     $('tool').querySelector('.tool-bases button')?.focus({ preventScroll: true });
   }
-  // Aplica una mutación. Sin el modo desafío, el resultado se ve al instante.
-  function apply(input, { guess = challenge, count = true } = {}) {
+  // Aplica una mutación y muestra el resultado al instante (el recorrido guiado pide adivinar antes).
+  function apply(input, { guess = false, count = true } = {}) {
     let result;
     try {
       result = G.simulate(input);
@@ -374,20 +338,6 @@
     return result;
   }
   // ---- Panel de resultado ----
-  // Explicación completa, para el desplegable «Para curiosos».
-  function explanation(r) {
-    if (r.effect === 'start-loss')
-      return 'El inicio ATG dejó de existir. En este modelo, la célula ya no encuentra la señal para empezar y no fabrica la cadena por esa vía.';
-    if (r.effect === 'stop-loss')
-      return 'Se perdió la señal STOP del final. El marco de lectura no cambió, pero la fabricación podría continuar. No conocemos la longitud final porque aquí no está incluida la secuencia posterior al gen.';
-    if (r.effect === 'synonymous')
-      return `El codón ${r.originalCodon} pasó a ${r.mutatedCodon}, pero ambos indican ${aaName(r.originalCodon)}. La secuencia de aminoácidos quedó igual; esto no evalúa otros posibles efectos celulares.`;
-    if (r.effect === 'missense')
-      return `El codón ${r.codon + 1} pasó de ${r.originalCodon} a ${r.mutatedCodon}. En la pieza ${r.piece}, ${aaName(r.originalCodon)} fue reemplazado por ${aaName(r.mutatedCodon)}. Cambiar una pieza no permite saber por sí solo cuánto cambia la función.`;
-    if (r.effect === 'nonsense')
-      return `Apareció una señal STOP en el codón ${r.stop + 1}. La traducción se detiene antes de tiempo y la cadena queda con ${r.mature.length} piezas.`;
-    return `Al ${r.type === 'del' ? 'quitar' : 'agregar'} una letra, los grupos de tres se desplazan desde el codón ${r.codon + 1}. Se altera cómo se lee lo que sigue.${r.startLost ? ' Además se perdió ATG: en este modelo no se fabrica la cadena por esa vía.' : r.lengthUnknown ? ' No aparece un STOP en la secuencia disponible, así que no conocemos la longitud final.' : ` El primer STOP aparece en el codón ${r.stop + 1}.`}${r.codon >= 147 ? ' El cambio ocurre en el extremo final; el modelo puede no mostrar diferencias en las piezas ya fabricadas.' : ''}`;
-  }
   // Resumen en palabras simples: es lo primero que se lee.
   function lead(r) {
     if (r.effect === 'start-loss')
@@ -443,22 +393,6 @@
     ],
   ];
   let lastGuess = null;
-  // Lo que dicen las otras 16 especies sobre la pieza que cambió.
-  const listNames = names =>
-    names.length > 1 ? `${names.slice(0, -1).join(', ')} y ${names.at(-1)}` : names[0];
-  function evolutionNote(r) {
-    if (!['missense', 'synonymous'].includes(r.effect) || r.piece < 1 || r.piece > 146) return '';
-    const E = Evolution,
-      n = E.SPECIES.length,
-      same = E.conservation()[r.piece - 1],
-      also = r.effect === 'missense' ? E.sameChange(r.piece, r.mature[r.piece - 1]) : [];
-    const extra = also.length
-      ? ` La pieza nueva ya existe en la naturaleza: ${also.length > 3 ? `${also.slice(0, 3).join(', ')} y ${also.length - 3} más` : listNames(also)} ${also.length === 1 ? 'la tiene' : 'la tienen'} en ese mismo lugar.`
-      : r.effect === 'missense' && same === n
-        ? ' Ningún animal de la lista tiene otra pieza acá: puede ser un lugar importante.'
-        : '';
-    return `<p class="evo-note"><b>En la evolución:</b> la pieza ${r.piece} es igual a la nuestra en <b>${same} de ${n}</b> especies${same === n ? ' (nunca cambió)' : ''}.${extra}</p>`;
-  }
   function resultHeading(r) {
     if (r.effect === 'start-loss') return 'Falta la señal para empezar';
     if (r.effect === 'stop-loss') return 'Falta la señal para terminar';
@@ -486,26 +420,7 @@
     }
     const guess = lastGuess,
       heading = resultHeading(r);
-    const length = r.lengthUnknown ? `${r.mature.length}+` : `${r.mature.length}`;
-    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}${r.realCase.id === 'sickle' ? ' <button class="text-button" data-goto="naturaleza:malaria:velcro">¿Por qué una sola pieza arruina todo? El velcro →</button> <button class="text-button" data-goto="naturaleza:malaria">¿Por qué es tan común? La historia de la malaria →</button>' : ''}</p>` : ''}${r.species ? `<p class="sickle-note species-note">${speciesNotes[r.species.id]} <button class="text-button" data-goto="naturaleza:${r.species.id === 'leopard' ? 'felinos' : 'animales'}">${r.species.id === 'leopard' ? 'Jaguar y leopardo →' : 'Conocé más animales →'}</button></p>` : ''}${r.effect === 'start-loss' ? `<p class="sickle-note species-note"><b>Algo parecido le pasó al pez de hielo de la Antártida.</b> En la mayoría de estas especies el gen de la cadena beta desapareció y no tienen hemoglobina: su sangre es casi transparente. <button class="text-button" data-goto="naturaleza:animales">Conocé más animales →</button></p>` : ''}${evolutionNote(r)}<button class="secondary save-card" id="save-card"><span aria-hidden="true">★</span> Guardar mi descubrimiento</button><details><summary>Para curiosos: la explicación completa</summary><p>${explanation(r)}</p><div class="result-metrics"><div><b>146 → ${length}</b>Piezas${r.lengthUnknown ? ' · final desconocido' : ''}</div><div><b>${r.differences.length}</b>Piezas distintas</div><div><b>${r.originalCodon || '—'} / ${r.mutatedCodon || '—'}</b>Codón original / mutado</div></div><p>Las dos proteínas pieza por pieza. Cada letra es un aminoácido; las piezas distintas están resaltadas.</p><div class="result-amino">Original<br>${G.EXPECTED.slice(1)}<br><br>Mutada<br>${
-      r.mature
-        ? r.mature
-            .split('')
-            .map((aa, i) => (G.EXPECTED[i + 1] !== aa ? `<mark>${aa}</mark>` : aa))
-            .join('')
-        : 'No se fabrica en este modelo.'
-    }</div></details>`;
-    box.querySelectorAll('[data-goto]').forEach(
-      b =>
-        (b.onclick = () => {
-          stopTour();
-          const [tab, chapter, anchor] = b.dataset.goto.split(':');
-          showTab(tab);
-          if (chapter) showChapter(chapter);
-          if (anchor) $(anchor)?.scrollIntoView({ block: 'start' });
-        }),
-    );
-    $('save-card').onclick = openCard;
+    box.innerHTML = `<div class="result-top"><h3>${heading}</h3>${guess ? `<span class="guess-feedback${guess === r.category ? ' hit' : ''}">${guess === r.category ? '✓ ¡Acertaste!' : 'Esta vez no acertaste'}</span>` : ''}</div><p class="result-lead">${lead(r)}</p><p class="sci-name">En ciencia se llama: ${effects[r.effect].toLowerCase()}.</p><button class="see-3d" id="see-3d">Ver mi proteína en 3D <span aria-hidden="true">↓</span></button>${chainBar(r)}${r.realCase ? `<p class="sickle-note">${caseInfo[r.realCase.id].note}</p>` : ''}`;
     $('see-3d').onclick = () => {
       if (!$('focus-mutation').hidden) viewer.focusMutation();
       document.querySelector('.protein-panel').scrollIntoView({
@@ -554,243 +469,9 @@
     clearResult();
     viewer.reset();
     viewer.rotating = !viewer.reduced.matches;
-    viewer.onRotation();
     render();
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
-  // ---- Tarjeta del descubrimiento: una imagen para llevarse el resultado ----
-  const CARD_FONT = "'Segoe UI Variable Text', Aptos, 'Segoe UI', system-ui, sans-serif",
-    BASE_COLORS = { A: '#ff7a66', T: '#ffd447', C: '#4fd8ff', G: '#b693ff' };
-  function roundRect(ctx, x, y, w, h, radius) {
-    ctx.beginPath();
-    ctx.roundRect(x, y, w, h, radius);
-  }
-  // Escribe un texto en varias líneas sin pasarse del ancho; devuelve dónde terminó.
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 5) {
-    const lines = [];
-    let line = '';
-    for (const word of text.split(' ')) {
-      const test = line ? `${line} ${word}` : word;
-      if (ctx.measureText(test).width > maxWidth && line) {
-        lines.push(line);
-        line = word;
-      } else line = test;
-    }
-    if (line) lines.push(line);
-    if (lines.length > maxLines) {
-      lines.length = maxLines;
-      lines[maxLines - 1] += '…';
-    }
-    lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineHeight));
-    return y + lines.length * lineHeight;
-  }
-  function drawCodon(ctx, codon, x, y, size, mark, removed) {
-    [...codon].forEach((b, i) => {
-      const left = x + i * (size + 12);
-      ctx.globalAlpha = removed && i === mark ? 0.35 : 1;
-      ctx.fillStyle = BASE_COLORS[b];
-      roundRect(ctx, left, y, size, size, 18);
-      ctx.fill();
-      if (i === mark) {
-        ctx.lineWidth = 7;
-        ctx.strokeStyle = '#ffffff';
-        ctx.stroke();
-      }
-      ctx.fillStyle = '#1a1335';
-      ctx.font = `800 ${size * 0.58}px ${CARD_FONT}`;
-      ctx.textAlign = 'center';
-      ctx.fillText(b, left + size / 2, y + size * 0.7);
-    });
-    ctx.globalAlpha = 1;
-    ctx.textAlign = 'left';
-  }
-  function cardBadge(r) {
-    if (r.realCase) return `¡Es un caso real: ${r.realCase.name}! · ${r.realCase.notation}`;
-    if (r.species?.id === 'leopard') return '¡El mismo STOP que el del leopardo negro! · TGA';
-    if (r.species)
-      return `¡Como en ${r.species.id === 'llama' ? 'la' : 'el'} ${r.species.name.toLowerCase()}! · ${r.species.notation}`;
-    if (r.effect === 'start-loss') return 'Como el pez de hielo: sin cadena beta';
-    return '';
-  }
-  function drawCard(canvas, r) {
-    const ctx = canvas.getContext('2d'),
-      W = canvas.width,
-      H = canvas.height,
-      pad = 96;
-    const bg = ctx.createRadialGradient(80, 0, 0, 80, 0, 900);
-    bg.addColorStop(0, '#4b2bb8');
-    bg.addColorStop(1, '#0e0b24');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = '#1a1744';
-    ctx.strokeStyle = '#3d3890';
-    ctx.lineWidth = 3;
-    roundRect(ctx, 48, 48, W - 96, H - 96, 40);
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.fillStyle = '#c2bdea';
-    ctx.font = `700 28px ${CARD_FONT}`;
-    ctx.fillText('ADN, GENES Y PROTEÍNAS · FERIA DE CIENCIAS', pad, 140);
-    const title = ctx.createLinearGradient(pad, 0, pad + 640, 0);
-    title.addColorStop(0, '#ff9a4d');
-    title.addColorStop(1, '#c98bff');
-    ctx.fillStyle = title;
-    ctx.font = `800 80px ${CARD_FONT}`;
-    ctx.fillText('Mi descubrimiento', pad, 236);
-    ctx.fillStyle = '#ffd447';
-    ctx.font = `800 50px ${CARD_FONT}`;
-    ctx.fillText(resultHeading(r), pad, 320);
-    if (lastGuess && lastGuess === r.category) {
-      ctx.fillStyle = '#4fd8ff';
-      ctx.font = `700 30px ${CARD_FONT}`;
-      ctx.fillText('✓ Lo predije bien', pad, 368);
-    }
-
-    // El codón antes y después del cambio, con la letra tocada remarcada.
-    const size = 104,
-      codonWidth = 3 * size + 24,
-      top = 410,
-      before = r.originalCodon,
-      after = r.mutatedCodon,
-      markBefore = r.type !== 'ins' && Math.floor(r.position / 3) === r.codon ? r.position % 3 : -1,
-      markAfter = r.type !== 'del' ? r.changeIndex % 3 : -1,
-      startX = (W - (codonWidth * 2 + 120)) / 2;
-    drawCodon(ctx, before, startX, top, size, markBefore, r.type === 'del');
-    ctx.fillStyle = '#c2bdea';
-    ctx.font = `700 64px ${CARD_FONT}`;
-    ctx.textAlign = 'center';
-    ctx.fillText('→', W / 2, top + size * 0.72);
-    ctx.textAlign = 'left';
-    drawCodon(ctx, after, startX + codonWidth + 120, top, size, markAfter, false);
-    const letter = G.DNA[r.position],
-      action =
-        r.type === 'sub'
-          ? `letra ${r.position + 1}: ${letter} → ${r.base}`
-          : r.type === 'del'
-            ? `quité la letra ${r.position + 1} (${letter})`
-            : `agregué una ${r.base} después de la letra ${r.position + 1}`;
-    ctx.fillStyle = '#c2bdea';
-    ctx.font = `600 32px ${CARD_FONT}`;
-    ctx.textAlign = 'center';
-    ctx.fillText(`Codón ${r.codon + 1} · ${action}`, W / 2, top + size + 62);
-    ctx.textAlign = 'left';
-
-    let y = top + size + 120;
-    const badge = cardBadge(r);
-    if (badge) {
-      ctx.font = `800 34px ${CARD_FONT}`;
-      const bw = Math.min(W - 2 * pad, ctx.measureText(badge).width + 56);
-      ctx.fillStyle = '#ffd44722';
-      ctx.strokeStyle = '#ffd447';
-      ctx.lineWidth = 3;
-      roundRect(ctx, (W - bw) / 2, y, bw, 70, 35);
-      ctx.fill();
-      ctx.stroke();
-      ctx.fillStyle = '#ffd447';
-      ctx.textAlign = 'center';
-      ctx.fillText(badge, W / 2, y + 47, W - 2 * pad - 40);
-      ctx.textAlign = 'left';
-      y += 120;
-    }
-    ctx.fillStyle = '#f7f5ff';
-    ctx.font = `500 36px ${CARD_FONT}`;
-    wrapText(ctx, lead(r), pad, y + 20, W - 2 * pad, 50, badge ? 4 : 5);
-
-    // Barras: la proteína normal (146 piezas) contra la mutada.
-    const length = Math.min(146, r.mature.length),
-      first = r.differences[0],
-      same = r.effect === 'frameshift' && first ? first - 1 : length,
-      barX = pad + 250,
-      barW = W - pad - barX,
-      rows = [
-        ['Proteína normal', 146, 0, '146 piezas'],
-        [
-          'Mi proteína',
-          same,
-          length - same,
-          r.lengthUnknown ? `${r.mature.length}+ piezas` : piezas(r.mature.length),
-        ],
-      ];
-    rows.forEach(([label, ok, wrong, count], i) => {
-      const by = 1060 + i * 86;
-      ctx.fillStyle = '#c2bdea';
-      ctx.font = `600 30px ${CARD_FONT}`;
-      ctx.fillText(label, pad, by + 24);
-      ctx.fillStyle = '#100d2c';
-      roundRect(ctx, barX, by, barW, 32, 16);
-      ctx.fill();
-      ctx.fillStyle = '#4fd8ff';
-      if (ok) {
-        roundRect(ctx, barX, by, (barW * ok) / 146, 32, 16);
-        ctx.fill();
-      }
-      if (wrong) {
-        ctx.fillStyle = '#ffb020';
-        ctx.fillRect(barX + (barW * ok) / 146, by, (barW * wrong) / 146, 32);
-      }
-      if (i === 1 && r.effect === 'missense' && r.piece >= 1 && r.piece <= 146) {
-        ctx.fillStyle = '#ff5d6c';
-        ctx.fillRect(barX + (barW * (r.piece - 1)) / 146 - 4, by - 8, 12, 48);
-      }
-      ctx.fillStyle = '#f7f5ff';
-      ctx.font = `700 26px ${CARD_FONT}`;
-      ctx.textAlign = 'right';
-      ctx.fillText(count, W - pad, by - 10);
-      ctx.textAlign = 'left';
-    });
-
-    ctx.fillStyle = '#c2bdea';
-    ctx.font = `500 26px ${CARD_FONT}`;
-    const date = new Date().toLocaleDateString('es-AR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-    ctx.fillText(`${date} · Simulación educativa, no es un diagnóstico`, pad, H - 92);
-  }
-  function openCard() {
-    if (!current || !revealed) return;
-    const canvas = $('card-canvas');
-    drawCard(canvas, current);
-    $('card-heading').textContent = 'Tu descubrimiento';
-    canvas.setAttribute('aria-label', `Tarjeta: ${resultHeading(current)}. ${lead(current)}`);
-    $('card-share').hidden = !navigator.canShare;
-    $('card-dialog').querySelector('.card-photo').textContent = standMode
-      ? 'Sacale una foto con tu celular para llevártela.'
-      : 'Descargala o compartila para llevártela.';
-    $('card-dialog').showModal();
-  }
-  function cardFile() {
-    return new Promise(resolve =>
-      $('card-canvas').toBlob(blob =>
-        resolve(new File([blob], 'mi-descubrimiento-adn.png', { type: 'image/png' })),
-      ),
-    );
-  }
-  $('close-card').onclick = () => $('card-dialog').close();
-  $('card-download').onclick = async () => {
-    const file = await cardFile(),
-      url = URL.createObjectURL(file),
-      a = document.createElement('a');
-    a.href = url;
-    a.download = file.name;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  };
-  $('card-share').onclick = async () => {
-    const file = await cardFile();
-    if (!navigator.canShare?.({ files: [file] }))
-      return notify('Este navegador no permite compartir imágenes. Descargala.');
-    try {
-      await navigator.share({
-        files: [file],
-        title: 'Mi descubrimiento',
-        text: '¿Qué cambia con una letra del ADN?',
-      });
-    } catch {}
-  };
-
   // ---- Pestañas y estadísticas del stand ----
   let currentTab = 'proyecto';
   function showTab(tab) {
@@ -848,34 +529,6 @@
       ? 'Los datos persisten en este navegador. Descargalos antes de cambiar de equipo o borrar los datos del navegador.'
       : 'Guardado permanente no disponible. Descargá los resultados antes de cerrar.';
   }
-  function setModel(model) {
-    viewer.model = model;
-    viewer.reset();
-    all('[data-model]').forEach(b => {
-      b.classList.toggle('active', b.dataset.model === model);
-      b.setAttribute('aria-pressed', String(b.dataset.model === model));
-    });
-    $('all-chains').disabled = model === 'af';
-    $('confidence-label').hidden = model !== 'af';
-    $('viewer-badge').textContent =
-      model === 'pdb' ? 'CADENA BETA · PDB 2HHB' : 'CADENA BETA · ALPHAFOLD P68871';
-    $('model-caption').textContent =
-      model === 'pdb'
-        ? 'Estructura medida por rayos X. Cada tramo conecta las posiciones reales de los aminoácidos.'
-        : 'Predicción de la cadena beta normal. La confianza de IA describe el modelo, no el efecto de una mutación.';
-    updateLegend();
-  }
-  function updateLegend() {
-    const confidence = viewer.model === 'af' && viewer.confidence;
-    if (viewer.evolution && !viewer.result) {
-      $('protein-legend').innerHTML =
-        '<span class="gradient-line" style="background:linear-gradient(90deg,#4a4296,#ff9a4d 85%,#ffd447 85%)"></span><span>Cambia en muchas especies</span><span>Igual en las 16</span>';
-      return;
-    }
-    $('protein-legend').innerHTML = confidence
-      ? '<span class="gradient-line" style="background:linear-gradient(90deg,#388de7 25%,#65cbf3 25%,#65cbf3 50%,#ffdb13 50%,#ffdb13 75%,#ff7d45 75%)"></span><span>pLDDT &gt;90</span><span>70–90</span><span>50–70</span><span>&lt;50</span>'
-      : '<span class="gradient-line"></span><span>Inicio de la cadena</span><span>Final</span>';
-  }
   // ---- Botones ----
   all('[data-tab]').forEach(
     b =>
@@ -889,13 +542,6 @@
     e.preventDefault();
     stopTour();
     showTab('proyecto');
-  };
-  $('challenge').checked = challenge;
-  $('challenge').onchange = e => {
-    challenge = e.target.checked;
-    try {
-      localStorage.setItem(challengeKey, challenge ? '1' : '0');
-    } catch {}
   };
   $('previous').onclick = () => {
     offset -= Math.max(1, perView - 1);
@@ -956,12 +602,6 @@
     $('tool').scrollIntoView({ block: 'nearest' });
     notify(caseInfo[c.id].toast);
   };
-  all('[data-model]').forEach(b => (b.onclick = () => setModel(b.dataset.model)));
-  $('all-chains').onchange = e => {
-    viewer.all = e.target.checked;
-    viewer.focus = null;
-    viewer.zoom = 1;
-  };
   // Modo evolución del visor: dorado = pieza igual en las 16 especies; el punto amarillo es el hierro del hemo.
   const study = Evolution.hemeStudy(MODELS.pdb);
   viewer.evolutionHeme = (() => {
@@ -974,15 +614,8 @@
         : best,
     );
   })();
-  function setEvolutionView(on) {
-    $('evo-color').checked = on;
-    viewer.evolution = on ? study.conservation : null;
-    updateLegend();
-  }
-  $('evo-color').onchange = e => setEvolutionView(e.target.checked);
-  // Con un resultado a la vista, el visor vuelve a marcar la mutación: la leyenda lo acompaña.
-  document.addEventListener('genoma:resultado', updateLegend);
-  document.addEventListener('genoma:limpio', updateLegend);
+  // Con un resultado nuevo, el visor vuelve a marcar la mutación.
+  document.addEventListener('genoma:resultado', () => (viewer.evolution = null));
   all('[data-evo-view]').forEach(
     b =>
       (b.onclick = () => {
@@ -990,44 +623,16 @@
         showTab('lab');
         clearResult();
         render();
-        setModel('pdb');
-        setEvolutionView(true);
-        document.querySelector('.viewer-more').open = true;
+        viewer.model = 'pdb';
+        viewer.reset();
+        viewer.evolution = study.conservation;
         document.querySelector('.protein-panel').scrollIntoView({ block: 'center' });
         notify(
           'Dorado: piezas iguales en las 16 especies. El punto amarillo es el hierro del hemo.',
         );
       }),
   );
-  $('confidence').onchange = e => {
-    viewer.confidence = e.target.checked;
-    updateLegend();
-  };
-  $('rotate').onclick = () => {
-    viewer.rotating = !viewer.rotating;
-    viewer.onRotation();
-  };
   $('focus-mutation').onclick = () => viewer.focusMutation();
-  // Impresión 3D: la cadena beta como un tubo cerrado, con una bolita en la pieza que cambió.
-  $('stl-download').onclick = () => {
-    const model = MODELS[viewer.model],
-      r = viewer.result,
-      mark = r && r.effect === 'missense' && r.piece >= 1 && r.piece <= 146 ? r.piece : 0,
-      file = new Blob([STL.toSTL(STL.proteinMeshes(model.chains[model.beta], { mark }))], {
-        type: 'model/stl',
-      }),
-      url = URL.createObjectURL(file),
-      a = document.createElement('a');
-    a.href = url;
-    a.download = mark ? `hemoglobina-beta-pieza-${mark}.stl` : 'hemoglobina-beta.stl';
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    notify(
-      mark
-        ? `Listo: la cadena beta con una bolita en la pieza ${mark}. Imprimila con soportes.`
-        : 'Listo: la cadena beta para imprimir en 3D, de unos 8 cm. Imprimila con soportes.',
-    );
-  };
   $('zoom-in').onclick = () => viewer.zoomBy(1.2);
   $('zoom-out').onclick = () => viewer.zoomBy(1 / 1.2);
   $('reset-view').onclick = () => viewer.reset();
@@ -1077,37 +682,6 @@
     a.download = `resultados-adn-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-  };
-  $('pdb-file').onchange = async e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-      if (file.size > 2e6)
-        throw new Error('El archivo es demasiado grande. Usá el PDB de una sola cadena P68871.');
-      const text = await file.text(),
-        parsed = G.parsePDB(text, true);
-      MODELS.af = parsed;
-      try {
-        localStorage.setItem('adn-hbb-custom-pdb', text);
-        $('import-status').textContent = 'Modelo verificado y guardado: hemoglobina beta P68871.';
-      } catch {
-        $('import-status').textContent =
-          'Modelo verificado. No pudo guardarse y estará disponible solo durante esta sesión.';
-      }
-      setModel('af');
-      notify('Modelo de hemoglobina beta cargado.');
-    } catch (err) {
-      $('import-status').textContent = err.message;
-    }
-    e.target.value = '';
-  };
-  $('restore-model').onclick = () => {
-    MODELS.af = JSON.parse(JSON.stringify(bundledAF));
-    try {
-      localStorage.removeItem('adn-hbb-custom-pdb');
-    } catch {}
-    setModel('af');
-    $('import-status').textContent = 'Modelo incluido restaurado: AlphaFold P68871, versión 6.';
   };
   if (document.modelContext?.registerTool) {
     try {
@@ -1201,7 +775,6 @@
       clearResult();
       viewer.reset();
       viewer.rotating = !viewer.reduced.matches;
-      viewer.onRotation();
       position = c.position;
       centerOn(position);
       render();
@@ -1378,245 +951,6 @@
     if (standMode && !tour.auto && performance.now() - lastActivity > STAND_IDLE) goIdle();
   }, 5000);
 
-  // Naturaleza: mapa de la malaria y las mutaciones que protegen (esquema por país, códigos ISO 3166 numéricos).
-  const AFRICA_HBS =
-      '686 270 624 324 694 430 384 466 854 288 768 204 562 566 120 148 140 729 728 226 266 178 180 024 800 404 834 646 108 894 454 508',
-    MAP_LAYERS = {
-      hbs: {
-        name: 'Anemia falciforme (HbS) frecuente',
-        ids: AFRICA_HBS + ' 682 512 887 356',
-        text: 'La mutación de la anemia falciforme es frecuente en África al sur del Sahara, en partes de Arabia y en la India: justo donde la malaria era más común.',
-      },
-      hbc: {
-        name: 'Hemoglobina C (HbC) frecuente',
-        ids: '854 288 466 768 204 384 566',
-        text: 'La hemoglobina C, el otro cambio del codón 7, se concentra en África occidental, una zona de malaria intensa. También protege, sobre todo con dos copias.',
-      },
-      thal: {
-        name: 'Talasemias y HbE frecuentes',
-        ids: '380 300 196 792 364 368 760 422 682 586 356 050 104 764 418 116 704 458 360 608 144 818 788',
-        text: 'Donde no llegó la mutación falciforme, otras mutaciones de la hemoglobina se volvieron comunes: talasemias en el Mediterráneo y Asia, y HbE en el sudeste asiático. También coinciden con la malaria.',
-      },
-    },
-    MALARIA_IDS = new Set(
-      (
-        AFRICA_HBS +
-        ' 231 706 232 450 716 516 072 478 262 682 512 887 356 586 050 104 764 418 116 704 458 360 608 144 598 626 380 300 196 792 364 368 760 422 400 818 788 012 504 724 620 340 222 558 188 591 076 170 862 328 740 604 068 218 600 332 214 192 388 484 320 084 004'
-      ).split(' '),
-    );
-  let mapLayer = 'hbs';
-  function renderMap() {
-    const svg = $('world-map');
-    if (!svg.childElementCount) {
-      svg.setAttribute('viewBox', `0 0 ${WORLD_MAP.width} ${WORLD_MAP.height}`);
-      svg.innerHTML = `<defs><pattern id="malaria-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2.6" height="7" fill="#ff5d6c"/></pattern></defs><g class="countries">${WORLD_MAP.countries.map(c => `<path data-id="${c.id}" d="${c.d}"/>`).join('')}</g><g class="malaria">${WORLD_MAP.countries
-        .filter(c => MALARIA_IDS.has(c.id))
-        .map(c => `<path d="${c.d}"/>`)
-        .join('')}</g>`;
-    }
-    const layer = MAP_LAYERS[mapLayer],
-      ids = new Set(layer.ids.split(' '));
-    svg
-      .querySelectorAll('.countries path')
-      .forEach(p => p.classList.toggle('on', ids.has(p.dataset.id)));
-    svg.querySelector('.malaria').style.display = $('map-malaria').checked ? '' : 'none';
-    all('[data-layer]').forEach(b => {
-      const on = b.dataset.layer === mapLayer;
-      b.classList.toggle('active', on);
-      b.setAttribute('aria-pressed', String(on));
-    });
-    $('map-layer-name').textContent = layer.name;
-    $('map-text').textContent = layer.text;
-  }
-  all('[data-layer]').forEach(
-    b =>
-      (b.onclick = () => {
-        mapLayer = b.dataset.layer;
-        renderMap();
-      }),
-  );
-  $('map-malaria').onchange = renderMap;
-
-  // Capítulos de Naturaleza: se ve una historia por vez para que la página no quede cargada.
-  function showChapter(name) {
-    all('.chapter').forEach(b => {
-      const on = b.dataset.chapter === name;
-      b.classList.toggle('active', on);
-      b.setAttribute('aria-selected', String(on));
-      b.tabIndex = on ? 0 : -1;
-    });
-    all('.chapter-page').forEach(p => (p.hidden = p.id !== `chapter-${name}`));
-  }
-  all('.chapter').forEach(b => {
-    b.onclick = () => showChapter(b.dataset.chapter);
-    b.onkeydown = e => {
-      const tabs = all('.chapter'),
-        step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
-      if (!step) return;
-      const next = tabs[(tabs.indexOf(b) + step + tabs.length) % tabs.length];
-      showChapter(next.dataset.chapter);
-      next.focus();
-    };
-  });
-
-  // Misma proyección que el mapa (Natural Earth): pasa de longitud y latitud a un punto del dibujo.
-  function project(lon, lat) {
-    const l = (lon * Math.PI) / 180,
-      p = (lat * Math.PI) / 180,
-      p2 = p * p,
-      p4 = p2 * p2,
-      x = l * (0.8707 - 0.131979 * p2 + p4 * (-0.013791 + p4 * (0.003971 * p2 - 0.001529 * p4))),
-      y = p * (1.007226 + p2 * (0.015085 + p4 * (-0.044475 + 0.028874 * p2 - 0.005916 * p4)));
-    return [WORLD_MAP.width / 2 + 175.5 * x, 270.3 - 175.5 * y];
-  }
-  const shape = points =>
-    'M' +
-    points
-      .map(([lon, lat]) =>
-        project(lon, lat)
-          .map(n => n.toFixed(1))
-          .join(','),
-      )
-      .join('L') +
-    'Z';
-  const land = () => WORLD_MAP.countries.map(c => `<path d="${c.d}"/>`).join('');
-
-  // Dónde viven el jaguar y el leopardo (esquema aproximado; se recorta con la forma de los continentes).
-  // prettier-ignore
-  const CAT_RANGES = {
-    jaguar: [
-      [[-109, 29], [-105, 24], [-104, 19], [-97, 16], [-92, 15], [-90, 21.5], [-87, 21], [-87, 16], [-83, 10], [-79, 9], [-75, 11], [-71, 12], [-63, 11], [-60, 8.5], [-52, 5], [-50, 0], [-44, -2.5], [-38, -8], [-39, -15], [-41, -21], [-48, -26], [-54, -28], [-58, -30], [-62, -29], [-65, -24], [-66, -18], [-70, -13], [-75, -10], [-78, -4], [-79, 0], [-78, 4], [-77, 8], [-80, 8], [-85, 11], [-90, 13], [-95, 16], [-99, 20], [-106, 27]],
-    ],
-    leopard: [
-      [[-17, 13], [-12, 9], [-5, 5], [3, 6], [9, 4], [9, -1], [12, -6], [13, -12], [12, -18], [15, -27], [18, -34], [25, -34.5], [30, -31], [33, -26], [36, -20], [40, -14], [40, -5], [42, 0], [48, 4], [51, 11], [44, 11], [42, 13], [38, 15], [34, 13], [24, 12], [16, 13], [4, 13], [-5, 15], [-12, 15]],
-      [[61, 28], [66, 30], [70, 33], [74, 35], [80, 31], [88, 28], [95, 29], [100, 31], [106, 32], [112, 33], [119, 31], [121, 25], [114, 22], [108, 21], [106, 17], [109, 12], [104, 9], [103, 2], [100, 4], [98, 9], [97, 16], [94, 19], [91, 22], [87, 22], [82, 17], [80, 13], [80, 10], [78, 8], [76, 9], [73, 16], [72, 21], [69, 23], [64, 25]],
-      [[79.7, 9.8], [81.9, 8.5], [81.7, 6.3], [80.2, 5.9], [79.8, 7.5]],
-      [[105.2, -6.2], [110, -6.6], [114.5, -7.6], [114.5, -8.7], [108, -7.8], [105.3, -6.9]],
-      [[44, 38], [46, 41], [49, 41], [54, 38], [60, 37], [63, 35], [62, 30], [58, 27], [54, 28], [50, 30], [47, 32], [45, 35]],
-      [[43, 13], [45, 15], [52, 17], [55, 18], [54, 16.5], [48, 14], [44, 12.6]],
-      [[127, 42], [131, 42.5], [134, 44], [135, 47], [131, 47], [128, 44]],
-    ],
-  };
-  function renderCatsMap() {
-    const svg = $('cats-map'),
-      label = (text, lon, lat, cls) => {
-        const [x, y] = project(lon, lat);
-        return `<text class="map-label ${cls}" x="${x.toFixed(0)}" y="${y.toFixed(0)}">${text}</text>`;
-      };
-    svg.setAttribute('viewBox', '150 120 720 270');
-    svg.innerHTML = `<defs><clipPath id="land-clip">${land()}</clipPath></defs><g class="countries">${land()}</g>${[
-      'jaguar',
-      'leopard',
-    ]
-      .map(
-        cat =>
-          `<g class="range ${cat}" clip-path="url(#land-clip)"><path d="${CAT_RANGES[cat].map(shape).join('')}"/></g>`,
-      )
-      .join(
-        '',
-      )}${label('Jaguar', -72, -6, 'jaguar')}${label('Leopardo', 22, -5, 'leopard')}${label('Leopardo', 92, 24, 'leopard')}`;
-  }
-
-  // Animales récord sobre el mapa: tocar uno abre su tarjeta.
-  const ANIMAL_PINS = [
-    { id: 'llama', name: 'Llama', lon: -68, lat: -17, cls: 'mountain' },
-    { id: 'goose', name: 'Ánsar indio', lon: 86, lat: 29, cls: 'sky' },
-    { id: 'mammoth', name: 'Mamut lanudo', lon: 125, lat: 66, cls: 'ice' },
-    { id: 'icefish', name: 'Pez de hielo', lon: -58, lat: -58, cls: 'water' },
-  ];
-  function openSpecies(id) {
-    const card = document.querySelector(`.species[data-species="${id}"]`),
-      button = card.querySelector('.species-open');
-    if (button.getAttribute('aria-expanded') !== 'true') button.click();
-    card.scrollIntoView({ behavior: viewer.reduced.matches ? 'auto' : 'smooth', block: 'center' });
-  }
-  function renderAnimalsMap() {
-    const svg = $('animals-map');
-    svg.setAttribute('viewBox', `0 0 ${WORLD_MAP.width} ${WORLD_MAP.height}`);
-    svg.innerHTML = `<g class="countries">${land()}</g>${ANIMAL_PINS.map(a => {
-      const [x, y] = project(a.lon, a.lat);
-      return `<g class="pin ${a.cls}" role="button" tabindex="0" data-pin="${a.id}" aria-label="${a.name}" transform="translate(${x.toFixed(0)} ${y.toFixed(0)})"><rect class="hit" x="-70" y="-42" width="140" height="58" rx="12"/><circle class="pulse" r="12"/><circle r="9"/><text y="-18">${a.name}</text></g>`;
-    }).join('')}`;
-    svg.querySelectorAll('.pin').forEach(pin => {
-      pin.onclick = () => openSpecies(pin.dataset.pin);
-      pin.onkeydown = e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openSpecies(pin.dataset.pin);
-        }
-      };
-    });
-  }
-
-  // Pelaje dibujado: rosetas grandes con puntos (jaguar) o chicas sin puntos (leopardo).
-  function furSVG(kind) {
-    const jaguar = kind.startsWith('jaguar'),
-      black = kind.endsWith('black'),
-      base = black ? '#17121c' : jaguar ? '#dca04c' : '#e6b464',
-      inner = black ? '#120e16' : jaguar ? '#b97a34' : '#cf9447',
-      spot = black ? '#050307' : '#2a1a10',
-      gap = jaguar ? 62 : 36,
-      r0 = gap * 0.3;
-    let seed = jaguar ? 11 : 5;
-    const rand = () => (seed = (seed * 9301 + 49297) % 233280) / 233280,
-      f = n => n.toFixed(1);
-    let centers = '',
-      rings = '';
-    for (let row = 0, y = 4; y < 200; row++, y += gap * 0.82)
-      for (let x = (row % 2) * (gap / 2) - 8; x < 340; x += gap) {
-        const cx = x + (rand() - 0.5) * gap * 0.16,
-          cy = y + (rand() - 0.5) * gap * 0.16,
-          r = r0 * (0.85 + rand() * 0.3),
-          blobs = jaguar ? 6 + Math.floor(rand() * 2) : 5,
-          turn = rand() * Math.PI;
-        // El centro de cada roseta es un poco más oscuro que el resto del pelo.
-        centers += `<ellipse cx="${f(cx)}" cy="${f(cy)}" rx="${f(r * 0.95)}" ry="${f(r * 0.8)}"/>`;
-        for (let k = 0; k < blobs; k++) {
-          if (rand() < 0.12) continue;
-          const a = turn + (k / blobs) * Math.PI * 2,
-            bx = cx + Math.cos(a) * r,
-            by = cy + Math.sin(a) * r * 0.85;
-          rings += `<ellipse cx="${f(bx)}" cy="${f(by)}" rx="${f(r * (jaguar ? 0.42 : 0.5))}" ry="${f(r * 0.2)}" transform="rotate(${((a * 180) / Math.PI + 90).toFixed(0)} ${f(bx)} ${f(by)})"/>`;
-        }
-        // Solo el jaguar tiene puntos dentro de las rosetas.
-        if (jaguar)
-          for (let k = 0, n = 1 + Math.floor(rand() * 3); k < n; k++)
-            rings += `<circle cx="${f(cx + (rand() - 0.5) * r * 0.7)}" cy="${f(cy + (rand() - 0.5) * r * 0.6)}" r="${f(r * 0.13)}"/>`;
-      }
-    return `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice"><rect width="320" height="180" fill="${base}"/><g fill="${inner}">${centers}</g><g fill="${spot}" opacity="${black ? 0.8 : 0.92}">${rings}</g>${black ? `<defs><linearGradient id="shine-${kind}" x1="0" y1="0" x2="1" y2="1"><stop offset=".3" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".16"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><rect width="320" height="180" fill="url(#shine-${kind})"/>` : ''}</svg>`;
-  }
-  all('[data-fur]').forEach(el => (el.innerHTML = furSVG(el.dataset.fur)));
-
-  // Tarjetas de especies: se abren al tocarlas y algunas llevan su cambio al simulador.
-  all('.species-open').forEach(
-    b =>
-      (b.onclick = () => {
-        const answer = b.nextElementSibling,
-          open = answer.hidden;
-        answer.hidden = !open;
-        b.setAttribute('aria-expanded', String(open));
-        b.textContent = open ? 'Ocultar' : 'Descubrí cómo';
-        b.closest('.species').classList.toggle('open', open);
-      }),
-  );
-  const tries = {
-    ...Object.fromEntries(
-      G.SPECIES.map(c => [c.id, { position: c.position, type: 'sub', base: c.base }]),
-    ),
-    icefish: { position: 0, type: 'sub', base: 'C' },
-  };
-  all('.species-try').forEach(
-    b =>
-      (b.onclick = () => {
-        const m = tries[b.dataset.try];
-        showTab('lab');
-        clearResult();
-        position = m.position;
-        centerOn(position);
-        apply(m, { guess: false });
-      }),
-  );
-
   // ---- Apariciones al bajar: cada sección entra suavemente la primera vez que se ve ----
   if ('IntersectionObserver' in window && !viewer.reduced.matches) {
     const appear = new IntersectionObserver(
@@ -1629,7 +963,7 @@
       },
       { rootMargin: '0px 0px -8% 0px' },
     );
-    for (const el of document.querySelectorAll('.poster-card, .species, .learning-grid article')) {
+    for (const el of document.querySelectorAll('.poster-card, .learning-grid article')) {
       el.classList.add('reveal');
       appear.observe(el);
     }
@@ -1644,7 +978,6 @@
       stopTour();
       showTab(tab);
     },
-    showChapter,
     startTour,
     get tab() {
       return currentTab;
@@ -1670,9 +1003,6 @@
   renderSurvey();
   renderStats();
   render();
-  renderMap();
-  renderCatsMap();
-  renderAnimalsMap();
   if (location.hash === '#jurado') startTour();
 
   // ---- Sin internet: guarda una copia de la app en el dispositivo (solo funciona publicada en la web) ----

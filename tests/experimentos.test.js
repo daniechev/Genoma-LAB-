@@ -1,4 +1,4 @@
-// Pruebas de los experimentos nuevos: evolución, mapa de mutaciones e impresión 3D.
+// Pruebas de los experimentos nuevos: evolución y mapa de mutaciones.
 // Ejecutar con: node --test
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -6,7 +6,6 @@ const fs = require('node:fs');
 const path = require('node:path');
 const G = require('../js/genetica.js');
 const E = require('../js/evolucion.js');
-const S = require('../js/stl.js');
 
 const MODELS = new Function(
   fs.readFileSync(path.join(__dirname, '..', 'js', 'datos-modelos.js'), 'utf8') + ';return MODELS',
@@ -66,29 +65,4 @@ test('el mapa de las 1.332 sustituciones coincide con el póster', () => {
       total[effect],
     );
   assert.deepEqual(E.missenseSeenInNature(), { missense: 957, seen: 165 });
-});
-
-test('el modelo para imprimir en 3D es una malla cerrada', () => {
-  const meshes = S.proteinMeshes(MODELS.pdb.chains.B, { mark: 6 });
-  for (const m of meshes) {
-    // Cada arista se recorre una vez en cada sentido: la superficie no tiene agujeros.
-    const edges = new Map();
-    for (const [a, b, c] of m.triangles)
-      for (const [x, y] of [
-        [a, b],
-        [b, c],
-        [c, a],
-      ])
-        edges.set(`${x},${y}`, (edges.get(`${x},${y}`) || 0) + 1);
-    for (const [key, n] of edges) {
-      const [x, y] = key.split(',');
-      assert.equal(n, 1);
-      assert.equal(edges.get(`${y},${x}`), 1);
-    }
-    assert.ok(S.signedVolume(m) > 0, 'las caras tienen que mirar hacia afuera');
-  }
-  const stl = new DataView(S.toSTL(meshes));
-  const triangles = meshes.reduce((n, m) => n + m.triangles.length, 0);
-  assert.equal(stl.getUint32(80, true), triangles);
-  assert.equal(stl.byteLength, 84 + 50 * triangles);
 });

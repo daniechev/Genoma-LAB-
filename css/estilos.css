@@ -575,41 +575,6 @@ details p {
   color: var(--muted);
   font-size: 16px;
 }
-.result-metrics {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 18px;
-}
-.result-metrics > div {
-  flex: 1;
-  min-width: 150px;
-  border-left: 3px solid var(--pink);
-  padding-left: 12px;
-  font-size: 15px;
-  color: var(--muted);
-}
-.result-metrics b {
-  display: block;
-  font: 700 22px var(--mono);
-  color: var(--text);
-}
-.result-amino {
-  font: 15px/1.9 var(--mono);
-  word-break: break-all;
-  max-height: 170px;
-  overflow: auto;
-  margin-top: 14px;
-  padding: 12px;
-  background: var(--well);
-  border-radius: 10px;
-  color: var(--muted);
-}
-.result-amino mark {
-  background: var(--red);
-  color: #fff;
-  border-radius: 3px;
-}
 
 /* Simulador en una sola pantalla */
 .hero {
@@ -906,48 +871,6 @@ details p {
   margin-top: 8px;
 }
 
-/* Naturaleza */
-.nature {
-  padding: 10px 0 40px;
-}
-.nature-block {
-  margin-bottom: 22px;
-}
-.nature-block > p {
-  margin-top: 12px;
-}
-.poster-card .nature-sub {
-  font-size: 22px;
-  margin: 34px 0 12px;
-}
-.nature-note {
-  font-size: 16px;
-}
-.genotypes {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-top: 20px;
-}
-.genotype {
-  display: grid;
-  gap: 4px;
-  align-content: start;
-  border-left: 2px solid var(--hair);
-  padding: 4px 0 4px 20px;
-  color: var(--muted);
-  font-size: 16px;
-}
-.genotype b {
-  color: var(--text);
-  font-size: 18px;
-}
-.genotype.as {
-  border-color: var(--accent);
-}
-.genotype.as b {
-  color: var(--accent);
-}
 .cells {
   display: flex;
   align-items: center;
@@ -967,94 +890,7 @@ details p {
   background: #c9505e;
   height: 20px;
 }
-.map-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
-.chip {
-  background: var(--card-2);
-  border: 2px solid var(--line);
-  border-radius: 999px;
-  padding: 8px 16px;
-  font-size: 16px;
-  font-weight: 600;
-  min-height: 44px;
-}
-.chip.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--ink);
-}
-.map-malaria {
-  margin-left: auto;
-}
-.map-figure {
-  margin: 14px 0 0;
-}
-#world-map {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-#world-map .countries path {
-  fill: #2c2868;
-  stroke: #100d2c;
-  stroke-width: 0.6;
-}
-#world-map .countries path.on {
-  fill: var(--accent);
-}
-#world-map .malaria path {
-  fill: url(#malaria-hatch);
-  opacity: 0.75;
-  stroke: none;
-  pointer-events: none;
-}
-.map-figure figcaption {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 22px;
-  align-items: center;
-  padding: 10px 6px 4px;
-  font-size: 15px;
-  color: var(--muted);
-}
-.map-figure figcaption p {
-  flex-basis: 100%;
-  margin-top: 4px;
-  color: var(--text);
-  font-size: 17px;
-}
-.map-key {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.map-key i {
-  width: 18px;
-  height: 14px;
-  border-radius: 4px;
-}
-.map-key i.fill {
-  background: var(--accent);
-}
-.map-key i.hatch {
-  background: repeating-linear-gradient(45deg, #ff5d6c 0 2px, transparent 2px 5px);
-  border: 1px solid #ff5d6c80;
-}
-.map-source {
-  font-size: 14px;
-  margin-top: 10px;
-}
-.species-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-top: 20px;
-  align-items: start;
-}
+
 /* Las especies sí son tarjetas: se tocan para descubrir la respuesta. */
 .species {
   display: grid;
@@ -1077,101 +913,11 @@ details p {
   border-color: #4fd8ff80;
   box-shadow: 0 0 40px #4fd8ff1f;
 }
-.species-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 18px;
-  display: grid;
-  place-items: center;
-  margin-bottom: 6px;
-}
-.species-icon svg {
-  width: 40px;
-  height: 40px;
-}
-.species-icon.mountain {
-  background: #ff9a4d33;
-  color: var(--orange);
-}
-.species-icon.sky {
-  background: #b693ff33;
-  color: var(--G);
-}
-.species-icon.ice {
-  background: #4fd8ff26;
-  color: var(--cyan);
-}
-.species-icon.water {
-  background: #ffffff1a;
-  color: #e6e4ff;
-}
+
 .species h3 {
   font-size: 24px;
 }
-.species-place {
-  color: var(--cyan);
-  font-size: 15px;
-  font-weight: 600;
-}
-.species-question {
-  font-size: 19px;
-  margin: 6px 0 10px;
-}
-.species-open {
-  justify-self: start;
-  min-height: 46px;
-  padding: 8px 18px;
-}
-.species-answer {
-  display: grid;
-  gap: 10px;
-  margin-top: 10px;
-  color: var(--muted);
-  font-size: 16px;
-}
-.species-answer b {
-  color: var(--text);
-}
-.species-change {
-  color: var(--text) !important;
-  font: 600 15px/1.5 var(--mono);
-  background: var(--card-2);
-  border-radius: 10px;
-  padding: 10px 12px;
-}
-.species-change b {
-  color: var(--accent) !important;
-}
-.species-limit {
-  font-style: italic;
-}
-.species-tries {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.species-tries .ghost {
-  min-height: 46px;
-  padding: 8px 14px;
-  font-family: var(--mono);
-}
-.species-answer .primary {
-  justify-self: start;
-  min-height: 50px;
-  font-size: 17px;
-  padding: 10px 20px;
-}
-.species-source {
-  font-size: 13px;
-  color: #8e89c4;
-}
-.species-note {
-  border-color: var(--cyan);
-  background: #4fd8ff14;
-}
-.species-note b {
-  color: var(--cyan);
-}
+
 .sickle-note .text-button {
   padding: 4px 0;
   font-size: 16px;
@@ -1270,81 +1016,7 @@ canvas:active {
   font-weight: 600;
   color: var(--text);
 }
-.viewer-more {
-  margin: 0 22px 22px;
-}
-.science-note[hidden] + .viewer-more {
-  margin-top: 0;
-}
-.viewer-tabs {
-  display: flex;
-  gap: 6px;
-  margin-top: 14px;
-  background: var(--well);
-  border-radius: 12px;
-  padding: 5px;
-}
-.viewer-tabs button {
-  flex: 1;
-  background: transparent;
-  color: var(--muted);
-  padding: 9px 6px;
-  border-radius: 9px;
-  font-size: 16px;
-  font-weight: 600;
-}
-.viewer-tabs .active {
-  background: var(--card-2);
-  color: var(--text);
-}
-.viewer-badge {
-  font: 700 14px var(--mono);
-  letter-spacing: 0.06em;
-  color: var(--cyan);
-}
-details .viewer-caption {
-  font-size: 15px;
-  margin-top: 6px;
-}
-.viewer-settings {
-  display: grid;
-  gap: 12px;
-  margin-top: 16px;
-  font-size: 16px;
-}
-.viewer-settings label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.viewer-settings input {
-  width: 22px;
-  height: 22px;
-  accent-color: var(--pink);
-}
-.viewer-settings button {
-  justify-self: start;
-  background: var(--card-2);
-  border: 2px solid var(--line);
-  border-radius: 12px;
-  padding: 9px 16px;
-  font-size: 16px;
-}
-.protein-legend {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 7px;
-  margin-top: 18px;
-  font-size: 14px;
-  color: var(--muted);
-}
-.gradient-line {
-  width: 100%;
-  height: 5px;
-  border-radius: 3px;
-  background: linear-gradient(90deg, #3ed4ff, #6f8bff, #ff7ad9);
-}
+
 .disclaimer {
   text-align: center;
   color: #9792cc;
@@ -1420,17 +1092,7 @@ details .viewer-caption {
   font: 700 17px var(--mono);
   color: var(--accent);
 }
-.file-label {
-  display: block;
-  margin: 22px 0 8px;
-  font-size: 16px;
-}
-.file-label input {
-  display: block;
-  margin-top: 10px;
-  max-width: 100%;
-  font-size: 15px;
-}
+
 .reading-page > .primary {
   margin-top: 18px;
 }
@@ -1983,21 +1645,15 @@ body.touring .protein-panel {
     border-left: 0;
     border-top: 1px solid var(--hair);
   }
-  .genotypes {
-    gap: 18px;
-  }
+
   .learning-grid,
   .stats-layout,
   .poster-grid,
   .results-layout,
-  .genotypes,
-  .evolution,
-  .species-grid {
+  .evolution {
     grid-template-columns: 1fr;
   }
-  .map-malaria {
-    margin-left: 0;
-  }
+
   .tour-bar {
     grid-template-columns: 1fr;
     padding: 14px 16px;
@@ -2042,7 +1698,7 @@ body.touring .protein-panel {
   }
   .topbar nav {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     border-radius: 18px;
   }
   .nav {
@@ -2140,44 +1796,6 @@ body.touring .protein-panel {
 }
 .stand-toggle input {
   margin-top: 4px;
-}
-
-/* Tarjeta del descubrimiento */
-.save-card {
-  margin-top: 18px;
-  background: #ffffff0a;
-  border: 1px solid #ffffff24;
-  border-radius: 999px;
-}
-.card-dialog {
-  max-width: 560px;
-  padding: 26px;
-}
-.card-dialog h2 {
-  margin-top: 0;
-}
-#card-canvas {
-  display: block;
-  margin: 0 auto;
-  max-width: 100%;
-  max-height: 58vh;
-  width: auto;
-  height: auto;
-  border-radius: 14px;
-}
-.card-photo {
-  text-align: center;
-}
-.card-actions {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-/* En la computadora del stand, descargar no sirve: se le saca una foto. */
-body.stand #card-download,
-body.stand #card-share {
-  display: none;
 }
 
 /* Código QR para llevarse la app al celular */
@@ -2281,12 +1899,10 @@ body::after {
   opacity: 1;
   transform: none;
 }
-.poster-grid > .reveal:nth-child(2),
-.species-grid > .reveal:nth-child(2) {
+.poster-grid > .reveal:nth-child(2) {
   transition-delay: 0.12s;
 }
-.poster-grid > .reveal:nth-child(3),
-.species-grid > .reveal:nth-child(3) {
+.poster-grid > .reveal:nth-child(3) {
   transition-delay: 0.24s;
 }
 @media print {
@@ -2338,114 +1954,14 @@ body::after {
   }
 }
 
-/* Naturaleza en capítulos: una historia por vez */
-.chapters {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin: 8px 0 34px;
-}
-.chapter {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
-  column-gap: 14px;
-  align-items: center;
-  text-align: left;
-  padding: 14px 4px;
-  border-radius: 0;
-  background: none;
-  border-bottom: 3px solid transparent;
-  color: var(--muted);
-  opacity: 0.7;
-  transition:
-    border-color 0.25s,
-    opacity 0.25s;
-}
-.chapter:hover {
-  opacity: 1;
-}
-.chapter.active {
-  border-bottom-color: var(--orange);
-  color: var(--text);
-  opacity: 1;
-}
-.chapter b {
-  font-size: 18px;
-  color: var(--text);
-}
-.chapter > span:last-child {
-  grid-column: 2;
-  font-size: 15px;
-}
-.chapter-icon {
-  grid-row: span 2;
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
-}
-.chapter-icon svg {
-  width: 32px;
-  height: 32px;
-}
-.chapter-icon.malaria {
-  background: #ff5d6c26;
-  color: var(--red);
-}
-.chapter-icon.felinos {
-  background: #ffb02026;
-  color: var(--amber);
-}
-.chapter-icon.animales {
-  background: #4fd8ff21;
-  color: var(--cyan);
-}
-.chapter-page {
-  animation: rise 0.45s ease both;
-}
-
-/* Mapas de especies */
-svg.world {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-svg.world .countries path {
-  fill: #2c2868;
-  stroke: #100d2c;
-  stroke-width: 0.6;
-}
 .range path {
   stroke: none;
 }
-.range.jaguar path {
-  fill: var(--amber);
-}
+
 .range.leopard path {
   fill: var(--cyan);
 }
-.map-label {
-  font:
-    800 17px/1 'Segoe UI Variable Text',
-    Aptos,
-    'Segoe UI',
-    system-ui,
-    sans-serif;
-  fill: #fff;
-  paint-order: stroke;
-  stroke: var(--ink);
-  stroke-width: 5px;
-  stroke-linejoin: round;
-  text-anchor: middle;
-}
-.map-key i.jaguar {
-  background: var(--amber);
-}
-.map-key i.leopard {
-  background: var(--cyan);
-}
+
 .pin {
   cursor: pointer;
   outline: none;
@@ -2486,18 +2002,7 @@ svg.world .countries path {
 .pin:focus-visible circle:not(.pulse) {
   stroke: var(--accent);
 }
-.pin.mountain {
-  color: var(--orange);
-}
-.pin.sky {
-  color: var(--G);
-}
-.pin.ice {
-  color: var(--cyan);
-}
-.pin.water {
-  color: #e6e4ff;
-}
+
 @keyframes pin-pulse {
   from {
     transform: scale(0.8);
@@ -2509,21 +2014,11 @@ svg.world .countries path {
   }
 }
 
-/* Jaguar contra leopardo */
-.faceoff {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 18px;
-  margin-top: 30px;
-}
 .cat h3 {
   font-size: 30px;
   margin-top: 12px;
 }
-.cat.jaguar h3 {
-  color: var(--amber);
-}
+
 .cat.leopard h3 {
   color: var(--cyan);
 }
@@ -2532,58 +2027,7 @@ svg.world .countries path {
   color: var(--muted);
   font-size: 15px;
 }
-.fur {
-  aspect-ratio: 16 / 9;
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow: 0 20px 50px #0008;
-}
-.fur svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.cat.jaguar .fur {
-  outline: 2px solid #ffb02066;
-  outline-offset: 4px;
-}
-.cat.leopard .fur {
-  outline: 2px solid #4fd8ff55;
-  outline-offset: 4px;
-}
-.versus {
-  font: 900 28px/1 var(--mono);
-  color: var(--muted);
-  opacity: 0.6;
-}
-.compare {
-  margin: 26px 0 0;
-}
-.compare > div {
-  display: grid;
-  grid-template-columns: 130px 1fr 1fr;
-  gap: 18px;
-  padding: 14px 0;
-  border-top: 1px solid var(--hair);
-}
-.compare dt {
-  color: var(--muted);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding-top: 3px;
-}
-.compare dd {
-  margin: 0;
-  font-size: 17px;
-}
-.compare dd.jaguar b {
-  color: var(--amber);
-}
-.compare dd.leopard b {
-  color: var(--cyan);
-}
+
 .tip {
   margin-top: 18px;
   padding-left: 16px;
@@ -2593,95 +2037,12 @@ svg.world .countries path {
 .tip b {
   color: var(--accent);
 }
-.black-cats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  margin-top: 20px;
-}
-.black-cat .fur {
-  aspect-ratio: 16 / 7;
-  margin-bottom: 14px;
-}
-.black-cat h4 {
-  font-size: 22px;
-  margin: 0;
-}
-.black-cat p {
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 16px;
-}
-.black-cat p b {
-  color: var(--text);
-}
-.black-cat .gene {
-  font: 600 15px/1.4 var(--mono);
-  color: var(--cyan);
-}
-.black-cat .hl {
-  color: var(--red);
-}
-.black-cat .inherit {
-  border-left: 2px solid var(--hair);
-  padding-left: 12px;
-}
-.try-leopard {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px 24px;
-  align-items: center;
-  margin-top: 30px;
-  padding-top: 22px;
-  border-top: 1px solid var(--hair);
-}
-.try-leopard p {
-  flex: 1 1 340px;
-  margin: 0;
-}
-.try-leopard b {
-  color: var(--accent);
-}
 
 @media (max-width: 900px) {
-  .chapters {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  .chapter {
-    padding: 10px 4px;
-  }
-  .chapter-icon {
-    width: 42px;
-    height: 42px;
-  }
-  .faceoff {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  .versus {
-    display: none;
-  }
   .cat h3 {
     font-size: 22px;
   }
-  .compare > div {
-    grid-template-columns: 1fr 1fr;
-    gap: 6px 14px;
-  }
-  .compare dt {
-    grid-column: 1 / -1;
-  }
-  .compare dd {
-    font-size: 15px;
-  }
-  .black-cats {
-    grid-template-columns: 1fr;
-  }
-  .map-label {
-    font-size: 30px;
-    stroke-width: 7px;
-  }
+
   .pin text {
     font-size: 26px;
   }
@@ -2693,9 +2054,6 @@ svg.world .countries path {
   .pin .pulse {
     animation: none;
     opacity: 0;
-  }
-  .chapter-page {
-    animation: none;
   }
 }
 
@@ -3399,14 +2757,7 @@ body {
   font-style: normal;
   font-weight: 800;
 }
-.evo-note {
-  margin: 14px 0;
-  font-size: 16px;
-  color: var(--muted);
-}
-.evo-note b {
-  color: var(--text);
-}
+
 @media (max-width: 900px) {
   .insights,
   .evo-question,
@@ -3417,44 +2768,6 @@ body {
   .evo-strip {
     grid-template-columns: repeat(37, minmax(0, 1fr));
     gap: 2px;
-  }
-}
-
-/* ---- Naturaleza: el velcro de la anemia falciforme ---- */
-.velcro {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(20px, 3vw, 40px);
-  align-items: center;
-  margin-bottom: 30px;
-}
-.velcro-stage {
-  height: clamp(280px, 34vw, 420px);
-  border-radius: 24px;
-  background: radial-gradient(circle, #2a0b18, #120414 70%);
-  overflow: hidden;
-}
-.velcro-stage canvas {
-  cursor: default;
-  touch-action: auto;
-}
-.velcro-side {
-  display: grid;
-  gap: 16px;
-  justify-items: start;
-}
-.velcro-side b {
-  color: var(--accent);
-}
-.velcro-caption {
-  font-size: 18px;
-  min-height: 5em;
-  padding-left: 14px;
-  border-left: 3px solid var(--amber);
-}
-@media (max-width: 900px) {
-  .velcro {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -3470,19 +2783,7 @@ kbd {
   text-align: center;
   color: var(--muted);
 }
-.print-3d {
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid var(--hair);
-}
-.print-3d .ghost {
-  min-height: 44px;
-  font-size: 15px;
-}
-.print-3d p {
-  font-size: 14px;
-  margin-top: 8px;
-}
+
 a.ghost {
   display: inline-flex;
   align-items: center;

@@ -14,7 +14,7 @@
 <a class="skip" href="#main">Saltar al contenido</a>
 <header class="topbar">
   <a class="brand" href="#" aria-label="ADN, genes y proteínas, inicio"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="brand-gradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9a4d"/><stop offset="1" stop-color="#c98bff"/></linearGradient></defs><path d="M9 4c0 12 14 12 14 24M23 4C23 16 9 16 9 28M10 8h12M11 24h10M13 13h6M13 19h6" stroke="url(#brand-gradient)" fill="none" stroke-width="2.4" stroke-linecap="round"/></svg><span>ADN, genes<br><b>y proteínas</b></span></a>
-  <nav aria-label="Secciones"><button class="nav active" data-tab="proyecto" aria-current="page">Inicio</button><button class="nav" data-tab="lab">Simulador</button><button class="nav" data-tab="naturaleza">Naturaleza</button></nav>
+  <nav aria-label="Secciones"><button class="nav active" data-tab="proyecto" aria-current="page">Inicio</button><button class="nav" data-tab="lab">Simulador</button></nav>
   <div class="top-actions"><button id="sound-toggle" class="icon-button" aria-pressed="true" aria-label="Apagar el sonido" title="Sonido prendido"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4Z" fill="currentColor"/><path class="waves" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="slash" d="m16 9 6 6m0-6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button id="fullscreen" class="icon-button" title="Pantalla completa" aria-label="Activar pantalla completa">⛶</button></div>
 </header>
 <main id="main">
@@ -53,7 +53,7 @@
       <li>Probamos <b>las 1.332 sustituciones</b> posibles de una letra.</li>
       <li>Marcamos cada cambio sobre la <b>estructura 3D real</b> (rayos X, PDB 2HHB).</li>
       <li>Comparamos la cadena beta con la de <b>16 especies</b>, del mandril a la rana.</li>
-      <li>Verificamos el programa con <b>28 pruebas automáticas</b>.</li>
+      <li>Verificamos el programa con <b>27 pruebas automáticas</b>.</li>
     </ol></article>
   </div>
   <section class="story" id="story" aria-label="Resultados paso a paso">
@@ -125,7 +125,7 @@
         <div class="tool" id="tool"></div>
       </section>
       <section class="panel result-panel" aria-labelledby="result-heading">
-        <div class="result-head"><h2 id="result-heading">2 · La proteína</h2><label class="challenge"><input type="checkbox" id="challenge"> <span><b>Modo desafío</b> adiviná antes de ver</span></label></div>
+        <div class="result-head"><h2 id="result-heading">2 · La proteína</h2></div>
         <div id="result" aria-live="polite"></div>
       </section>
     </div>
@@ -135,14 +135,6 @@
       <p class="viewer-overlay" id="viewer-overlay">La hemoglobina ayuda a llevar oxígeno por tu cuerpo.</p>
       <div class="viewer-controls"><button id="focus-mutation" hidden>◎ Ver dónde cayó mi mutación</button></div>
       <div class="science-note" id="science-note" hidden><span aria-hidden="true">ⓘ</span><p>Los colores marcan qué piezas cambiaron. <strong>No muestran la forma real de la proteína con la mutación.</strong></p></div>
-      <details class="viewer-more"><summary>Opciones avanzadas</summary>
-        <div class="viewer-tabs" role="group" aria-label="Estructura de referencia"><button class="active" data-model="pdb" aria-pressed="true">Experimental</button><button data-model="af" aria-pressed="false">AlphaFold · IA</button></div>
-        <p class="viewer-badge" id="viewer-badge">CADENA BETA · PDB 2HHB</p>
-        <p class="viewer-caption" id="model-caption">Estructura medida por rayos X. Cada tramo conecta las posiciones reales de los aminoácidos.</p>
-        <div class="viewer-settings"><label><input type="checkbox" id="evo-color"> Colorear lo que la evolución no cambió</label><label><input type="checkbox" id="all-chains"> Ver las 4 cadenas</label><label id="confidence-label" hidden><input type="checkbox" id="confidence"> Colorear confianza de IA</label><button id="rotate" aria-pressed="true">Ⅱ Pausar giro</button></div>
-        <div class="protein-legend" id="protein-legend"><span class="gradient-line"></span><span>Inicio de la cadena</span><span>Final</span></div>
-        <div class="print-3d"><button class="ghost" id="stl-download"><span aria-hidden="true">⬇</span> Descargar para imprimir en 3D</button><p class="muted">Archivo STL de la cadena beta, de unos 8 cm. Si cambiaste una pieza, lleva una bolita en ese lugar. Imprimila con soportes.</p></div>
-      </details>
     </aside>
   </div>
   <section class="consequences" id="consequences" aria-labelledby="cons-heading">
@@ -167,114 +159,23 @@
   </section>
   <p class="disclaimer">Una simulación educativa con una secuencia pública. No es un diagnóstico.</p>
 </section>
-<section id="tab-naturaleza" class="tab-page nature" hidden>
-  <div class="poster-hero"><p class="eyebrow">MÁS ALLÁ DEL LABORATORIO</p><h1>Una letra <em>en la naturaleza</em></h1><p>Las mismas letras que cambiás en el simulador también cambiaron en personas y animales reales. Elegí una historia.</p></div>
-
-  <div class="chapters" role="tablist" aria-label="Historias">
-    <button class="chapter active" role="tab" id="ch-malaria" aria-selected="true" aria-controls="chapter-malaria" data-chapter="malaria"><span class="chapter-icon malaria" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="17" cy="24" r="11" fill="currentColor"/><circle cx="17" cy="24" r="4" fill="#0b0820" opacity=".45"/><path d="M30 31c4-9 9-12 14-12-2 8-7 13-14 12Z" fill="currentColor" opacity=".75"/></svg></span><b>Una mutación que protege</b><span>Anemia falciforme y malaria</span></button>
-    <button class="chapter" role="tab" id="ch-felinos" aria-selected="false" aria-controls="chapter-felinos" data-chapter="felinos" tabindex="-1"><span class="chapter-icon felinos" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M10 12l6 6h16l6-6 2 16c0 9-7 14-16 14S8 37 8 28Z" fill="currentColor"/><g fill="#0b0820" opacity=".55"><circle cx="18" cy="27" r="2.6"/><circle cx="30" cy="27" r="2.6"/><path d="M21 34h6l-3 3Z"/></g></svg></span><b>Jaguar y leopardo</b><span>Parecidos, pero no iguales</span></button>
-    <button class="chapter" role="tab" id="ch-animales" aria-selected="false" aria-controls="chapter-animales" data-chapter="animales" tabindex="-1"><span class="chapter-icon animales" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M4 40 18 16l8 12 6-8 12 20Z" fill="currentColor"/><path d="m18 16 4 7-4-2-3 3Z" fill="#fff" opacity=".85"/></svg></span><b>Animales récord</b><span>Llama, mamut y más</span></button>
-  </div>
-
-  <article class="poster-card nature-block chapter-page" id="chapter-malaria" role="tabpanel" aria-labelledby="ch-malaria">
-    <h2>Una mutación que protege</h2>
-    <p class="poster-big">La anemia falciforme es grave. ¿Por qué es tan común en algunas regiones? Porque tener <b>una sola copia</b> protege contra la <b>malaria</b>.</p>
-    <div class="genotypes">
-      <div class="genotype aa"><span class="cells" aria-hidden="true"><i></i><i></i></span><b>Ninguna copia</b><span>Sin anemia, pero sin protección contra la malaria.</span></div>
-      <div class="genotype as"><span class="cells" aria-hidden="true"><i></i><i class="s"></i></span><b>Una copia · portador</b><span>Casi sin síntomas y muy protegido: el riesgo de malaria grave baja cerca de un 90 %.</span></div>
-      <div class="genotype ss"><span class="cells" aria-hidden="true"><i class="s"></i><i class="s"></i></span><b>Dos copias</b><span>Anemia falciforme: los glóbulos rojos se deforman y se traban.</span></div>
-    </div>
-    <p class="muted nature-note">Cada persona tiene dos copias del gen: una de su mamá y otra de su papá.</p>
-
-    <h3 class="nature-sub" id="velcro">¿Por qué una sola pieza arruina todo? El velcro</h3>
-    <div class="velcro">
-      <div class="velcro-stage"><canvas id="velcro-canvas" role="img" aria-label="Hemoglobinas dentro de un glóbulo rojo"></canvas></div>
-      <div class="velcro-side">
-        <p>Imaginá un <b>velcro</b>. Con la mutación, la pieza 6 pasa a ser <b>valina</b>, una pieza que huye del agua: es el lado de los <b>ganchitos</b>. Otra hemoglobina tiene un <b>bolsillo</b> (formado por las piezas 85 y 88) que es el lado de los pelitos.</p>
-        <div class="segmented" role="group" aria-label="Pieza 6"><button data-velcro="E" aria-pressed="false">Pieza 6: Glu (normal)</button><button data-velcro="V" aria-pressed="true" class="active">Pieza 6: Val (falciforme)</button></div>
-        <label class="challenge"><input type="checkbox" id="velcro-low"> <span><b>Poco oxígeno</b> el bolsillo se abre</span></label>
-        <p class="velcro-caption" id="velcro-caption" aria-live="polite"></p>
-      </div>
-    </div>
-
-    <h3 class="nature-sub">¿Dónde pasa?</h3>
-    <div class="map-controls" role="group" aria-label="Capa del mapa">
-      <button class="chip active" data-layer="hbs" aria-pressed="true">Anemia falciforme</button><button class="chip" data-layer="hbc" aria-pressed="false">Hemoglobina C</button><button class="chip" data-layer="thal" aria-pressed="false">Talasemias y HbE</button>
-      <label class="challenge map-malaria"><input type="checkbox" id="map-malaria" checked> <span><b>Superponer</b> dónde había malaria</span></label>
-    </div>
-    <figure class="map-figure"><svg id="world-map" role="img" aria-labelledby="map-caption"></svg>
-      <figcaption id="map-caption"><span class="map-key"><i class="fill"></i><span id="map-layer-name">Mutación frecuente</span></span><span class="map-key"><i class="hatch"></i>Malaria antes de las campañas de control</span><p id="map-text"></p></figcaption>
-    </figure>
-    <p class="muted map-source">Esquema simplificado por país, para mostrar el patrón general. Basado en Piel y col. (2010), Weatherall y Clegg (2001) y la OMS.</p>
-  </article>
-
-  <article class="poster-card nature-block chapter-page" id="chapter-felinos" role="tabpanel" aria-labelledby="ch-felinos" hidden>
-    <h2>Jaguar y leopardo: ¿gemelos?</h2>
-    <p class="poster-big">Se parecen tanto que mucha gente los confunde. Son <b>primos</b>: los dos son grandes felinos del grupo de las panteras. Pero viven en <b>continentes distintos</b>.</p>
-    <figure class="map-figure cats-figure"><svg id="cats-map" class="world" role="img" aria-label="Mapa: el jaguar vive en América, del norte de México al norte de Argentina; el leopardo, en África y el sur de Asia."></svg>
-      <figcaption><span class="map-key"><i class="jaguar"></i>Jaguar · América</span><span class="map-key"><i class="leopard"></i>Leopardo · África y Asia</span></figcaption>
-    </figure>
-    <p class="nature-note">¿Cómo llegaron tan lejos? Sus antepasados vivían en Asia. Hace más de un millón de años, algunos cruzaron a América por un puente de tierra que unía Siberia con Alaska. Separados durante tantas generaciones, cada grupo cambió a su manera.</p>
-
-    <div class="faceoff">
-      <div class="cat jaguar"><div class="fur" data-fur="jaguar" aria-hidden="true"></div><h3>Jaguar</h3><p class="latin">Panthera onca</p></div>
-      <span class="versus" aria-hidden="true">vs</span>
-      <div class="cat leopard"><div class="fur" data-fur="leopard" aria-hidden="true"></div><h3>Leopardo</h3><p class="latin">Panthera pardus</p></div>
-    </div>
-    <dl class="compare">
-      <div><dt>Manchas</dt><dd class="jaguar">Rosetas <b>grandes</b>, con <b>puntos adentro</b></dd><dd class="leopard">Rosetas <b>chicas</b>, <b>sin puntos</b> adentro</dd></div>
-      <div><dt>Cuerpo</dt><dd class="jaguar">Más robusto y pesado, cabeza grande y cola corta</dd><dd class="leopard">Más liviano y estilizado, cola larga</dd></div>
-      <div><dt>Superpoder</dt><dd class="jaguar">La mordida más fuerte de los felinos para su tamaño: atraviesa caparazones de tortuga</dd><dd class="leopard">Trepa árboles con la presa en la boca, para que no se la roben leones ni hienas</dd></div>
-      <div><dt>Le gusta</dt><dd class="jaguar">El agua: nada muy bien y caza yacarés en los ríos</dd><dd class="leopard">Casi cualquier ambiente: selvas, sabanas, montañas y desiertos</dd></div>
-    </dl>
-    <p class="tip"><b>Truco para no confundirlos:</b> si ves puntitos dentro de las manchas, es un jaguar.</p>
-
-    <h3 class="nature-sub">La pantera negra: el mismo color, dos recetas distintas</h3>
-    <p>La «pantera negra» no es una especie: es un jaguar o un leopardo con una mutación que oscurece su pelo. ¡Las manchas siguen ahí! Se ven cuando les da el sol.</p>
-    <div class="black-cats">
-      <div class="black-cat"><div class="fur" data-fur="jaguar-black" aria-hidden="true"></div><h4>Jaguar negro</h4><p class="gene">Gen <i>MC1R</i> · le faltan <b>15 letras</b></p><p>Como 15 es múltiplo de 3, se pierden <b>5 piezas justas</b> y el resto de la receta se lee bien. El interruptor del pigmento negro queda trabado en «encendido».</p><p class="inherit"><b>Dominante:</b> alcanza con una copia. Como una luz que quedó prendida: con una sola, el cuarto ya se ilumina.</p></div>
-      <div class="black-cat"><div class="fur" data-fur="leopard-black" aria-hidden="true"></div><h4>Leopardo negro</h4><p class="gene">Gen <i>ASIP</i> · cambia <b>1 letra</b></p><p><b>TG<span class="hl">C</span> → TG<span class="hl">A</span></b>: aparece un STOP. La proteína se corta en la pieza 111 y ya no puede frenar al pigmento negro.</p><p class="inherit"><b>Recesiva:</b> hacen falta dos copias, una de cada padre. Como un auto con dos frenos: si uno se rompe, el otro alcanza. Por eso dos leopardos manchados pueden tener un cachorro negro.</p></div>
-    </div>
-    <div class="try-leopard"><p>La hemoglobina humana también tiene una cisteína, en la pieza 93, escrita TG<b>T</b>. Si cambiás la última letra por <b>A</b>, queda TGA: <b>el mismo STOP</b> que el del leopardo.</p><button class="primary species-try" data-try="leopard">Probá el STOP del leopardo <span aria-hidden="true">→</span></button></div>
-    <p class="muted map-source">Distribución: esquema aproximado. Fuentes: Eizirik y col. (2003), <i>Current Biology</i>; Schneider y col. (2012), <i>PLoS ONE</i>.</p>
-  </article>
-
-  <article class="poster-card nature-block chapter-page" id="chapter-animales" role="tabpanel" aria-labelledby="ch-animales" hidden>
-    <h2>Animales con hemoglobinas especiales</h2>
-    <p class="poster-big">Cada especie ajustó su hemoglobina a su ambiente. Tocá un animal en el mapa.</p>
-    <figure class="map-figure"><svg id="animals-map" class="world" role="group" aria-label="Mapa con los animales"></svg></figure>
-    <div class="species-grid">
-      <article class="species" data-species="llama"><div class="species-icon mountain"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 40 18 16l8 12 6-8 12 20Z" fill="currentColor"/><path d="m18 16 4 7-4-2-3 3Z" fill="#fff" opacity=".85"/></svg></div><h3>Llama</h3><p class="species-place">Los Andes, a unos 4.000 m de altura</p><p class="species-question">¿Cómo respira donde el aire tiene poco oxígeno?</p><button class="ghost species-open" aria-expanded="false">Descubrí cómo</button>
-        <div class="species-answer" hidden><p>Su hemoglobina <b>agarra el oxígeno con más fuerza</b>, como una mano que aprieta para no soltar lo poco que consigue. Uno de los cambios clave está en la cadena beta, la misma de este proyecto: en la pieza 2 tiene asparagina en lugar de histidina.</p><p class="species-change">Pieza 2: His → Asn · en el gen humano, <b>C</b>AT → <b>A</b>AT: ¡una sola letra!</p><button class="primary species-try" data-try="llama">Probalo en el simulador <span aria-hidden="true">→</span></button><p class="species-source">Piccinini y col. (1990), hemoglobina de guanaco, llama y alpaca.</p></div></article>
-      <article class="species" data-species="goose"><div class="species-icon sky"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 40 18 16l8 12 6-8 12 20Z" fill="currentColor"/><path d="m18 16 4 7-4-2-3 3Z" fill="#fff" opacity=".85"/></svg></div><h3>Ánsar indio</h3><p class="species-place">Cruza el Himalaya volando</p><p class="species-question">¿Cómo vuela tan alto sin quedarse sin aire?</p><button class="ghost species-open" aria-expanded="false">Descubrí cómo</button>
-        <div class="species-answer" hidden><p>Un solo cambio en la <b>otra cadena</b> de la hemoglobina, la alfa, afloja una unión entre las cadenas y hace que capture más oxígeno. Cuando los científicos pusieron ese cambio en hemoglobina humana, también capturó más oxígeno.</p><p class="species-change">Cadena alfa, pieza 119: Pro → Ala</p><p class="species-limit">Está en otro gen (alfa), así que no se puede probar en este simulador.</p><p class="species-source">Jessen y col. (1991), PNAS.</p></div></article>
-      <article class="species" data-species="mammoth"><div class="species-icon ice"><svg viewBox="0 0 48 48" aria-hidden="true"><g stroke="currentColor" stroke-width="3.4" stroke-linecap="round" fill="none"><path d="M24 5v38M7.5 14.5l33 19M7.5 33.5l33-19"/><path d="m18 8 6 5 6-5M18 40l6-5 6 5M6 22l8-1-3-7M42 26l-8 1 3 7M6 26l8 1-3 7M42 22l-8-1 3-7"/></g></svg></div><h3>Mamut lanudo</h3><p class="species-place">Siberia, durante la Edad de Hielo</p><p class="species-question">¿Cómo llevaba oxígeno con un frío extremo?</p><button class="ghost species-open" aria-expanded="false">Descubrí cómo</button>
-        <div class="species-answer" hidden><p>Con frío, la hemoglobina común <b>suelta mal el oxígeno</b>. Científicos reconstruyeron la del mamut a partir de ADN antiguo: tres cambios hacían que la soltara igual de bien aunque hiciera frío, y así perdía menos calor.</p><p class="species-change">Los tres son de una sola letra en el gen humano. Probá cada uno:</p><div class="species-tries"><button class="ghost species-try" data-try="mammoth12">Thr12Ala</button><button class="ghost species-try" data-try="mammoth86">Ala86Ser</button><button class="ghost species-try" data-try="mammoth101">Glu101Gln</button></div><p class="species-source">Campbell y col. (2010), Nature Genetics. En el mamut, esta cadena es una mezcla de beta y delta.</p></div></article>
-      <article class="species" data-species="icefish"><div class="species-icon water"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5C17 16 11 23 11 30a13 13 0 0 0 26 0c0-7-6-14-13-25Z" fill="none" stroke="currentColor" stroke-width="3.4"/><path d="M18 31a6 6 0 0 0 6 6" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg></div><h3>Pez de hielo</h3><p class="species-place">Antártida, en agua a casi −2 °C</p><p class="species-question">¿Cómo vive sin nada de hemoglobina?</p><button class="ghost species-open" aria-expanded="false">Descubrí cómo</button>
-        <div class="species-answer" hidden><p>No tiene hemoglobina: su sangre es <b>casi transparente</b>. En la mayoría de estas especies, el gen de la cadena beta directamente desapareció. Sobrevive porque el agua helada tiene mucho oxígeno disuelto, y tiene un corazón grande y mucha sangre.</p><p class="species-change">Podés imitarlo: si se pierde la señal de inicio ATG, no se fabrica la cadena beta.</p><button class="primary species-try" data-try="icefish">Apagá el gen en el simulador <span aria-hidden="true">→</span></button><p class="species-source">Cocca y col. (1995), PNAS.</p></div></article>
-    </div>
-  </article>
-</section>
 <section id="tab-learn" class="tab-page reading-page" hidden><p class="eyebrow">CUATRO IDEAS PARA EMPEZAR</p><h1>De cuatro letras a una proteína.</h1><div class="learning-grid">
   <article><span class="lesson-number">01</span><h2>¿Qué es el ADN?</h2><p>Es una molécula que guarda instrucciones de los seres vivos. Usa cuatro letras: A, T, C y G. En su doble hélice, A se une con T y C con G.</p><div class="pair-demo"><span class="base a">A</span><i>···</i><span class="base t">T</span><span class="base c">C</span><i>···</i><span class="base g">G</span></div><p>Un gen es un tramo de ADN. Algunos genes contienen la receta para fabricar una proteína.</p></article>
   <article><span class="lesson-number">02</span><h2>¿Cómo se lee?</h2><p>La célula hace una copia de trabajo, el ARN. El ribosoma lee esa copia de tres en tres. Cada grupo, llamado <b>codón</b>, indica un aminoácido o una señal de parada.</p><div class="recipe"><span>ADN <b>ATG GAA TTT TGA</b></span><span>ARN <b>AUG GAA UUU UGA</b></span><span>Piezas <b>Met · Glu · Phe · STOP</b></span></div></article>
   <article><span class="lesson-number">03</span><h2>¿Qué es una proteína?</h2><p>Es una cadena de aminoácidos que se pliega. Su estructura ayuda a determinar su función. Las proteínas transportan sustancias, construyen tejidos y participan en las defensas del cuerpo.</p><p>La hemoglobina lleva oxígeno en la sangre. Tiene cuatro cadenas: dos alfa y dos beta. Acá exploramos la receta de la cadena beta.</p></article>
   <article><span class="lesson-number">04</span><h2>¿Qué es una mutación?</h2><p>Es un cambio en las letras del ADN. Se puede cambiar, quitar o agregar una letra. Mirá qué pasa con una frase que se lee de a tres letras:</p><div class="recipe"><span>Original <b>LUZ SOL MAR PAN</b></span><span>Cambio <b>LUZ SAL MAR PAN</b></span><span>Sin la S <b>LUZ OLM ARP AN</b></span></div><p>Cambiar una letra afecta solo a una palabra. Quitar o agregar una letra corre todos los grupos que siguen, y el resto de la frase pierde sentido.</p></article>
 </div><details><summary>Para docentes: qué simplifica este simulador</summary><p>Usamos la secuencia codificante de HBB: 444 bases y 148 codones, incluido el STOP. Se traduce en 147 aminoácidos; la metionina inicial se retira de la proteína normal y quedan 146 piezas. Por eso, la pieza 6 corresponde al codón 7.</p><p>El modelo traduce desde el inicio de la secuencia hasta el primer STOP. Si se pierde ATG, considera que no se fabrica la proteína por esa vía. Si se pierde el STOP final, no puede calcular la longitud completa porque no incluye el ADN posterior.</p><p>Una mutación silenciosa conserva la secuencia de aminoácidos; eso no demuestra que no tenga otros efectos celulares. Las inserciones y eliminaciones de una base se agrupan como cambio de marco, incluso cuando también afectan al inicio o al STOP.</p><p>La categoría del juego «Se desordena lo que sigue» reúne dos efectos distintos: cambio de marco y pérdida del STOP. La explicación del resultado identifica cuál ocurrió.</p><p>Las piezas ausentes y cambiadas se marcan sobre la estructura original. No calculamos la estructura ni la función de una proteína mutada.</p></details>
-<details><summary>Para docentes: modelos 3D y fuentes</summary><p>La estructura experimental <a href="https://www.rcsb.org/structure/2HHB" target="_blank" rel="noreferrer">PDB 2HHB</a> fue determinada por Fermi y colaboradores mediante rayos X (1984). Mostramos sus carbonos alfa y el hierro de sus cuatro grupos hemo.</p><p>El modelo <a href="https://alphafold.ebi.ac.uk/entry/P68871" target="_blank" rel="noreferrer">AlphaFold P68871, versión 6</a> predice la estructura de la cadena beta normal. Su pLDDT expresa la confianza de la predicción por aminoácido, no la gravedad de una mutación. Datos de AlphaFold DB bajo CC BY 4.0.</p><p>Secuencia proteica de referencia: <a href="https://www.uniprot.org/uniprotkb/P68871/entry" target="_blank" rel="noreferrer">UniProt P68871</a>. La secuencia codificante es la proporcionada en el documento del proyecto y se comprueba que traduce exactamente a esta proteína.</p><label class="file-label">Cargar otro archivo PDB de AlphaFold P68871<input id="pdb-file" type="file" accept=".pdb"></label><button class="text-button" id="restore-model">Volver al modelo AlphaFold incluido</button><p id="import-status" role="status"></p></details>
+<details><summary>Para docentes: modelos 3D y fuentes</summary><p>La estructura experimental <a href="https://www.rcsb.org/structure/2HHB" target="_blank" rel="noreferrer">PDB 2HHB</a> fue determinada por Fermi y colaboradores mediante rayos X (1984). Mostramos sus carbonos alfa y el hierro de sus cuatro grupos hemo.</p><p>El modelo <a href="https://alphafold.ebi.ac.uk/entry/P68871" target="_blank" rel="noreferrer">AlphaFold P68871, versión 6</a> predice la estructura de la cadena beta normal. Su pLDDT expresa la confianza de la predicción por aminoácido, no la gravedad de una mutación. Datos de AlphaFold DB bajo CC BY 4.0.</p><p>Secuencia proteica de referencia: <a href="https://www.uniprot.org/uniprotkb/P68871/entry" target="_blank" rel="noreferrer">UniProt P68871</a>. La secuencia codificante es la proporcionada en el documento del proyecto y se comprueba que traduce exactamente a esta proteína.</p></details>
 <button class="primary" data-return-lab>Volver al simulador</button></section>
 <section id="tab-stats" class="tab-page reading-page" hidden><p class="eyebrow">EL EXPERIMENTO COLECTIVO</p><h1>¿Qué descubrió el público?</h1><p class="muted">Cada resultado revelado suma una mutación. Los datos se guardan únicamente en este navegador.</p><div class="stats-overview" id="stats-overview"></div><div class="stats-layout"><article class="stats-card"><h2>Mutaciones observadas</h2><div id="stats-bars"></div></article><article class="stats-card"><h2>¿Qué esperar al cambiar una letra?</h2><p>Al probar las 1.332 sustituciones posibles del gen HBB:</p><table><thead><tr><th>Efecto</th><th>Casos</th><th>Porcentaje</th></tr></thead><tbody id="survey-table"></tbody></table><p class="muted">Esta tabla solo cuenta cambios de una letra por otra. El público también quita y agrega letras, así que sus resultados no tienen por qué coincidir.</p></article></div><label class="challenge stand-toggle"><input type="checkbox" id="stand-mode"> <span><b>Modo stand</b> si nadie toca la pantalla durante 90 segundos, vuelve al inicio y muestra el recorrido guiado. Tocar la pantalla lo corta.</span></label><p><a class="text-button" href="cartel.html" target="_blank" rel="noopener">Imprimir el cartel del stand con el código QR</a></p><div class="stats-actions"><button id="export" class="secondary">Descargar resultados</button><button id="reset-count" class="text-button danger">Reiniciar contador</button></div><p id="storage-status" role="status"></p><button class="primary" data-return-lab>Volver al simulador</button></section>
 </main>
 <footer><span>ADN, genes y proteínas · Feria de ciencias</span><nav class="footer-links" aria-label="Más"><button class="footer-link" data-tab="learn">Cómo funciona</button><button class="footer-link" id="start-tour">Recorrido guiado</button><a class="footer-link" href="presentacion.html" target="_blank" rel="noopener">Modo presentación</a><button class="footer-link" data-tab="stats">Resultados del stand</button></nav></footer>
 <div class="toast" id="toast" role="status" hidden></div>
 <dialog id="mission-dialog" aria-labelledby="mission-heading"><button class="dialog-close" aria-label="Cerrar" id="close-mission">×</button><p class="eyebrow">MISIÓN / UNA LETRA PUEDE CAMBIARLO TODO</p><h2 id="mission-heading">Elegí un caso real.</h2><div class="case-picker" role="group" aria-label="Casos reales"><button data-case="sickle" class="active" aria-pressed="true"><b>Anemia falciforme</b>Glu6Val</button><button data-case="hbc" aria-pressed="false"><b>Hemoglobina C</b>Glu6Lys</button><button data-case="thal" aria-pressed="false"><b>Beta-talasemia</b>Gln39Stop</button></div><div id="case-detail" aria-live="polite"></div><p class="muted">Son casos históricos, sin relación con las personas que visitan el stand.</p><button class="primary" id="start-mission">Ir al codón 7</button></dialog>
-<dialog id="card-dialog" class="card-dialog" aria-labelledby="card-heading"><button class="dialog-close" aria-label="Cerrar" id="close-card">×</button><h2 id="card-heading">Tu descubrimiento</h2><canvas id="card-canvas" width="1080" height="1350" role="img"></canvas><p class="muted card-photo">Sacale una foto con tu celular para llevártela.</p><div class="card-actions"><button class="primary" id="card-download">Descargar imagen</button><button class="secondary" id="card-share" hidden>Compartir</button></div></dialog>
 <script src="js/datos-modelos.js"></script>
-<script src="js/datos-mapa.js"></script>
 <script src="js/datos-especies.js"></script>
 <script src="js/genetica.js"></script>
 <script src="js/evolucion.js"></script>
-<script src="js/stl.js"></script>
 <script src="js/sonido.js"></script>
 <script src="js/helice.js"></script>
 <script src="js/visor-3d.js"></script>
@@ -285,6 +186,5 @@
 <script src="js/consecuencias.js"></script>
 <script src="js/experimento-evolucion.js"></script>
 <script src="js/historia.js"></script>
-<script src="js/velcro.js"></script>
 <script src="js/guia.js"></script>
 </body></html>
