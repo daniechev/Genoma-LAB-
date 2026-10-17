@@ -157,7 +157,7 @@ GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
     };
   }
   // Las 1.332 sustituciones posibles (444 letras × 3 letras nuevas), en orden: letra por letra, A-T-C-G.
-  // Se calcula una sola vez y se guarda: lo usan el póster, el mapa de calor y el duelo.
+  // Se calcula una sola vez y se guarda: lo usan el póster y el mapa de calor.
   let map = null;
   function substitutionMap() {
     if (map) return map;

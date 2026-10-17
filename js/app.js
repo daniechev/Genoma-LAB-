@@ -1635,7 +1635,7 @@
     }
   }
 
-  // ---- Lo que usan los otros módulos (viaje, fábrica, sangre, mapa de calor, nombre, duelo…) ----
+  // ---- Lo que usan los otros módulos (viaje, fábrica, sangre, mapa de calor…) ----
   window.GenomaLab = {
     viewer,
     notify,

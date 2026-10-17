@@ -15,7 +15,6 @@ Descargá el repositorio y abrí `index.html` en el navegador. No hace falta ins
 - **Tarjeta del descubrimiento:** después de cada resultado, *Guardar mi descubrimiento* arma una imagen con el cambio y su efecto, para descargarla, compartirla o sacarle una foto.
 - **Sin internet:** publicada en GitHub Pages, la app se guarda en el celular la primera vez que se abre (aparece el aviso *«Listo: la app ya funciona aunque no tengas internet»*). Después funciona aunque se corte el wifi, y se puede agregar a la pantalla de inicio como una app. Si se cambia un archivo, la copia se renueva sola en la visita siguiente; si se agrega un archivo nuevo, hay que sumarlo a la lista `ARCHIVOS` de `sw.js` (una prueba avisa si falta).
 - **Guion:** [`docs/guion-del-stand.md`](docs/guion-del-stand.md) tiene una explicación de un minuto con analogías y respuestas a las preguntas que suele hacer el jurado.
-- **Para la fila:** la pestaña **Jugá** escribe el nombre del visitante en ADN y arma una tarjeta para llevarse; ahí mismo, el **duelo** enfrenta a dos personas en la misma pantalla.
 - **Sonido:** el botón del parlante, arriba a la derecha, prende o apaga los sonidos. Los efectos solo suenan después de que alguien toca la pantalla, así que el modo stand no hace ruido solo.
 
 ### Publicarla en internet (GitHub Pages)
@@ -78,10 +77,6 @@ La pestaña **Naturaleza** cuenta tres historias, una por vez, para que la pági
 - **Jaguar y leopardo:** dos primos que viven en continentes distintos. Un mapa muestra dónde vive cada uno, el pelaje dibujado deja ver la diferencia de las rosetas y una tabla compara cuerpo, caza y ambiente. Termina con la **pantera negra**: en el jaguar se deben a 15 letras que faltan en el gen *MC1R* (dominante) y en el leopardo a una sola letra que crea un STOP en el gen *ASIP* (recesiva). El botón *Probá el STOP del leopardo* hace el mismo cambio (TGT → TGA) en la cisteína 93 de la hemoglobina, y el simulador lo reconoce.
 - **Animales récord:** un mapa con la llama, el ánsar indio, el mamut lanudo y el pez de hielo; al tocar cada uno se abre su tarjeta. Los cambios de la llama y del mamut son de una sola letra en el gen humano y se pueden probar en el simulador.
 
-### Tu nombre
-
-Escribís tu nombre y se arma como proteína: cada letra es una pieza (A alanina, L leucina…), con el codón que más usan los genes humanos, ATG adelante y TAA al final. La B, la J, la X y la Z no son piezas; la U y la O son las piezas raras selenocisteína y pirrolisina, escritas con un STOP «disfrazado». Un botón cambia una letra del ADN al azar: el nombre puede cambiar, cortarse con un STOP o quedar igual. Se puede descargar una tarjeta.
-
 Fuentes: Piel y col. 2010 (*Nature Communications*), Taylor y col. 2012 (*Lancet Infectious Diseases*), Weatherall y Clegg 2001 (*Bull. OMS*), OMS región africana 2010, Piccinini y col. 1990, Jessen y col. 1991 (*PNAS*), Campbell y col. 2010 (*Nature Genetics*) Cocca y col. 1995 (*PNAS*), Eizirik y col. 2003 (*Current Biology*) y Schneider y col. 2012 (*PLoS ONE*). El mapa usa Natural Earth (dominio público) y es un esquema simplificado por país.
 
 ## Estructura
@@ -99,8 +94,6 @@ js/datos-mapa.js        mapa del mundo simplificado (Natural Earth)
 js/datos-especies.js    cadena beta de 16 especies (Swiss-Prot)
 js/genetica.js          ADN, código genético, casos reales y clasificación de mutaciones
 js/evolucion.js         comparación con las 16 especies y distancia al hemo
-js/nombre.js            un nombre escrito como proteína y su ADN
-js/duelo.js             rondas y puntaje del duelo
 js/stl.js               malla cerrada para imprimir en 3D (STL)
 js/sonido.js            efectos de sonido y melodía de la proteína (Web Audio)
 js/visor-3d.js          visor 3D dibujado en canvas
@@ -113,8 +106,6 @@ js/melodia.js           la proteína como melodía
 js/mapa-calor.js        mapa de las 1.332 sustituciones (presentación)
 js/experimento-evolucion.js  segundo experimento del póster
 js/velcro.js            cómo se arman las fibras de la anemia falciforme
-js/tu-nombre.js         pestaña «Tu nombre»
-js/duelo-juego.js       pantalla del duelo
 js/guia.js              guía de la primera vez en el simulador
 js/consecuencias.js     pestañas de «Lo que pasa después»
 js/presentacion.js      diapositivas, vista del presentador y sincronización
@@ -141,7 +132,7 @@ Con [Node.js](https://nodejs.org) 18 o más reciente:
 node --test
 ```
 
-Las 31 pruebas verifican los 64 codones contra el código genético estándar, la traducción del gen completo, cada tipo de mutación, los tres casos reales, el reparto de las 1.332 sustituciones (también por letra del codón), las 16 especies y el resultado del experimento del hemo, el nombre en ADN, las rondas del duelo, que el modelo para imprimir sea una malla cerrada, que la presentación tenga notas en cada diapositiva, que el póster y la presentación digan cuántas pruebas hay y que la copia sin internet incluya todos los archivos. Conviene correrlas después de tocar `js/genetica.js` o `js/evolucion.js`.
+Las 28 pruebas verifican los 64 codones contra el código genético estándar, la traducción del gen completo, cada tipo de mutación, los tres casos reales, el reparto de las 1.332 sustituciones (también por letra del codón), las 16 especies y el resultado del experimento del hemo, que el modelo para imprimir sea una malla cerrada, que la presentación tenga notas en cada diapositiva, que el póster y la presentación digan cuántas pruebas hay y que la copia sin internet incluya todos los archivos. Conviene correrlas después de tocar `js/genetica.js` o `js/evolucion.js`.
 
 El código se ordena con [Prettier](https://prettier.io):
 

@@ -1,4 +1,4 @@
-// Pruebas de los experimentos nuevos: evolución, mapa de mutaciones, nombre, duelo e impresión 3D.
+// Pruebas de los experimentos nuevos: evolución, mapa de mutaciones e impresión 3D.
 // Ejecutar con: node --test
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -6,8 +6,6 @@ const fs = require('node:fs');
 const path = require('node:path');
 const G = require('../js/genetica.js');
 const E = require('../js/evolucion.js');
-const N = require('../js/nombre.js');
-const D = require('../js/duelo.js');
 const S = require('../js/stl.js');
 
 const MODELS = new Function(
@@ -68,58 +66,6 @@ test('el mapa de las 1.332 sustituciones coincide con el póster', () => {
       total[effect],
     );
   assert.deepEqual(E.missenseSeenInNature(), { missense: 957, seen: 165 });
-});
-
-test('un nombre se escribe en ADN con inicio, un codón por letra y STOP', () => {
-  const ana = N.encodeName('Ána');
-  assert.equal(ana.text, 'ANA');
-  assert.equal(ana.dna, 'ATGGCCAACGCCTAA');
-  assert.equal(G.translate(ana.dna).protein, 'MANA');
-  assert.equal(ana.ways, 4 * 2 * 4);
-  // Cada codón elegido de verdad escribe su pieza.
-  for (const [aa, codon] of Object.entries(N.CODON)) assert.equal(G.table[codon], aa);
-  const juan = N.encodeName('Juan');
-  assert.deepEqual(juan.missing, ['J']);
-  assert.equal(juan.protein, 'MUAN');
-  assert.equal(N.readName(juan.dna, juan.specials).protein, 'MUAN');
-  // Sin el contexto especial, la U se lee como un STOP.
-  assert.equal(G.translate(juan.dna).protein, 'M');
-});
-
-test('una letra cambia el nombre', () => {
-  const ana = N.encodeName('ANA');
-  // ADN de ANA: ATG GCC AAC GCC TAA (la letra 3 es la primera del nombre).
-  assert.equal(N.mutateName(ana, 4, 'T').name, 'VNA'); // GCC → GTC: A pasa a V
-  assert.equal(N.mutateName(ana, 5, 'A').effect, 'synonymous'); // GCC → GCA: sigue siendo A
-  assert.equal(N.mutateName(ana, 6, 'T').name, 'AYA'); // AAC → TAC: N pasa a Y
-  const cut = N.mutateName(N.encodeName('AKA'), 6, 'T'); // AAG → TAG: un STOP corta el nombre
-  assert.equal(cut.effect, 'nonsense');
-  assert.equal(cut.name, 'A');
-  for (let i = 0; i < 200; i++) {
-    const m = N.randomNameMutation(N.encodeName('Rosalind'), Math.random);
-    assert.ok(m.position >= 3 && m.position < 3 + 8 * 3);
-  }
-});
-
-test('el duelo mezcla los cuatro resultados sin repetir mutaciones', () => {
-  let seed = 7;
-  const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
-  const rounds = D.makeRounds(8, rand);
-  const count = Object.fromEntries(D.CATEGORIES.map(c => [c, 0]));
-  for (const r of rounds) count[r.result.category]++;
-  assert.deepEqual(Object.values(count), [2, 2, 2, 2]);
-  assert.equal(new Set(rounds.map(r => `${r.type}${r.position}${r.base}`)).size, 8);
-  const round = rounds[0],
-    right = round.result.category,
-    wrong = D.CATEGORIES.find(c => c !== right);
-  assert.deepEqual(
-    D.score(round, [
-      { guess: right, time: 900 },
-      { guess: right, time: 500 },
-    ]).points,
-    [1, 2],
-  );
-  assert.deepEqual(D.score(round, [{ guess: wrong, time: 1 }, null]).points, [0, 0]);
 });
 
 test('el modelo para imprimir en 3D es una malla cerrada', () => {

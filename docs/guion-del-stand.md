@@ -8,7 +8,7 @@ Una guía para que cualquiera del grupo pueda presentar igual de bien. Los tiemp
 - [ ] En **Resultados del stand** (abajo a la derecha), activar el **modo stand**. Si nadie toca la pantalla durante 90 segundos, la app vuelve sola al inicio y muestra el recorrido guiado.
 - [ ] Imprimir el cartel con el código QR (en **Resultados del stand**, o abriendo `cartel.html`).
 - [ ] Probar que el QR abra la app en un celular.
-- [ ] Si viene el jurado: tener una terminal lista para correr `node --test` (muestra las 31 pruebas automáticas).
+- [ ] Si viene el jurado: tener una terminal lista para correr `node --test` (muestra las 28 pruebas automáticas).
 - [ ] Para presentar al jurado: abrir `presentacion.html` en la pantalla grande y apretar **P** para abrir la vista del presentador en la notebook (notas, cronómetro y diapositiva siguiente).
 - [ ] Probar el sonido (botón del parlante, arriba a la derecha). Si hay mucho ruido, conviene unos parlantes chicos.
 
@@ -43,8 +43,6 @@ Si tienen más tiempo, la pestaña **Naturaleza** cuenta por qué esta mutación
 Si el visitante es chico o le gustan los animales, abrí **Naturaleza → Jaguar y leopardo**:
 
 > «¿Jaguar o leopardo? Mirá las manchas: si tienen puntitos adentro, es un jaguar. Y la pantera negra no es una especie: al leopardo le cambió **una sola letra** y apareció un STOP. ¿Lo probamos en la hemoglobina?»
-
-Para chicos o familias que esperan, la pestaña **Jugá**: su nombre escrito en ADN («¿Querés ver tu nombre escrito en ADN?») o un **duelo** entre dos («¿Quién entiende más el ADN?»).
 
 ## Analogías que funcionan
 
