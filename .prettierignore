@@ -1,0 +1,6 @@
+# Datos generados: se dejan compactos.
+js/datos-modelos.js
+js/datos-mapa.js
+# El HTML y los textos se editan a mano.
+*.html
+*.md

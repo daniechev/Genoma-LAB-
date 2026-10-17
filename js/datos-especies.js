@@ -1,0 +1,138 @@
+// Cadenas beta de la hemoglobina de 16 especies (sin la metionina inicial, 146 piezas cada una).
+// Fuente: entradas de UniProtKB/Swiss-Prot incluidas en el tutorial de HMMER (archivo globins45.fa).
+// «separacion»: hace cuántos millones de años (aprox.) se separó su linaje del nuestro, según TimeTree.
+(function (root) {
+  'use strict';
+  const SPECIES_HBB = [
+    {
+      entry: 'HBB_CALAR',
+      name: 'Tití plateado',
+      latin: 'Mico argentatus',
+      group: 'primate',
+      separacion: 43,
+      seq: 'VHLTGEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMNNPKVKAHGKKVLGAFSDGLTHLDNLKGTFAHLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPVVQAAYQKVVAGVANALAHKYH',
+    },
+    {
+      entry: 'HBB_MANSP',
+      name: 'Mandril',
+      latin: 'Mandrillus sphinx',
+      group: 'primate',
+      separacion: 29,
+      seq: 'VHLTPEEKTAVTTLWGKVNVDEVGGEALGRLLVVYPWTQRFFDSFGDLSSPDAVMGNPKVKAHGKKVLGAFSDGLNHLDNLKGTFAQLSELHCDKLHVDPENFKLLGNVLVCVLAHHFGKEFTPQVQAAYQKVVAGVANALAHKYH',
+    },
+    {
+      entry: 'HBB_RABIT',
+      name: 'Conejo',
+      latin: 'Oryctolagus cuniculus',
+      group: 'mamífero',
+      separacion: 90,
+      seq: 'VHLSSEEKSAVTALWGKVNVEEVGGEALGRLLVVYPWTQRFFESFGDLSSANAVMNNPKVKAHGKKVLAAFSEGLSHLDNLKGTFAKLSELHCDKLHVDPENFRLLGNVLVIVLSHHFGKEFTPQVQAAYQKVVAGVANALAHKYH',
+    },
+    {
+      entry: 'HBB_URSMA',
+      name: 'Oso polar',
+      latin: 'Ursus maritimus',
+      group: 'mamífero',
+      separacion: 96,
+      seq: 'VHLTGEEKSLVTGLWGKVNVDEVGGEALGRLLVVYPWTQRFFDSFGDLSSADAIMNNPKVKAHGKKVLNSFSDGLKNLDNLKGTFAKLSELHCDKLHVDPENFKLLGNVLVCVLAHHFGKEFTPQVQAAYQKVVAGVANALAHKYH',
+    },
+    {
+      entry: 'HBB_SUNMU',
+      name: 'Musaraña almizclera',
+      latin: 'Suncus murinus',
+      group: 'mamífero',
+      separacion: 96,
+      seq: 'VHLSGEEKACVTGLWGKVNEDEVGAEALGRLLVVYPWTQRFFDSFGDLSSASAVMGNPKVKAHGKKVLHSLGEGVANLDNLKGTFAKLSELHCDKLHVDPENFRLLGNVLVVVLASKFGKEFTPPVQAAFQKVVAGVANALAHKYH',
+    },
+    {
+      entry: 'HBB_EQUHE',
+      name: 'Onagro',
+      latin: 'Equus hemionus',
+      group: 'mamífero',
+      separacion: 96,
+      seq: 'VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPAAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAQLSELHCDKLHVDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVANALAHKYH',
+    },
+    {
+      entry: 'HBB_TUPGL',
+      name: 'Tupaya',
+      latin: 'Tupaia glis',
+      group: 'mamífero',
+      separacion: 82,
+      seq: 'VHLSGEEKAAVTGLWGKVDLEKVGGQSLGSLLIVYPWTQRFFDSFGDLSSPSAVMSNPKVKAHGKKVLTSFSDGLNHLDNLKGTFAKLSELHCDKLHVDPENFRLLGNVLVRVLACNFGPEFTPQVQAAFQKVVAGVANALAHKYH',
+    },
+    {
+      entry: 'HBB_TRIIN',
+      name: 'Manatí amazónico',
+      latin: 'Trichechus inunguis',
+      group: 'mamífero',
+      separacion: 100,
+      seq: 'VHLTPEEKALVIGLWAKVNVKEYGGEALGRLLVVYPWTQRFFEHFGDLSSASAIMNNPKVKAHGEKVFTSFGDGLKHLEDLKGAFAELSELHCDKLHVDPENFRLLGNVLVCVLARHFGKEFSPEAQAAYQKVVAGVANALAHKYH',
+    },
+    {
+      entry: 'HBB_SPECI',
+      name: 'Suslik europeo',
+      latin: 'Spermophilus citellus',
+      group: 'mamífero',
+      separacion: 90,
+      seq: 'VHLSDGEKNAISTAWGKVHAAEVGAEALGRLLVVYPWTQRFFDSFGDLSSASAVMGNAKVKAHGKKVIDSFSNGLKHLDNLKGTFASLSELHCDKLHVDPENFKLLGNMIVIVMAHHLGKDFTPEAQAAFQKVVAGVANALAHKYH',
+    },
+    {
+      entry: 'HBB_TACAC',
+      name: 'Equidna',
+      latin: 'Tachyglossus aculeatus',
+      group: 'monotrema',
+      separacion: 180,
+      seq: 'VHLSGSEKTAVTNLWGHVNVNELGGEALGRLLVVYPWTQRFFESFGDLSSADAVMGNAKVKAHGAKVLTSFGDALKNLDNLKGTFAKLSELHCDKLHVDPENFNRLGNVLVVVLARHFSKEFTPEAQAAWQKLVSGVSHALAHKYH',
+    },
+    {
+      entry: 'HBB_ORNAN',
+      name: 'Ornitorrinco',
+      latin: 'Ornithorhynchus anatinus',
+      group: 'monotrema',
+      separacion: 180,
+      seq: 'VHLSGGEKSAVTNLWGKVNINELGGEALGRLLVVYPWTQRFFEAFGDLSSAGAVMGNPKVKAHGAKVLTSFGDALKNLDDLKGTFAKLSELHCDKLHVDPENFNRLGNVLIVVLARHFSKDFSPEVQAAWQKLVSGVAHALGHKYH',
+    },
+    {
+      entry: 'HBB_COLLI',
+      name: 'Paloma',
+      latin: 'Columba livia',
+      group: 'ave',
+      separacion: 312,
+      seq: 'VHWSAEEKQLITSIWGKVNVADCGAEALARLLIVYPWTQRFFSSFGNLSSATAISGNPNVKAHGKKVLTSFGDAVKNLDNIKGTFAQLSELHCDKLHVDPENFRLLGDILVIILAAHFGKDFTPECQAAWQKLVRVVAHALARKYH',
+    },
+    {
+      entry: 'HBB_LARRI',
+      name: 'Gaviota reidora',
+      latin: 'Chroicocephalus ridibundus',
+      group: 'ave',
+      separacion: 312,
+      seq: 'VHWSAEEKQLITGLWGKVNVADCGAEALARLLIVYPWTQRFFASFGNLSSPTAINGNPMVRAHGKKVLTSFGEAVKNLDNIKNTFAQLSELHCDKLHVDPENFRLLGDILIIVLAAHFAKDFTPDSQAAWQKLVRVVAHALARKYH',
+    },
+    {
+      entry: 'HBB1_VAREX',
+      name: 'Varano de la sabana',
+      latin: 'Varanus exanthematicus',
+      group: 'reptil',
+      separacion: 312,
+      seq: 'VHWTAEEKQLICSLWGKIDVGLIGGETLAGLLVIYPWTQRQFSHFGNLSSPTAIAGNPRVKAHGKKVLTSFGDAIKNLDNIKDTFAKLSELHCDKLHVDPTNFKLLGNVLVIVLADHHGKEFTPAHHAAYQKLVNVVSHSLARRYH',
+    },
+    {
+      entry: 'HBBL_RANCA',
+      name: 'Rana toro (renacuajo)',
+      latin: 'Lithobates catesbeianus',
+      group: 'anfibio',
+      separacion: 352,
+      seq: 'VHWTAEEKAVINSVWQKVDVEQDGHEALTRLFIVYPWTQRYFSTFGDLSSPAAIAGNPKVHAHGKKILGAIDNAIHNLDDVKGTLHDLSEEHANELHVDPENFRRLGEVLIVVLGAKLGKAFSPQVQHVWEKFIAVLVDALSHSYH',
+    },
+    {
+      entry: 'HBB2_XENTR',
+      name: 'Rana de uñas',
+      latin: 'Xenopus tropicalis',
+      group: 'anfibio',
+      separacion: 352,
+      seq: 'VHWTAEEKATIASVWGKVDIEQDGHDALSRLLVVYPWTQRYFSSFGNLSNVSAVSGNVKVKAHGNKVLSAVGSAIQHLDDVKSHLKGLSKSHAEDLHVDPENFKRLADVLVIVLAAKLGSAFTPQVQAVWEKLNATLVAALSHGYF',
+    },
+  ];
+  if (typeof module !== 'undefined') module.exports = SPECIES_HBB;
+  root.SPECIES_HBB = SPECIES_HBB;
+})(globalThis);

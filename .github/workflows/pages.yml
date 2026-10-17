@@ -1,0 +1,42 @@
+# Publica la página en GitHub Pages cada vez que se actualiza nuevo-main,
+# solo si pasan las pruebas automáticas.
+# Dirección: https://daniechev.github.io/Genoma-LAB-/
+name: Publicar en GitHub Pages
+
+on:
+  push:
+    branches: [nuevo-main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Pruebas automáticas
+        run: node --test
+      - uses: actions/configure-pages@v5
+      - name: Preparar los archivos de la página
+        run: |
+          mkdir sitio
+          cp -r index.html cartel.html presentacion.html sw.js manifest.webmanifest css js img sitio/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: sitio
+      - id: deployment
+        uses: actions/deploy-pages@v4

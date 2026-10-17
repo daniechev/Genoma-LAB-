@@ -1,0 +1,272 @@
+// Motor genético: el ADN del gen HBB, el código genético y la clasificación de mutaciones.
+// No toca la página: se usa igual en el navegador y en las pruebas (node --test).
+(function (root) {
+  'use strict';
+  // Secuencia codificante del gen HBB: 444 letras (148 codones, incluido el STOP final).
+  const DNA = `ATG GTG CAT CTG ACT CCT GAG GAG AAG TCT GCC GTT ACT GCC CTG TGG GGC AAG GTG AAC
+GTG GAT GAA GTT GGT GGT GAG GCC CTG GGC AGG CTG CTG GTG GTC TAC CCT TGG ACC CAG
+AGG TTC TTT GAG TCC TTT GGG GAT CTG TCC ACT CCT GAT GCT GTT ATG GGC AAC CCT AAG
+GTG AAG GCT CAT GGC AAG AAA GTG CTC GGT GCC TTT AGT GAT GGC CTG GCT CAC CTG GAC
+AAC CTC AAG GGC ACC TTT GCC ACA CTG AGT GAG CTG CAC TGT GAC AAG CTG CAC GTG GAT
+CCT GAG AAC TTC AGG CTC CTG GGC AAC GTG CTG GTC TGT GTG CTG GCC CAT CAC TTT GGC
+AAA GAA TTC ACC CCA CCA GTG CAG GCT GCC TAT CAG AAA GTG GTG GCT GGT GTG GCT AAT
+GCC CTG GCC CAC AAG TAT CAC TAA`.replace(/\s/g, '');
+  const EXPECTED =
+    'MVHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH';
+  const table = {};
+  const bases = 'TCAG',
+    codes = 'FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG';
+  let k = 0;
+  for (const a of bases)
+    for (const b of bases) for (const c of bases) table[a + b + c] = codes[k++];
+  const names = {
+    A: 'Ala',
+    R: 'Arg',
+    N: 'Asn',
+    D: 'Asp',
+    C: 'Cys',
+    E: 'Glu',
+    Q: 'Gln',
+    G: 'Gly',
+    H: 'His',
+    I: 'Ile',
+    L: 'Leu',
+    K: 'Lys',
+    M: 'Met',
+    F: 'Phe',
+    P: 'Pro',
+    S: 'Ser',
+    T: 'Thr',
+    W: 'Trp',
+    Y: 'Tyr',
+    V: 'Val',
+    '*': 'STOP',
+  };
+  // Lee el ADN de a tres letras hasta el primer STOP y devuelve la proteína.
+  function translate(dna) {
+    let protein = '',
+      stop = -1;
+    for (let i = 0; i + 2 < dna.length; i += 3) {
+      const aa = table[dna.slice(i, i + 3)];
+      if (!aa) throw new Error('La secuencia contiene letras no válidas.');
+      if (aa === '*') {
+        stop = i / 3;
+        break;
+      }
+      protein += aa;
+    }
+    return { protein, stop };
+  }
+  // Casos reales del gen HBB. position es el índice (desde 0) de la letra que cambia.
+  const CASES = [
+    { id: 'sickle', name: 'Anemia falciforme', notation: 'Glu6Val', position: 19, base: 'T' },
+    { id: 'hbc', name: 'Hemoglobina C', notation: 'Glu6Lys', position: 18, base: 'A' },
+    { id: 'thal', name: 'Beta-talasemia', notation: 'Gln39Stop', position: 117, base: 'T' },
+  ];
+  // Cambios de otras especies que en el gen humano son de una sola letra (la pieza se cuenta sin la metionina inicial).
+  const SPECIES = [
+    { id: 'llama', name: 'Llama', notation: 'His2Asn', position: 6, base: 'A' },
+    { id: 'mammoth12', name: 'Mamut lanudo', notation: 'Thr12Ala', position: 36, base: 'G' },
+    { id: 'mammoth86', name: 'Mamut lanudo', notation: 'Ala86Ser', position: 258, base: 'T' },
+    { id: 'mammoth101', name: 'Mamut lanudo', notation: 'Glu101Gln', position: 303, base: 'C' },
+    // El leopardo negro tiene un STOP (TGC → TGA) en otro gen, el ASIP; acá se imita en la cisteína 93.
+    {
+      id: 'leopard',
+      name: 'Leopardo',
+      notation: 'Cys93Stop',
+      position: 281,
+      base: 'A',
+      effect: 'nonsense',
+    },
+  ];
+  function findSpecies(position, type, base) {
+    return type === 'sub'
+      ? SPECIES.find(c => c.position === position && c.base === base) || null
+      : null;
+  }
+  function findCase(position, type, base) {
+    return type === 'sub'
+      ? CASES.find(c => c.position === position && c.base === base) || null
+      : null;
+  }
+  // Aplica una mutación (sub = cambiar, del = quitar, ins = agregar) y clasifica su efecto.
+  function simulate({ position, type, base }) {
+    if (!Number.isInteger(position) || position < 0 || position >= DNA.length)
+      throw new Error('Elegí una letra entre 1 y 444.');
+    if (!['sub', 'del', 'ins'].includes(type)) throw new Error('Tipo de mutación no válido.');
+    if (type !== 'del' && !/^[ATCG]$/.test(base)) throw new Error('Elegí A, T, C o G.');
+    if (type === 'sub' && base === DNA[position])
+      throw new Error('Elegí una letra diferente para crear una mutación.');
+    const changeIndex = position + (type === 'ins' ? 1 : 0);
+    const mutated =
+      type === 'sub'
+        ? DNA.slice(0, position) + base + DNA.slice(position + 1)
+        : type === 'del'
+          ? DNA.slice(0, position) + DNA.slice(position + 1)
+          : DNA.slice(0, position + 1) + base + DNA.slice(position + 1);
+    const startLost = mutated.slice(0, 3) !== 'ATG';
+    const tr = translate(mutated),
+      protein = startLost ? '' : tr.protein;
+    const mature = protein.slice(1),
+      original = EXPECTED.slice(1);
+    const codon = Math.floor(changeIndex / 3);
+    let category, effect;
+    // Quitar o agregar una letra siempre cuenta como «desorden», aunque también afecte al inicio o al STOP.
+    if (type !== 'sub') {
+      category = 'desorden';
+      effect = 'frameshift';
+    } else if (startLost) {
+      category = 'corte';
+      effect = 'start-loss';
+    } else if (tr.stop === -1) {
+      category = 'desorden';
+      effect = 'stop-loss';
+    } else if (protein.length < EXPECTED.length) {
+      category = 'corte';
+      effect = 'nonsense';
+    } else if (protein === EXPECTED) {
+      category = 'nada';
+      effect = 'synonymous';
+    } else {
+      category = 'pieza';
+      effect = 'missense';
+    }
+    const differences = [];
+    for (let i = 0; i < Math.min(mature.length, original.length); i++)
+      if (mature[i] !== original[i]) differences.push(i + 1);
+    return {
+      position,
+      type,
+      base,
+      changeIndex,
+      mutated,
+      category,
+      effect,
+      startLost,
+      protein,
+      mature,
+      stop: tr.stop,
+      codon,
+      piece: codon,
+      originalCodon: DNA.slice(codon * 3, codon * 3 + 3),
+      mutatedCodon: mutated.slice(codon * 3, codon * 3 + 3),
+      differences,
+      realCase: findCase(position, type, base),
+      species: findSpecies(position, type, base),
+      lengthUnknown: !startLost && tr.stop === -1,
+    };
+  }
+  // Las 1.332 sustituciones posibles (444 letras × 3 letras nuevas), en orden: letra por letra, A-T-C-G.
+  // Se calcula una sola vez y se guarda: lo usan el póster, el mapa de calor y el duelo.
+  let map = null;
+  function substitutionMap() {
+    if (map) return map;
+    map = [];
+    for (let p = 0; p < DNA.length; p++)
+      for (const b of 'ATCG')
+        if (b !== DNA[p]) {
+          const r = simulate({ position: p, type: 'sub', base: b });
+          map.push({
+            position: p,
+            base: b,
+            effect: r.effect,
+            category: r.category,
+            codon: r.codon,
+            letter: p % 3,
+            from: table[r.originalCodon],
+            to: table[r.mutatedCodon],
+          });
+        }
+    return map;
+  }
+  // Cuenta cada efecto entre las 1.332 sustituciones.
+  function substitutionSurvey() {
+    const counts = { missense: 0, synonymous: 0, nonsense: 0, 'start-loss': 0, 'stop-loss': 0 };
+    for (const m of substitutionMap()) counts[m.effect]++;
+    return counts;
+  }
+  // Lo mismo, separado según qué letra del codón cambia (1.ª, 2.ª o 3.ª).
+  function letterSurvey() {
+    const rows = [0, 1, 2].map(() => ({
+      total: 0,
+      missense: 0,
+      synonymous: 0,
+      nonsense: 0,
+      'start-loss': 0,
+      'stop-loss': 0,
+    }));
+    for (const m of substitutionMap()) {
+      rows[m.letter].total++;
+      rows[m.letter][m.effect]++;
+    }
+    return rows;
+  }
+  // Lee un archivo PDB y se queda con los carbonos alfa (un punto por aminoácido) y el hierro de los hemo.
+  function parsePDB(text, alphaFold = false) {
+    const chains = {},
+      hemes = [],
+      seen = new Set();
+    for (const line of text.split(/\r?\n/)) {
+      const kind = line.slice(0, 6).trim(),
+        atom = line.slice(12, 16).trim(),
+        alt = line[16];
+      if (alt && alt !== ' ' && alt !== 'A') continue;
+      if (!((kind === 'ATOM' && atom === 'CA') || (kind === 'HETATM' && atom === 'FE'))) continue;
+      const chain = line[21],
+        res = Number(line.slice(22, 26));
+      const key = chain + ':' + res + ':' + atom;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const p = [
+        Number(line.slice(30, 38)),
+        Number(line.slice(38, 46)),
+        Number(line.slice(46, 54)),
+        res,
+        Number(line.slice(60, 66)),
+      ];
+      if (!p.every(Number.isFinite)) throw new Error('Coordenadas inválidas en el modelo.');
+      if (atom === 'FE') hemes.push(p);
+      else
+        (chains[chain] ||= []).push({
+          ...Object.fromEntries(['x', 'y', 'z', 'res', 'confidence'].map((n, i) => [n, p[i]])),
+          aa: line.slice(17, 20).trim(),
+        });
+    }
+    const candidate =
+      Object.keys(chains).find(c => chains[c].length === 147 && chains[c][0].aa === 'MET') ||
+      Object.keys(chains).find(c => chains[c].length === 146);
+    const beta = alphaFold ? candidate : 'B';
+    if (!beta || !chains[beta])
+      throw new Error('No se encontró la cadena beta completa de 146 o 147 aminoácidos.');
+    if (alphaFold) {
+      const inverse = Object.fromEntries(
+        Object.entries(names).map(([a, n]) => [n.toUpperCase(), a]),
+      );
+      const seq = chains[beta].map(p => inverse[p.aa] || '?').join('');
+      if (seq !== EXPECTED && seq !== EXPECTED.slice(1))
+        throw new Error('Este archivo no corresponde a la hemoglobina beta humana P68871.');
+      for (const c of Object.keys(chains)) if (c !== beta) delete chains[c];
+    }
+    for (const [id, pts] of Object.entries(chains)) {
+      const shift = pts[0].aa === 'MET' && pts.length === 147 ? 1 : 0;
+      chains[id] = pts.filter((p, i) => i >= shift).map((p, i) => ({ ...p, res: i + 1 }));
+    }
+    return { chains, hemes: alphaFold ? [] : hemes, beta };
+  }
+  const api = {
+    DNA,
+    EXPECTED,
+    table,
+    names,
+    CASES,
+    SPECIES,
+    translate,
+    simulate,
+    substitutionMap,
+    substitutionSurvey,
+    letterSurvey,
+    parsePDB,
+  };
+  if (typeof module !== 'undefined') module.exports = api;
+  root.Genetics = api;
+})(globalThis);
