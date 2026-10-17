@@ -46,7 +46,7 @@ Va paso a paso y nada se mueve solo: al principio solo se ve el ADN, y el result
 
 Debajo, **Lo que pasa después** muestra dos miradas del mismo cambio, de a una por vez (con pestañas; después de cada cambio arranca en la fábrica):
 
-- **La fábrica:** el ribosoma lee el ARN de verdad (el normal o el tuyo). Llegan los ARN de transferencia con sus piezas; si aparece un STOP, la cadena se suelta ahí. También muestra el corrimiento del marco, la pérdida del inicio y la del STOP.
+- **La fábrica:** el ribosoma lee el ARN de verdad (el normal o el tuyo). Llegan los ARN de transferencia con sus piezas; si aparece un STOP, la cadena se suelta ahí. También muestra el corrimiento del marco, la pérdida del inicio y la del STOP. Se detiene en el codón que cambiaste hasta que tocás *Seguir fabricando*, y al final se queda quieta para leer el resultado (↺ la repite).
 - **En la sangre:** glóbulos rojos que pasan por un capilar. Solo se dibuja lo que se sabe de los casos reales: medialunas que se traban con poco oxígeno (falciforme), cristales (hemoglobina C) o glóbulos chicos y pálidos (talasemia), con 1 o 2 copias. Para el resto dice que no se sabe.
 
 La sección **Casos reales** propone tres mutaciones conocidas para encontrar:

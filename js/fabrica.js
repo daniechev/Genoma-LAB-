@@ -1,5 +1,6 @@
 // La fábrica: el ribosoma lee el ARN de a tres letras y por cada codón un ARN de transferencia trae su pieza.
 // Lee la secuencia de verdad (la normal o la que cambiaste): si aparece un STOP, la cadena se suelta ahí.
+// Nada pasa de largo: se detiene en el codón que cambió hasta que alguien toca «Seguir» y al final se queda quieta.
 (() => {
   'use strict';
   const canvas = document.getElementById('factory');
@@ -7,6 +8,7 @@
   const G = Genetics,
     ctx = canvas.getContext('2d'),
     caption = document.getElementById('factory-caption'),
+    goOn = document.getElementById('factory-next'),
     reduced = matchMedia('(prefers-reduced-motion: reduce)'),
     FONT = "'Segoe UI Variable Text', Aptos, 'Segoe UI', system-ui, sans-serif",
     MONO = "'Cascadia Mono', Consolas, monospace",
@@ -29,7 +31,8 @@
     phase = 0,
     mode = 'reading',
     chain = [],
-    hold = 0,
+    paused = false,
+    done = false,
     lastTime = 0,
     told = new Set();
 
@@ -64,7 +67,9 @@
     start = result && !result.startLost ? Math.max(0, Math.min(140, result.codon - 4)) : 0;
     cur = start;
     phase = 0;
-    hold = 0;
+    paused = false;
+    done = false;
+    goOn.hidden = true;
     told = new Set();
     chain = Array.from({ length: start }, (_, k) => beadKind(k, G.table[codonAt(seq, k)]));
     mode = result?.startLost ? 'scan' : 'reading';
@@ -78,7 +83,7 @@
       );
     else
       say(
-        `Saltamos hasta cerca de tu cambio (codón ${result.codon + 1}). Las ${start} piezas anteriores ya están hechas.`,
+        `El ribosoma lee tu ARN de a tres letras. Mirá el codón ${result.codon + 1}, subrayado en rojo.`,
       );
     if (reduced.matches) {
       // Sin animación: se muestra directamente el momento en que se lee el codón que cambió.
@@ -108,9 +113,13 @@
       phase = 0;
       const pieces = cur - 1;
       say(
-        pieces === 146
-          ? `<b>${rna(next)} es STOP.</b> La cadena se suelta completa, con 146 piezas, y se pliega para formar la hemoglobina.`
-          : `<b>${rna(next)} es STOP.</b> La cadena se suelta antes de tiempo, con <b>${pieces} piezas</b> en lugar de 146.`,
+        pieces !== 146
+          ? `<b>${rna(next)} es STOP.</b> La cadena se suelta antes de tiempo, con <b>${pieces} piezas</b> en lugar de 146.`
+          : result?.effect === 'missense'
+            ? `<b>Listo.</b> La cadena sale completa, con 146 piezas, pero la pieza ${result.piece} es <b>distinta</b> (en rojo).`
+            : result?.effect === 'synonymous'
+              ? '<b>Listo.</b> La cadena sale completa y es <b>igual</b> a la normal.'
+              : `<b>${rna(next)} es STOP.</b> La cadena se suelta completa, con 146 piezas, y se pliega para formar la hemoglobina.`,
       );
       return false;
     }
@@ -336,26 +345,31 @@
     const dt = Math.min(0.05, (time - lastTime) / 1000);
     lastTime = time;
     if (visible && !document.hidden && canvas.offsetParent && !reduced.matches) {
-      // Después de mostrar el codón que cambió, adelanta rápido hasta el final.
-      const fast = result && mode === 'reading' && cur > result.codon + 3,
+      // Después del codón que cambió, adelanta rápido hasta el final.
+      const fast = result && mode === 'reading' && cur > result.codon,
         stepTime = fast ? 0.06 : 0.62;
-      if (hold > 0) {
-        hold -= dt;
-        if (hold <= 0) restart();
+      // Con la pieza nueva ya puesta en el codón que cambió, espera a que alguien toque «Seguir».
+      if (
+        mode === 'reading' &&
+        result &&
+        cur === result.codon &&
+        phase >= 0.62 &&
+        !told.has('seguir')
+      ) {
+        if (!paused) {
+          paused = true;
+          goOn.hidden = false;
+        }
       } else if (mode === 'reading') {
         phase += dt / stepTime;
         if (phase >= 1) {
           phase -= 1;
           if (!step()) phase = 0;
         }
-      } else {
-        // STOP, sin STOP o sin inicio: termina la escena, se queda quieta un rato y vuelve a empezar.
+      } else if (!done) {
+        // STOP, sin STOP o sin inicio: termina la escena y se queda quieta. «↺» la repite.
         phase = Math.min(1, phase + dt / (stepTime * (mode === 'release' ? 3 : 4)));
-        if (phase >= 1 && hold <= 0) {
-          hold = 3.5;
-          // Avisa que terminó de fabricar (la banda puede pasar sola a «En la sangre»).
-          document.dispatchEvent(new CustomEvent('genoma:fabrica-fin'));
-        }
+        done = phase >= 1;
       }
       draw();
     }
@@ -365,5 +379,10 @@
   document.addEventListener('genoma:resultado', restart);
   document.addEventListener('genoma:limpio', restart);
   document.getElementById('factory-play').onclick = restart;
+  goOn.onclick = () => {
+    told.add('seguir');
+    paused = false;
+    goOn.hidden = true;
+  };
   restart();
 })();
